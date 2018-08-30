@@ -1,0 +1,83 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	height: 100%;
+}
+#root{
+  height:100%;
+}
+.mainContainer{
+  height:100%;
+}
+
+.auth_block{
+  padding-top:10rem;
+  text-align: center;
+}
+.auth_inner{
+  max-width:430px;
+  display:block;
+  padding:35px;
+  margin:0 auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  position: relative;
+  background: #fff;
+}
+.app_logo{
+  background:url('/images/ukn_logo.png') no-repeat bottom center;
+  position: relative;
+  margin: 0 auto;
+  width: 375px;
+  height: 145px;
+  margin-bottom:25px;
+}
+.subheader{
+  font: 300 26px 'Open Sans';
+  margin-bottom:12px;
+  display:block;
+}
+.mainContainer .logo{
+  background: url('/images/ukn_logo.png') no-repeat bottom center;
+  width: 150px;
+  height: 150px;
+  background-position-x: 0px;
+  margin:0 auto;
+  transition: all .3s ease-in-out;
+}
+.preloadSpinner{
+  margin:0 auto;
+  text-align:center;
+}
