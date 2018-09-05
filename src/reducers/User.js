@@ -4,7 +4,7 @@ const initialState = {
     status : '',
     loggedIn : false,
     isFetching : false,
-    token : '',
+    //token : '',
     errMsg:''
   }
   
@@ -20,9 +20,12 @@ const initialState = {
           ...state,
           loggedIn : true,
           isFetching : false,
+          id : action.data.id,
           name : action.data.name,
+          surename : action.data.surename,
           status : action.data.status,
-          token : action.data.token
+          role : action.data.role
+          //token : action.data.token
         }
       case 'LOGIN_FAIL':
         return {

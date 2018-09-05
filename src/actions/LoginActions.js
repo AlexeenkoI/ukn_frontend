@@ -5,28 +5,33 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const ETHERNAL_ERROR = 'ETHERNAL_ERROR';
 
 
-export function tryToLogin(auth,pass){
+export function tryToLogin(auth,pass,isRemember){
     return function(dispatch){
         dispatch(startLogin());
-        const data = {
-            login : auth,
-            password : pass
+        const reqBody = {
+            data : {
+                login : auth,
+                password : pass
+            }
         }
-        fetch('/users',{
+        console.log(reqBody);
+        fetch('/api/users/login',{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             method:'POST',
-            body : JSON.stringify(data)
+            body : JSON.stringify(reqBody)
         })
         .then(response => response.json())
         .then(json => {
             console.log('recieved data');
             console.log(json);
-            if(json.status === 'ok'){
-                setTimeout(()=>dispatch(successLogin(json)),1000)
-                
+            if(json.success == true){
+                dispatch(successLogin(json.data[0]))
+                if(isRemember){
+                   // document.cookie = "autoLogin=true";
+                }
             }else{
                 dispatch(errorLogin(json))
                 message.error(json.errMsg, 2.5)
@@ -34,7 +39,12 @@ export function tryToLogin(auth,pass){
                 
             }
             
-        }).catch(err => dispatch(errorLogin(err)))
+        })
+        .then(() =>{ 
+            if(isRemember)
+                document.cookie = "autoLogin=true;"
+        })
+        .catch(err => dispatch(errorLogin(err)))
     }
 }
 export function startLogin(){

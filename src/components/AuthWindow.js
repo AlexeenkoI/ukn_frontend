@@ -22,23 +22,29 @@ class AuthWindow extends Component{
 
     componentWillMount(){
         document.body.style.backgroundColor = "#E0F2F1";
-        //document.cookie = "userName=Vasya";
-        //const cook = this.getCookie("userName");
-        //console.log(cook);
+        if(this.getCookie("autoLogin")){
+         this.handleSubmit();
+          //this.props.form.validateFields((err, values) => {
+          //  if (!err) {
+          //    this.props.loginAction(values.userName, values.password, values.remember);
+          //  }
+          //});
+        }
     }
-     //getCookie(name) {
-     //   var matches = document.cookie.match(new RegExp(
-     //     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-     //   ));
-     //   return matches ? decodeURIComponent(matches[1]) : undefined;
-     // }
+     getCookie(name) {
+        var matches = document.cookie.match(new RegExp(
+          "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+      }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-      
+    handleSubmit = () => {
+        //e.preventDefault();
+        
         this.props.form.validateFields((err, values) => {
           if (!err) {
-            this.props.loginAction(values.userName, values.password);
+            console.log(values);
+            this.props.loginAction(values.userName, values.password, values.remember);
           }
         });
       }
@@ -71,9 +77,9 @@ class AuthWindow extends Component{
                     <FormItem {...formItemLayout}>
                       {getFieldDecorator('remember', {
                         valuePropName: 'checked',
-                        initialValue: true,
+                        initialValue: false,
                       })(
-                        <Checkbox>Запомнить меня</Checkbox>
+                        <Checkbox>Автоматический вход</Checkbox>
                       )}
                       <Button type="primary" htmlType="submit" className="login-form-button" loading={this.props.userData.isFetching}>
                         Войти
@@ -96,7 +102,7 @@ const mapStateToProps = store =>{
 }
 
 const mapDispatchToProps = dispatch =>({
-  loginAction : (login, password) => dispatch(tryToLogin(login,password))
+  loginAction : (login, password, isRemember) => dispatch(tryToLogin(login,password,isRemember))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(WrappedNormalLoginForm));

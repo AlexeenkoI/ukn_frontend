@@ -1,37 +1,10 @@
 import React, { Component } from 'react'
 import Preloader from './Preloader'
 import { Table, Input, Button, Icon } from 'antd';
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router'
 
-
-const data = [{
-    key: '1',
-    statement:'12',
-    date:'12.12.12',
-    customer_name: 'John Brown',
-    object_addr: 'spoon str 12-32',
-    photo_need: 'yes',
-    //app_number:'12345',
-    //has_info:'yes',
-    work_type:'схема',
-    emloye:'User1',
-    price:'12200',
-    comments:'asd',
-    deadline:'13.12.14'
-  },{
-    key: '2',
-    statement:'13',
-    date:'13.13.13',
-    customer_name: 'John Brown2',
-    object_addr: 'spoon str 22-32',
-    photo_need: 'yes',
-    //app_number:'33333',
-    //has_info:'yes',
-    work_type:'МП',
-    emloye:'User2',
-    price:'12200',
-    comments:'asd',
-    deadline:'12.13.14'
-  }];
+import { getContracts } from '../actions/WorkSheetActions'
 
 
 class WorkSheet extends Component{
@@ -40,6 +13,11 @@ class WorkSheet extends Component{
         this.state = {
             searchText: '',
           };
+    }
+
+    componentWillMount(){
+
+      this.props.getContracts(this.props.user.id,null,null,{contractor:this.props.user.id});
     }
 
     handleSearch = (selectedKeys, confirm) => () => {
@@ -58,8 +36,8 @@ class WorkSheet extends Component{
     render(){
         const columns = [{
           title: '№ Договора',
-          dataIndex: 'statement',
-          key: 'statement',
+          dataIndex: 'contract_number',
+          key: 'contract_number',
           filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div className="custom-filter-dropdown">
               <Input
@@ -74,7 +52,13 @@ class WorkSheet extends Component{
             </div>
           ),
           filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#108ee9' : '#aaa' }} />,
-          onFilter: (value, record) => record.statement.toLowerCase().includes(value.toLowerCase()),
+          onFilter: (value, record) => {
+            //console.log(value);
+            console.log(value);
+            //record.contract_number == value;
+            //console.log(record.contract_number.toLowerCase().includes(value));
+            //record.statement.toLowerCase().includes(value.toLowerCase())
+          },
           onFilterDropdownVisibleChange: (visible) => {
             if (visible) {
               setTimeout(() => {
@@ -88,53 +72,61 @@ class WorkSheet extends Component{
           },
         }, {
           title: 'Дата заключения',
-          dataIndex: 'date',
-          key: 'date',
+          dataIndex: 'date_started',
+          key: 'date_started',
         }, {
           title: 'ФИО Заказчика',
-          dataIndex: 'customer_name',
-          key: 'customer_name',
+          dataIndex: 'customer',
+          key: 'customer',
 
         },{
           title: 'Адрес объекта',
-          dataIndex: 'object_addr',
-          key: 'object_addr'
-        },{
-          title: 'Наличие сьемки',
-          dataIndex: 'photo_need',
-          key: 'photo_need'
+          dataIndex: 'address',
+          key: 'address'
         },{
           title: 'Вид кадастровых работ',
-          dataIndex: 'work_type',
-          key: 'work_type'
+          dataIndex: 'type_of_work',
+          key: 'type_of_work'
         },{
           title: 'Исполнитель',
-          dataIndex: 'emloye',
-          key: 'emloye'
+          dataIndex: 'contractor',
+          key: 'contractor'
         },{
           title: 'Стоимость',
           dataIndex: 'price',
           key: 'price'
         },{
           title: 'Примечание',
-          dataIndex: 'comments',
-          key: 'comments',
+          dataIndex: 'comment',
+          key: 'comment',
           render : (data)=>{
             return <span className="test">{data}</span>
           }
         },{
           title: 'Исполнить до',
-          dataIndex: 'deadline',
-          key: 'deadline'
+          dataIndex: 'date_deadline',
+          key: 'date_deadline'
         }];
-        return this.state.isLoading ? (<div><Preloader/></div>):
-        ( <Table columns={columns} 
-          dataSource={data}
+        return this.props.contracts.isFetching ? (<div><Preloader/></div>):
+        ( <Table  rowKey="id" columns={columns} 
+          dataSource={this.props.contracts.data}
           loading={false}
           onChange={this.onPaginationChange}
-          pagination={{defaultPageSize:1,pageSize:1}} />);
+          pagination={{defaultPageSize:10,pageSize:10}} />);
       }
     }
 
+    const mapStateToProps = store =>{
+      return {
+        user : store.user,
+        contracts : store.contracts
+      }
+    }
 
-export default WorkSheet;
+    const mapDispatchToProps = dispatch =>({
+      getContracts : (id,limit,offset,filterData) => dispatch(getContracts(id,limit,offset,filterData))
+    })
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(WorkSheet));
+
+//export default WorkSheet;
