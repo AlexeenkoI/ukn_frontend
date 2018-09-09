@@ -16,20 +16,23 @@ class AuthWindow extends Component{
     constructor(props){
         super(props);
         this.props = props;
-
         this.handleSubmit.bind(this);
     }
 
     componentWillMount(){
         document.body.style.backgroundColor = "#E0F2F1";
         if(this.getCookie("autoLogin")){
-         this.handleSubmit();
+         
+         //this.handleSubmit();
           //this.props.form.validateFields((err, values) => {
           //  if (!err) {
           //    this.props.loginAction(values.userName, values.password, values.remember);
           //  }
           //});
         }
+    }
+    componentDidMount(){
+      
     }
      getCookie(name) {
         var matches = document.cookie.match(new RegExp(
@@ -38,8 +41,8 @@ class AuthWindow extends Component{
         return matches ? decodeURIComponent(matches[1]) : undefined;
       }
 
-    handleSubmit = () => {
-        //e.preventDefault();
+    handleSubmit = (e) => {
+        e.preventDefault();
         
         this.props.form.validateFields((err, values) => {
           if (!err) {
@@ -59,7 +62,7 @@ class AuthWindow extends Component{
             <div className="app_logo fadeInDown animated"></div>
             <div className="auth_inner fadeIn animated">   
                 <span className="subheader">Вход в офис</span>
-                <Form onSubmit={this.handleSubmit} className="login-form" layout="horizontal">
+                <Form id="app_login" onSubmit={this.handleSubmit} className="login-form" layout="horizontal">
                     <FormItem>
                       {getFieldDecorator('userName', {
                         rules: [{ required: true, message: 'Пожалуйста введите логин' }],

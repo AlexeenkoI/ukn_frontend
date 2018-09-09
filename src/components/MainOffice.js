@@ -66,7 +66,7 @@ class MainOffice extends Component{
                       style={{ fontSize: 20, marginLeft:15,cursor:"pointer"}}
                     />
                   </Header>
-                  <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+                  <Content style={{ margin: '24px 16px 16px 24px', padding: 24, background: '#fff' }}>
                     <Switch>
                         <Route exact path="/" component={WorkSheet}/>
                         <Route exact path="/users-list" component={UsersList}/>

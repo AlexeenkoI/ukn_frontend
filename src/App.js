@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { LocaleProvider } from 'antd';
+import ru_RU from 'antd/lib/locale-provider/ru_RU';
+import 'moment/locale/ru';
 
 import MainOffice from './components/MainOffice';
 import './App.css';
@@ -7,27 +10,13 @@ import './styles/animate.css';
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = {users: []}
-    this.fetchClick = this.fetchClick.bind(this);
-  }
-  
-  
-  componentDidMount() {
-    //fetch('/users')
-    //  .then(res => res.json())
-    //  .then(res =>{ this.setState({ users:res })});
-  }
-
-  fetchClick(){
-    //console.log('click');
-    //fetch('/users')
-    //.then(res => res.json())
-    //.then(res =>{ this.setState({ users:res }) });
   }
   
   render() {
     return (
+      <LocaleProvider locale={ru_RU}>
         <MainOffice/>
+      </LocaleProvider>
     );
   }
 }
