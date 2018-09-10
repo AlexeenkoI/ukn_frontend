@@ -3,6 +3,7 @@ export const LOGIN_ATTEMPT = 'LOGIN_ATTEMPT';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const ETHERNAL_ERROR = 'ETHERNAL_ERROR';
+export const LOGOUT = 'LOGOUT';
 
 
 export function tryToLogin(auth,pass,isRemember){
@@ -25,8 +26,6 @@ export function tryToLogin(auth,pass,isRemember){
         })
         .then(response => response.json())
         .then(json => {
-            console.log('recieved data');
-            console.log(json);
             if(json.success == true){
                 dispatch(successLogin(json.data[0]))
                 if(isRemember){
@@ -67,5 +66,12 @@ export function errorLogin(msg){
         type : LOGIN_FAIL,
         data : msg,
         isFetching : false
+    }
+}
+
+export function logout(){
+    document.cookie = "auth_id=;";
+    return {
+        type : LOGOUT
     }
 }

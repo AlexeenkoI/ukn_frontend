@@ -4,7 +4,6 @@ const initialState = {
     status : '',
     loggedIn : false,
     isFetching : false,
-    //token : '',
     errMsg:''
   }
   
@@ -32,6 +31,11 @@ const initialState = {
           ...state,
           isFetching : false,
           errMsg : action.data.errMsg
+        }
+      case 'LOGOUT' : 
+        return {
+          ...state,
+          loggedIn : false
         }
       default:
         return state

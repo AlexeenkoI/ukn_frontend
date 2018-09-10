@@ -8,9 +8,12 @@ import AuthWindow from './AuthWindow'
 import WorkSheet from './WorkSheet'
 import LeftMenu from './LeftMenu'
 import UsersList from './UsersList'
+import LoggedUser from './small/LoggedUser'
+
+import { logout } from '../actions/LoginActions'
 
 import 'antd/dist/antd.css';
-import { Layout, Icon } from 'antd'
+import { Layout, Icon, Row, Col } from 'antd'
 
 const { Header, Content } = Layout;
 const socket = openSocket('http://localhost:3002');
@@ -59,12 +62,22 @@ class MainOffice extends Component{
                 <LeftMenu collapsed={this.state.collapsed}/>
                 <Layout>
                   <Header className="header" style={{ background: '#fff', padding: 0 }}>
+                  <Row>
+                  <Col span={2}>
                     <Icon
                       className="trigger"
                       type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                       onClick={this.toggle}
                       style={{ fontSize: 20, marginLeft:15,cursor:"pointer"}}
                     />
+                    </Col>
+                        <Col span={4} offset={18}>
+                            <LoggedUser
+                             user={this.props.currentUser}
+                             logOut={this.props.logout}
+                             />
+                        </Col>
+                        </Row>
                   </Header>
                   <Content style={{ margin: '24px 16px 16px 24px', padding: 24, background: '#fff' }}>
                     <Switch>
@@ -86,4 +99,8 @@ const mapStateToProps = store =>{
     }
 }
 
-export default withRouter(connect(mapStateToProps)(MainOffice));
+const mapDispatchToProps = dispatch => ({
+    logout : () => dispatch(logout())
+})
+
+export default withRouter(connect(mapStateToProps,mapDispatchToProps)(MainOffice));

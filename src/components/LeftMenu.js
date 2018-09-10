@@ -23,20 +23,33 @@ class LeftMenu extends Component{
             <div className="logo" />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
               <Menu.Item key="1">
-              <NavLink to="/" activeClassName="active"><Icon type="user" />
-                <span>Заявления</span></NavLink>
+                <NavLink to="/" activeClassName="active">
+                  <Icon type="file-text" />
+                  <span>Заявления</span>
+                </NavLink>
               </Menu.Item>
               <Menu.Item key="2">
-              <NavLink to="/users-list" activeClassName="active">
-                <Icon type="video-camera" />
-                <span>Сотрудники</span></NavLink>
+                <NavLink to="/users-list" activeClassName="active">
+                  <Icon type="team" />
+                  <span>Сотрудники</span>
+                </NavLink>
               </Menu.Item>
-              <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Заявления(Админ)</span></span>}>
-              <Menu.Item key="5" >Option 5</Menu.Item>
-              <Menu.Item key="6">Option 6</Menu.Item>
-              <Menu.Item key="7">Option 7</Menu.Item>
-              <Menu.Item key="8">Option 8</Menu.Item>
-            </SubMenu>
+              <Menu.Item key="3">
+              <NavLink to="/"  activeClassName="active">
+                <Icon type="solution" theme="outlined" />
+                <span>Клиенты</span>
+              </NavLink>
+            </Menu.Item>
+              <SubMenu key="sub1" title={<span><Icon type="setting"/><span>Настройки</span></span>}>
+                <Menu.Item key="sub1_2">
+                  <Icon type="exception"/>
+                  Статусы
+                </Menu.Item>
+                <Menu.Item key="sub1_3">
+                  <Icon type="file-unknown"/>
+                  Виды заявлений
+                </Menu.Item>
+              </SubMenu>
             </Menu>
           </Sider>
         )

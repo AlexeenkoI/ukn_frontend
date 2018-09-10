@@ -53,40 +53,6 @@ class WorkSheet extends Component{
           title: '№ Договора',
           dataIndex: 'contract_number',
           key: 'contract_number',
-          // filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-          //   <div className="custom-filter-dropdown">
-          //     <Input
-          //       ref={ele => this.searchInput = ele}
-          //       placeholder="Поиск по номеру"
-          //       value={selectedKeys[0]}
-          //       onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          //       onPressEnter={this.handleSearch('contract_number',selectedKeys)}
-          //     />
-          //     <Button type="primary" onClick={this.handleSearch('contract_number',selectedKeys)}>Искать</Button>
-          //     <Button onClick={this.handleReset(clearFilters)}>Сбросить</Button>
-          //   </div>
-          // ),
-          // filterIcon: filtered => <Icon type="search" style={{ color: filtered ? '#108ee9' : '#aaa' }} />,
-         // onFilter: (value, record) => {
-            //console.log(value);
-            //this.props.setFilter({contract_number : value});
-            //console.log(value);
-            //return;
-            //record.contract_number == value;
-            //console.log(record.contract_number.toLowerCase().includes(value));
-            //record.statement.toLowerCase().includes(value.toLowerCase())
-          //},
-          // onFilterDropdownVisibleChange: (visible) => {
-          //   if (visible) {
-          //     setTimeout(() => {
-          //       this.searchInput.focus();
-          //     });
-          //   }
-          // },
-          render: (text) => {
-            const { searchText } = this.state;
-            return  text;
-          },
         }, {
           title: 'Дата заключения',
           dataIndex: 'date_started',
