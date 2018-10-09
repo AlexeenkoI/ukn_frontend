@@ -114,9 +114,9 @@ class Filters extends Component{
                         <FormItem
                         label="Период"
                         >
-                            <DatePicker placeholder="C" onChange={this.handleDateFrom}/>
+                            <DatePicker style={{width:'40%'}} placeholder="C" onChange={this.handleDateFrom}/>
                             -
-                            <DatePicker placeholder="По" onChange={this.handleDateTo}/>
+                            <DatePicker style={{width:'40%'}} placeholder="По" onChange={this.handleDateTo}/>
                         </FormItem>
                     </Col>
                     <Col span={2}>

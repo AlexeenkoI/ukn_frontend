@@ -24,7 +24,6 @@ const initialState = {
           surename : action.data.surename,
           status : action.data.status,
           role : action.data.role
-          //token : action.data.token
         }
       case 'LOGIN_FAIL':
         return {

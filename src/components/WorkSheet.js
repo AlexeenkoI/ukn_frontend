@@ -26,16 +26,11 @@ class WorkSheet extends Component{
     }
 
     handleSearch = (type,selectedKeys) => () => {
-        //confirm();
-        console.log('handle')
-        console.log(selectedKeys);
         this.props.applyFilter(this.props.user.id,this.props.contracts.filters, type, selectedKeys[0]);
-        //this.setState({ searchText: selectedKeys[0] });
     }
     
     handleReset = clearFilters => () => {
         clearFilters();
-        //this.setState({ searchText: '' });
         this.props.resetFilter(this.props.user.id,this.props.contracts.filters);
 
     }
@@ -75,28 +70,17 @@ class WorkSheet extends Component{
           dataIndex: 'name',
           key: 'contractor'
         },
-        //{
-        //  title: 'Стоимость',
-        //  dataIndex: 'price',
-        //  key: 'price'
-        //},
         {
           title: 'Примечание',
           dataIndex: 'comment',
           key: 'comment',
-          render : (data)=>{
-            return <span className="test">{data}</span>
+          render : (text, record)=>{
+            return <span className="test">{text}</span>
           }
         },{
           title: 'Исполнить до',
           dataIndex: 'date_deadline',
           key: 'date_deadline',
-          // filterDropdown: () => (
-          //   <div className="custom-filter-dropdown">
-          //   <DatePicker onChange={this.onCalendarChange} locale={locale}/>
-          //   </div>
-          // ),
-          // filterIcon: filtered => <Icon type="calendar" theme="outlined" />
         }];
         return !this.props.contracts.isLoaded ? 
         ( <div>

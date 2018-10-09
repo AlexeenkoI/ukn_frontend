@@ -9,8 +9,10 @@ import WorkSheet from './WorkSheet'
 import LeftMenu from './LeftMenu'
 import UsersList from './UsersList'
 import LoggedUser from './small/LoggedUser'
+import Notificator from './small/Notificator'
 
 import { logout } from '../actions/LoginActions'
+import { recieveContractNotification } from '../actions/NotificationsActions'
 
 import 'antd/dist/antd.css';
 import { Layout, Icon, Row, Col } from 'antd'
@@ -25,6 +27,7 @@ class MainOffice extends Component{
             isLogged : false,
             collapsed : false
         }
+
     }
 
     tryToLogin = (data) => {
@@ -42,9 +45,10 @@ class MainOffice extends Component{
         });
       }
     componentWillMount(){
-        socket.on('testEvent',(res)=>{
+        socket.on('updateContracts',(res)=>{
             console.log('hey hey im socket event');
-            console.dir(res);
+            console.log(res);
+            this.props.recieveContractNotification(res);
             //dispatch(initialItems(res))
         })
     }
@@ -62,16 +66,21 @@ class MainOffice extends Component{
                 <LeftMenu collapsed={this.state.collapsed}/>
                 <Layout>
                   <Header className="header" style={{ background: '#fff', padding: 0 }}>
-                  <Row>
-                  <Col span={2}>
-                    <Icon
-                      className="trigger"
-                      type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                      onClick={this.toggle}
-                      style={{ fontSize: 20, marginLeft:15,cursor:"pointer"}}
-                    />
+                  <Row type="flex" align="middle">
+                  <Col span={3}>
+                    <div>
+                        <span className="badge-info ant-badge">
+                            <Icon
+                              className="trigger"
+                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                              onClick={this.toggle}
+                              style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
+                            />
+                        </span>
+                        <Notificator notifications={this.props.notifications.contractsNotifications}/>
+                    </div>
                     </Col>
-                        <Col span={4} offset={18}>
+                        <Col span={3} offset={18}>
                             <LoggedUser
                              user={this.props.currentUser}
                              logOut={this.props.logout}
@@ -95,12 +104,14 @@ class MainOffice extends Component{
 const mapStateToProps = store =>{
     return {
         currentUser : store.user,
-        contracts : store.contracts
+        contracts : store.contracts,
+        notifications : store.notifications
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    logout : () => dispatch(logout())
+    logout : () => dispatch(logout()),
+    recieveContractNotification : (data) => dispatch(recieveContractNotification(data))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(MainOffice));
