@@ -4,6 +4,7 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const ETHERNAL_ERROR = 'ETHERNAL_ERROR';
 export const LOGOUT = 'LOGOUT';
+export const REINIT_USER = 'REINIT_USER';
 
 
 export function tryToLogin(auth,pass,isRemember){

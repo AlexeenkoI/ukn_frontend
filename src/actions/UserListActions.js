@@ -98,6 +98,10 @@ export function updatedUser(id,formData){
             if(json.success == true){
                 console.log(json);
                 message.success(json.msg);
+                if(id === formData.id){
+                    dispatch(rerenderUser(formData));
+                    dispatch(getUserList(id));
+                }
             }
         })
         .catch( err => {
@@ -121,4 +125,11 @@ export function insertOrUpdateUser(id, data){
 
 export function deleteUser(id,deleteUserId){
 
+}
+
+export function rerenderUser(data){
+    return {
+        type : "REINIT_USER",
+        data
+    }
 }

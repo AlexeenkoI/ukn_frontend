@@ -36,6 +36,14 @@ const initialState = {
           ...state,
           loggedIn : false
         }
+      case 'REINIT_USER' :
+        return {
+          ...state,
+          name : action.data.name,
+          surename : action.data.surename,
+          status : action.data.status,
+          role : action.data.role
+        }
       default:
         return state
     }
