@@ -7,6 +7,10 @@ import MainOffice from './components/MainOffice';
 import './App.css';
 import './styles/animate.css';
 
+/**
+ * Здесь подключается Локальный провайдер Ru-ru для Antd
+ */
+
 class App extends Component {
   constructor(props){
     super(props);

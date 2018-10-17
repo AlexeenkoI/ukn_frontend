@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Table, Drawer, Checkbox, Divider  } from 'antd'
+import { Table, Drawer, Checkbox, Divider, Spin   } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import UsersForm from './usersList/UsersForm'
-import { getUserList } from '../actions/UserListActions'
+import UserEdit from '../components/forms/UserEdit'
+import { getUserList, getUser, updatedUser } from '../actions/UserListActions'
 
 const data = [{
     id : 1,
@@ -24,15 +25,30 @@ class UsersList extends Component{
         this.toggleDrawer = this.toggleDrawer.bind(this)
     }
 
-    toggleDrawer = () =>{
+    toggleDrawer = incId =>{
         this.setState({
-            visible:!this.state.visible
+            visible: true
+        })
+        this.props.getCurrentUser(this.props.user.id, incId)
+        //action to load data to form in drawer
+    }
+
+    closeDrawer = () =>{
+        this.setState({
+            visible : false
         })
     }
 
     componentWillMount(){
+        console.log('mount user-list');
         this.props.getUserList(this.props.user.id);
     }
+
+    handleSubmit = (values) => {
+        console.log(values);
+        this.props.updatedUser(this.props.user.id, values);
+        this.closeDrawer();
+    };
 
     render(){
         const columns = [
@@ -41,7 +57,7 @@ class UsersList extends Component{
             dataIndex : 'is_active',
             key : 'is_active',
             render : (text,record) => (
-                <Checkbox checked={true} checked={this.state.is_active} />
+                <Checkbox checked={true} checked={record.is_active} />
             )
         },
         {
@@ -63,7 +79,7 @@ class UsersList extends Component{
             title : 'Действия',
             key : 'Action',
             render : (text,record) => (
-                <a onClick={this.toggleDrawer}>Редактировать</a>
+                <a onClick={() => this.toggleDrawer(record.id)}>Редактировать</a>
             )
         }]
         return(
@@ -79,16 +95,21 @@ class UsersList extends Component{
                     width="640"
                     placement="right"
                     closable={true}
-                    onClose={this.toggleDrawer}
+                    onClose={this.closeDrawer}
                     visible={this.state.visible}
+                    destroyOnClose={true}
                 >
+
                 <div>
-                    <p>Контент</p>
+                    <p>Изменение данных Пользователя</p>
                 </div>
                 <Divider/>
-                <div>
-                    <UsersForm/>
-                </div>
+                    <div>
+                        {this.props.userList.userIsLoading ? 
+                            (<Spin/>) :
+                            (<UserEdit onSubmit={this.handleSubmit} initialValues={this.props.userList.currentUserData} userRoles={this.props.userList.userRoles} />)
+                        }
+                    </div>
                 </Drawer>
             </div>
         )
@@ -104,6 +125,8 @@ const mapStateToProps = store =>{
 
 const mapDispatchToProps = dispatch =>({
     getUserList : (id) => dispatch(getUserList(id)),
+    getCurrentUser : (authUserId, incUserId) => dispatch(getUser(authUserId, incUserId)),
+    updatedUser : (authorizeId, formData) => dispatch(updatedUser(authorizeId, formData))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(UsersList));

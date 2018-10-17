@@ -17,9 +17,6 @@ class UsersForm extends Component{
         this.changePwdBttnClick = this.changePwdBttnClick.bind(this);
     }
 
-    handleSubmit = () => {
-
-    }
 
     changePwdBttnClick = () =>{
         console.log('click')

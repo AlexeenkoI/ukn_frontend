@@ -20,6 +20,10 @@ import { Layout, Icon, Row, Col } from 'antd'
 const { Header, Content } = Layout;
 const socket = openSocket('http://localhost:3002');
 
+
+/**
+ * Точка входа и роутинга в основные компоненты
+ */
 class MainOffice extends Component{
     constructor(props){
         super(props);

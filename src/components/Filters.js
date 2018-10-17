@@ -97,22 +97,22 @@ class Filters extends Component{
                 <Row gutter={12}>
                     <Col span={2} >
                         <FormItem
-                        label="Статус"
+                            label="Статус"
                         >
                             <Select 
-                            showSearch
-                            style={{ width: '100%' }}
-                            placeholder="Статус"
-                            onChange={this.handleStatusChange}
+                                showSearch
+                                style={{ width: '100%' }}
+                                placeholder="Статус"
+                                onChange={this.handleStatusChange}
                             >
-                            {this.props.filterData ? this.props.filterData.types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}
+                                {this.props.filterData ? this.props.filterData.types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}
                             </Select>
                     
                         </FormItem>
                     </Col>
                     <Col span={4}>
                         <FormItem
-                        label="Период"
+                            label="Период"
                         >
                             <DatePicker style={{width:'40%'}} placeholder="C" onChange={this.handleDateFrom}/>
                             -
@@ -120,22 +120,22 @@ class Filters extends Component{
                         </FormItem>
                     </Col>
                     <Col span={2}>
-                    <FormItem
-                    label="Заказчик"
-                    >
-                        <Select
-                        showSearch
-                        style={{width:'100%'}}
-                        placeholder="Заказчик"
+                        <FormItem
+                            label="Заказчик"
                         >
-                        </Select>
+                            <Select
+                                showSearch
+                                style={{width:'100%'}}
+                                placeholder="Заказчик"
+                            >
+                            </Select>
                         </FormItem>
                     </Col>
 
                     <Col span={6}>
 
                     <FormItem
-                    label='&nbsp;'
+                        label='&nbsp;'
                     >
                         <Button
                         type="primary"
@@ -143,7 +143,6 @@ class Filters extends Component{
                         loading={this.props.loadingState}
                         icon="search"
                         >
-                        
                         Искать
                         </Button>
                         <Button

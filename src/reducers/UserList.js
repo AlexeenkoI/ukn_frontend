@@ -1,9 +1,8 @@
 const initialState= {
-    currentUser : '',
+    currentUserId : '',
     isLoading : true,
-    changeData : {
-
-    },
+    currentUserData : {},
+    userIsLoading : false,
     data : []
 }
 
@@ -15,6 +14,22 @@ export function userListReducer(state = initialState, action){
                 ...state,
                 isLoading : false,
                 data : action.data
+            }
+        case 'RECIEVE_USER':
+        console.log(action)
+        const currentUserData = action.json.data[0];
+        const userRoles = action.json.userRoles;
+        console.log(userRoles);
+            return {
+                ...state,
+                userIsLoading : false,
+                currentUserData,
+                userRoles
+            }
+        case 'GET_USER':
+            return{
+                ...state,
+                userIsLoading : true,
             }
         default:
             return state;
