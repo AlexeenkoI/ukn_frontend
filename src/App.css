@@ -70,14 +70,22 @@ body {
   display:block;
 }
 .mainContainer .logo{
-  background: url('/images/ukn_logo.png') no-repeat bottom center;
-  width: 150px;
-  height: 150px;
-  background-position-x: 0px;
   margin:0 auto;
   transition: all .3s ease-in-out;
+}
+.mainContainer .logo img{
+  width: 100%;
 }
 .preloadSpinner{
   margin:0 auto;
   text-align:center;
 }
+.action-row{
+  display: inline-block
+}
+.action-title{
+  display:block;
+  padding:5px;
+}
+
+

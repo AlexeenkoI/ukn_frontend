@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { Table, Drawer, Checkbox, Divider, Spin   } from 'antd'
+import React, { Component, Fragment } from 'react'
+import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
 import UsersForm from './usersList/UsersForm'
 import UserEdit from '../components/forms/UserEdit'
-import { getUserList, getUser, updatedUser } from '../actions/UserListActions'
+import { getUserList, getUser, updatedUser, deleteUser, clearForm } from '../actions/UserListActions'
 
 const data = [{
     id : 1,
@@ -49,6 +49,17 @@ class UsersList extends Component{
         this.props.updatedUser(this.props.user.id, values);
         this.closeDrawer();
     };
+    deleteAction = (delId) => {
+        this.props.deleteById(this.props.user.id, delId);
+    }
+
+    createAction = () => {
+        this.props.clearForm();
+        this.setState({
+            visible: true
+        });
+
+    }
 
     render(){
         const columns = [
@@ -79,11 +90,18 @@ class UsersList extends Component{
             title : 'Действия',
             key : 'Action',
             render : (text,record) => (
-                <a onClick={() => this.toggleDrawer(record.id)}>Редактировать</a>
+                <div className="action-row">
+                    <a className="action-title" onClick={() => this.toggleDrawer(record.id)}>Редактировать</a>
+                    <Popconfirm onConfirm={() => this.deleteAction(record.id)} title="Вы уверены что хотите удалить запись?">
+                        <a className="action-title">Удалить</a>
+                    </Popconfirm>
+                </div>
+                
             )
         }]
         return(
             <div>
+                <Row><Button onClick={this.createAction}>Добавить Пользователя</Button></Row>
                 <Table  
                     rowKey="id" 
                     columns={columns} 
@@ -107,7 +125,7 @@ class UsersList extends Component{
                     <div>
                         {this.props.userList.userIsLoading ? 
                             (<Spin/>) :
-                            (<UserEdit onSubmit={this.handleSubmit} initialValues={this.props.userList.currentUserData} userRoles={this.props.userList.userRoles} />)
+                            (<UserEdit onSubmit={this.handleSubmit} initialValues={this.props.userList.currentUserData} userRoles={this.props.user.userRoles} />)
                         }
                     </div>
                 </Drawer>
@@ -126,7 +144,9 @@ const mapStateToProps = store =>{
 const mapDispatchToProps = dispatch =>({
     getUserList : (id) => dispatch(getUserList(id)),
     getCurrentUser : (authUserId, incUserId) => dispatch(getUser(authUserId, incUserId)),
-    updatedUser : (authorizeId, formData) => dispatch(updatedUser(authorizeId, formData))
+    updatedUser : (authorizeId, formData) => dispatch(updatedUser(authorizeId, formData)),
+    clearForm : () => dispatch(clearForm()),
+    deleteById : (id, deleteId) => dispatch(deleteUser(id, deleteId))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(UsersList));

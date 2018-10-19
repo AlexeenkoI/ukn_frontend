@@ -16,7 +16,6 @@ export function tryToLogin(auth,pass,isRemember){
                 password : pass
             }
         }
-        console.log(reqBody);
         fetch('/api/users/login',{
             headers: {
                 'Accept': 'application/json',
@@ -28,7 +27,8 @@ export function tryToLogin(auth,pass,isRemember){
         .then(response => response.json())
         .then(json => {
             if(json.success == true){
-                dispatch(successLogin(json.data[0]))
+                console.log(json);
+                dispatch(successLogin(json))
                 if(isRemember){
                    // document.cookie = "autoLogin=true";
                 }
@@ -54,10 +54,11 @@ export function startLogin(){
     }
 }
 
-export function successLogin(userData){
+export function successLogin(incData){
     return{
         type : LOGIN_SUCCESS,
-        data : userData,
+        data : incData.data[0],
+        userRoles : incData.userRoles,
         isFetching : false
     }
 }

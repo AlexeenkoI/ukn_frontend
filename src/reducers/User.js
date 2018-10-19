@@ -23,7 +23,8 @@ const initialState = {
           name : action.data.name,
           surename : action.data.surename,
           status : action.data.status,
-          role : action.data.role
+          role : action.data.role,
+          userRoles : action.userRoles
         }
       case 'LOGIN_FAIL':
         return {

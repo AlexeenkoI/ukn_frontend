@@ -10,16 +10,15 @@ export function userListReducer(state = initialState, action){
     switch(action.type){
         case 'RECIEVE_USERS_LIST':
             console.log('recieve');
+            console.log(action);
             return {
                 ...state,
                 isLoading : false,
-                data : action.data
+                data : action.data.users,
             }
         case 'RECIEVE_USER':
-        console.log(action)
-        const currentUserData = action.json.data[0];
-        const userRoles = action.json.userRoles;
-        console.log(userRoles);
+            const currentUserData = action.json.data[0];
+            const userRoles = action.json.userRoles;
             return {
                 ...state,
                 userIsLoading : false,
@@ -30,6 +29,11 @@ export function userListReducer(state = initialState, action){
             return{
                 ...state,
                 userIsLoading : true,
+            }
+        case 'CLEAR_CURRENT_USER':
+            return {
+                ...state,
+                currentUserData : {}
             }
         default:
             return state;

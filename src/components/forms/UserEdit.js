@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider,Collapse } from 'antd'
 import { Field, reduxForm } from 'redux-form'
-import { connect } from 'react-redux'
+import { connect, destroy } from 'react-redux'
 const FormItem = Form.Item;
 
 /**
@@ -120,7 +120,8 @@ function mapStateToProps(state, ownProps) {
 export default connect(mapStateToProps)(reduxForm({
   form:'UserForm',
   validate,
-  enableReinitialize : true
+  enableReinitialize : true,
+  destroyOnUnmount: true
 })(UserEdit))
 
 //export default UserEdit = reduxForm({

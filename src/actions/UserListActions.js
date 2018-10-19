@@ -8,12 +8,12 @@ export const UPDATE_SUCSESS = 'UPDATE_SUCSESS';
 export const UPDATE_ERROR = 'UPDATE_ERROR';
 export const GET_USER = 'GET_USER';
 export const RECIEVE_USER = 'RECIEVE_USER';
+export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
 
 
 export function getUserList(id){
     return function(dispatch){
        // dispatch(fetchUsers());
-       console.log('start');
         const reqBody = {
             userId : id,
         }
@@ -29,7 +29,7 @@ export function getUserList(id){
         .then(json => {
             if(json.success == true){
                 console.log('user list recieved');
-                dispatch(recieveUserList(json.users))
+                dispatch(recieveUserList(json))
             }
         })
         .catch(err => {
@@ -101,6 +101,8 @@ export function updatedUser(id,formData){
                 if(id === formData.id){
                     dispatch(rerenderUser(formData));
                     dispatch(getUserList(id));
+                }else{
+                    dispatch(getUserList(id));
                 }
             }
         })
@@ -115,7 +117,8 @@ export function recieveUserList(data){
     console.log(data);
     return {
         type : RECIEVE_USERS_LIST,
-        data
+        data,
+
     }
 }
 
@@ -124,12 +127,45 @@ export function insertOrUpdateUser(id, data){
 }
 
 export function deleteUser(id,deleteUserId){
-
+    return function(dispatch){
+        if(id === deleteUserId){
+            message.warning('Вы не можете удалить свою учетную запись!');
+            return;
+        }
+        const reqBody = {
+            userId : id,
+            deleteId : deleteUserId
+        }
+        fetch('/api/users/deleteuser/' + deleteUserId,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'DELETE',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            message.success(json.msg)
+            dispatch(getUserList(id))
+        })
+        .catch( err => {
+            message.error(err);
+            console.log(err);
+        })
+    }
+    
 }
 
 export function rerenderUser(data){
     return {
         type : "REINIT_USER",
         data
+    }
+}
+
+export function clearForm(){
+    return {
+        type : CLEAR_CURRENT_USER
     }
 }

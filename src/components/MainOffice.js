@@ -13,6 +13,7 @@ import Notificator from './small/Notificator'
 
 import { logout } from '../actions/LoginActions'
 import { recieveContractNotification } from '../actions/NotificationsActions'
+import { getUser, updatedUser } from '../actions/UserListActions'
 
 import 'antd/dist/antd.css';
 import { Layout, Icon, Row, Col } from 'antd'
@@ -62,6 +63,10 @@ class MainOffice extends Component{
         console.log("Disconnecting Socket as component will unmount");
     }
 
+    handleProfileSubmit = values => {
+        this.props.changeProfileData(this.props.currentUser.id, values);
+    }
+
 
     render(){
         return(
@@ -88,6 +93,10 @@ class MainOffice extends Component{
                             <LoggedUser
                              user={this.props.currentUser}
                              logOut={this.props.logout}
+                             loadProfile={this.props.getProfileData}
+                             onSubmit={this.handleProfileSubmit}
+                             ownProfile = {this.props.userProfile}
+                             isLoading = {this.props.isLoadingProfile}
                              />
                         </Col>
                         </Row>
@@ -109,13 +118,17 @@ const mapStateToProps = store =>{
     return {
         currentUser : store.user,
         contracts : store.contracts,
-        notifications : store.notifications
+        notifications : store.notifications,
+        isLoadingProfile : store.userList.userIsLoading,
+        userProfile : store.userList.currentUserData
     }
 }
 
 const mapDispatchToProps = dispatch => ({
     logout : () => dispatch(logout()),
-    recieveContractNotification : (data) => dispatch(recieveContractNotification(data))
+    recieveContractNotification : (data) => dispatch(recieveContractNotification(data)),
+    getProfileData : (userId, profileId) => dispatch(getUser(userId, profileId)),
+    changeProfileData : (userId, formData) => dispatch(updatedUser(userId, formData))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(MainOffice));

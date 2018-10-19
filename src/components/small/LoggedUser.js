@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Avatar, Menu, Dropdown, Icon, Modal } from 'antd'
+import { Avatar, Menu, Dropdown, Icon, Modal, Spin } from 'antd'
+import UserEdit from '../../components/forms/UserEdit'
 
 
 class LoggedUser extends Component{
@@ -13,7 +14,19 @@ class LoggedUser extends Component{
         this.setState(state => ({
             isModalOn: !state.isModalOn
         }));
-      }
+        this.props.loadProfile(this.props.user.id, this.props.user.id);
+    }
+
+    cancelModal = () => {
+        this.setState(state => ({
+            isModalOn : false
+        }))
+    }
+    onFormSubmit = (values) => {
+        this.cancelModal();
+        this.props.onSubmit(values);
+    }
+
 
     render(){
         const dropDownMenu = (
@@ -33,20 +46,30 @@ class LoggedUser extends Component{
                 <Avatar icon="user" size={30} shape="circle" />
                 <span style={{padding:'10px'}}>{`${this.props.user.name} ${this.props.user.surename}`}</span>
                 <Dropdown overlay={dropDownMenu}  trigger={['click']}>
-                <a className="ant-dropdown-link">
-                  действия <Icon type="down" />
-                </a>
+                    <a className="ant-dropdown-link">
+                      действия <Icon type="down" />
+                    </a>
                 </Dropdown>
                 <Modal
                  footer={false}
                  visible={this.state.isModalOn}
                  onCancel={this.handleClick}
+                 title="Информация о профиле"
                  >
-                    test content...
+                 {this.props.isLoading ? 
+                    (<Spin/>) :
+                    ( <UserEdit 
+                        onSubmit={this.onFormSubmit} 
+                        initialValues={this.props.ownProfile} 
+                        userRoles={this.props.user.userRoles}
+                    />)
+                }
+                   
                 </Modal>
             </div>
         )
     }
 }
+
 
 export default LoggedUser;
