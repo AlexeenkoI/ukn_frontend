@@ -15,12 +15,14 @@ const initialState = {
       offset : "",
       whereString : "",
     },
-    data : [],
     filterData : {
       types : [],
       users : [],
       contractors : []
-    }
+    },
+    data : [],
+    contractLoading: false,
+    currentContract : {}
   }
   
   export function contractsReducer(state = initialState, action) {
@@ -63,6 +65,18 @@ const initialState = {
             types : action.types,
             users : action.users
           }
+        }
+      case 'START_GET_CONTRACT_DATA' :
+        return {
+          ...state,
+          contractLoading : true,
+        }
+      case 'RECIEVE_CONTRACT_DATA' :
+        const currentContract = action.data[0];
+        return {
+          ...state,
+          contractLoading : false,
+          currentContract 
         }
       default:
         return state;

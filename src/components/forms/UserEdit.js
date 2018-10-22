@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider,Collapse } from 'antd'
+import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse } from 'antd'
 import { Field, reduxForm } from 'redux-form'
 import { connect, destroy } from 'react-redux'
 const FormItem = Form.Item;
@@ -51,24 +51,24 @@ class UserEdit extends Component{
         console.log(this.props);
     }
 
-    handleSubmit = values =>{
-        console.log(values);
-        return false
-    }
+    //handleSubmit = values =>{
+    //    console.log(values);
+    //    return false
+    //}
 
     render(){
-        const {handleSubmit, pristine,submitting, reset} = this.props;
+        const { handleSubmit, pristine,submitting, reset } = this.props;
         const submit = (values) => console.log(values);
 
         return(
             <Form onSubmit={handleSubmit}>
                 <Field type="hidden" component="input" name="id"/>
-                <Field label="Активнвость" name="is_active" component={ACheckbox} type="checkbox" />
+                <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
                 <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
                 <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
                 <Field label="Логин" name="login" component={AInput} placeholder="" />
                 {this.props.userStatus == 1 &&
-                    <Field label="Статус" component={ASelect} name="role">
+                    <Field label="Статус" component={ASelect}  name="role">
                         {this.props.userRoles.map(role =>
                             <Select.Option value={role.id} key={role.id}>
                               {role.role_name}
@@ -112,7 +112,7 @@ function mapStateToProps(state, ownProps) {
             name : ownProps.initialValues.name,
             surename : ownProps.initialValues.surename,
             login : ownProps.initialValues.login,
-            role : state.user.role
+            role : ownProps.initialValues.role
         }
     }
 }

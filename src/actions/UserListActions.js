@@ -78,10 +78,10 @@ export function fetchUser(){
     }
 }
 
-export function updatedUser(id,formData){
+export function updatedUser(incId,formData){
     return function(dispatch){
         const reqBody = {
-            userId : id,
+            userId : incId,
             data : formData
         }
         const id = formData.id ? formData.id : '';
@@ -96,9 +96,8 @@ export function updatedUser(id,formData){
         .then( res => res.json())
         .then( json => {
             if(json.success == true){
-                console.log(json);
                 message.success(json.msg);
-                if(id === formData.id){
+                if(incId === formData.id){
                     dispatch(rerenderUser(formData));
                     dispatch(getUserList(id));
                 }else{
@@ -113,8 +112,6 @@ export function updatedUser(id,formData){
 }
 
 export function recieveUserList(data){
-    console.log('recieve user list');
-    console.log(data);
     return {
         type : RECIEVE_USERS_LIST,
         data,

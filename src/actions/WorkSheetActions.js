@@ -1,10 +1,16 @@
+import { message } from 'antd'
+
 export const START_GET_CONTRACTS = 'START_GET_CONTRACTS';
 export const RECIEVE_CONTRACTS = 'RECIEVE_CONTRACTS';
 export const ERROR_RECIEVE_CONTRACTS = 'ERROR_RECIEVE_CONTRACTS';
 export const SET_FILTERS = 'SET_FILTERS';
 export const APPLY_FILTERS = 'APPLY_FILTERS';
 export const RESET_FILTERS = 'RESET_FILTERS';
-export const RECIEVE_FILTER_VALUES = 'RECIEVE_FILTER_VALUES'
+export const RECIEVE_FILTER_VALUES = 'RECIEVE_FILTER_VALUES';
+export const START_GET_CONTRACT_DATA = 'START_GET_CONTRACT_DATA';
+export const RECIEVE_CONTRACT_DATA = 'RECIEVE_CONTRACT_DATA';
+export const UPDATE_CONTRACT_DATA = 'UPDATE_CONTRACT_DATA';
+export const DELETE_CONTRACT_DATA = 'DELETE_CONTRACT_DATA';
 
 export function getContracts(id,filterData){
     return function(dispatch){
@@ -157,4 +163,57 @@ export function recieveFilters(data){
         types : data.filterData.types,
         users : data.filterData.users
     }
+}
+
+export function getContract(user, contractId){
+    return function(dispatch){
+        const reqBody = {
+            userId : user,
+            contractId : contractId
+        }
+
+        fetch('/api/contracts/getcontract/' + contractId , {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log('contract recieved');
+            console.log(json);
+            if(json.success == true){
+                dispatch(recieveContract(json.data));
+            }else{
+                message.warning(json.msg);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+    }
+}
+
+export function startGettingContract(){
+    return{
+        type : START_GET_CONTRACT_DATA
+    }
+}
+
+export function recieveContract(data){
+    return {
+        type : RECIEVE_CONTRACT_DATA,
+        data
+    }
+}
+
+export function updateContract(id, data){
+
+}
+
+export function deleteContract(id, deleteId){
+
 }

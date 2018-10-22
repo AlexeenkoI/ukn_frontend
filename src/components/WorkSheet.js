@@ -1,21 +1,24 @@
 import React, { Component } from 'react'
 import Preloader from './Preloader'
-import { Table, Input, Button, Icon } from 'antd';
+import { Table, Input, Button, Icon, Modal, Spin } from 'antd';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/ru_RU';
 
-import { getContracts , setFilters } from '../actions/WorkSheetActions'
+import { getContracts , setFilters, getContract, updateContract } from '../actions/WorkSheetActions'
 import Filters from './Filters';
+import ContractEdit from './forms/ContractEdit';
 
 
 class WorkSheet extends Component{
     constructor(props){
         super(props);
         this.state = {
-            searchText: '',
+            searchText : '',
+            isModalOn : false
           };
+        //this.handleClick = this.handleModalClick.bind(this);
     }
 
     componentWillMount(){
@@ -43,7 +46,30 @@ class WorkSheet extends Component{
       console.log(string);
     }
 
+    onRecordClick = (recoordId) => {
+      const { user, getContract } = this.props;
+      console.log('record clicked: ' + recoordId);
+      this.setState(state => ({
+        isModalOn: !state.isModalOn
+      }));
+      getContract(user.id, recoordId);
+    }
+
+    closeModalClick = () => {
+      this.setState(state => ({
+          isModalOn: false
+      }));
+    }
+
+    onContractFormSubmit = (values) => {
+      console.log('form submitted.');
+      console.log(values);
+      return false;
+    }
+
     render(){
+
+
         const columns = [{
           title: '№ Договора',
           dataIndex: 'contract_number',
@@ -75,7 +101,7 @@ class WorkSheet extends Component{
           dataIndex: 'comment',
           key: 'comment',
           render : (text, record)=>{
-            return <span className="test">{text}</span>
+            return <a onClick={() => {this.onRecordClick(record.id)}}>Информация</a>
           }
         },{
           title: 'Исполнить до',
@@ -98,6 +124,23 @@ class WorkSheet extends Component{
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
             pagination={{defaultPageSize:10,pageSize:10}} />
+          <Modal
+          footer={false}
+          visible={this.state.isModalOn}
+          onCancel={this.closeModalClick}
+          title="Информация о заявке"
+          >
+            {this.props.contracts.contractLoading ? 
+              (<Spin/>):
+              (<ContractEdit
+                contractData = {this.props.contracts.currentContract}
+                onSubmit = {this.onContractFormSubmit}
+                //isLoading = {this.contracts.contractLoading}
+                statuses = {this.props.contracts.filterData.types}
+              />)
+            }
+            
+          </Modal>
           </div>
         );
       }
@@ -113,6 +156,8 @@ class WorkSheet extends Component{
     const mapDispatchToProps = dispatch =>({
       getContracts : (id,limit,offset,filterData) => dispatch(getContracts(id,limit,offset,filterData)),
       setFilters : (name, filter) => dispatch(setFilters(name, filter)),
+      getContract : (userId, id) => dispatch(getContract(userId,id)),
+      updateContract : (userId, formData) => dispatch(updateContract(userId,formData))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 
