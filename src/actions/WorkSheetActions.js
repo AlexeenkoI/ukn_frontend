@@ -210,10 +210,43 @@ export function recieveContract(data){
     }
 }
 
-export function updateContract(id, data){
-
+export function updateContract(id, formData, filterData){
+    return function (dispatch){
+        const reqBody = {
+            userId : id,
+            data : formData
+        }
+        fetch('/api/contracts/updatecontract/' + formData.id , {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'PUT',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            if(json.success == true){
+                message.success(json.msg);
+                dispatch(getContracts(id, filterData))
+            }else{
+                message.warning(json.msg);
+            }
+        })
+        .catch( err => {
+            message.warning(err);
+        })
+    }
 }
 
 export function deleteContract(id, deleteId){
+
+}
+
+export function getContractFileList(userId, contractId){
+
+}
+
+export function updateContractFileList(userId, data){
 
 }

@@ -22,10 +22,13 @@ class WorkSheet extends Component{
     }
 
     componentWillMount(){
-      if(!this.props.contracts.isLoaded){
+      //if(!this.props.contracts.isLoaded){
+        //Устанавливаем фильтр на текущего пользователя
         this.props.setFilters('contractor',this.props.user.id);
+        //Устанавливаем фильтр по умолчанию на статус заявок - В работе
+        this.props.setFilters('status', 2);
         this.props.getContracts(this.props.user.id,this.props.contracts.filters);
-      }
+      //}
     }
 
     handleSearch = (type,selectedKeys) => () => {
@@ -62,9 +65,11 @@ class WorkSheet extends Component{
     }
 
     onContractFormSubmit = (values) => {
+      const { user, updateContract, contracts } = this.props;
       console.log('form submitted.');
       console.log(values);
-      return false;
+      updateContract(user.id, values, contracts.filters);
+      this.closeModalClick();
     }
 
     render(){
@@ -157,7 +162,7 @@ class WorkSheet extends Component{
       getContracts : (id,limit,offset,filterData) => dispatch(getContracts(id,limit,offset,filterData)),
       setFilters : (name, filter) => dispatch(setFilters(name, filter)),
       getContract : (userId, id) => dispatch(getContract(userId,id)),
-      updateContract : (userId, formData) => dispatch(updateContract(userId,formData))
+      updateContract : (userId, formData, filterData) => dispatch(updateContract(userId,formData,filterData))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 

@@ -22,7 +22,6 @@ class Filters extends Component{
     }
     componentWillMount(){
         this.props.getFilterData(this.props.user.id);
-        console.log(this.props)
     }
 
     handeSubmit = (e) =>{
@@ -72,7 +71,7 @@ class Filters extends Component{
                         <Select 
                         showSearch
                         style={{ width: '100%' }}
-                        defaultValue={this.props.user.name}
+                        defaultValue={this.props.user.id}
                         value={this.props.filters.contractor}
                         placeholder="Исполнитель"
                         onChange={this.handleContractorChange}
@@ -103,6 +102,7 @@ class Filters extends Component{
                                 showSearch
                                 style={{ width: '100%' }}
                                 placeholder="Статус"
+                                value = {this.props.filters.status}
                                 onChange={this.handleStatusChange}
                             >
                                 {this.props.filterData ? this.props.filterData.types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}

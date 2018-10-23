@@ -10,6 +10,7 @@ import LeftMenu from './LeftMenu'
 import UsersList from './UsersList'
 import LoggedUser from './small/LoggedUser'
 import Notificator from './small/Notificator'
+import CustomersList from './CustomersList'
 
 import { logout } from '../actions/LoginActions'
 import { recieveContractNotification } from '../actions/NotificationsActions'
@@ -105,6 +106,7 @@ class MainOffice extends Component{
                     <Switch>
                         <Route exact path="/" component={WorkSheet}/>
                         <Route exact path="/users-list" component={UsersList}/>
+                        <Route path="/customers-list" component={CustomersList}/>
                     </Switch>
                   </Content>
                 </Layout>

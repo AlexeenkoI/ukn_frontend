@@ -37,8 +37,8 @@ class LeftMenu extends Component{
                   <span>Сотрудники</span>
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="3">
-              <NavLink to="/"  activeClassName="active">
+              <Menu.Item key="/customers-list">
+              <NavLink to="/customers-list"  activeClassName="active">
                 <Icon type="solution" theme="outlined" />
                 <span>Клиенты</span>
               </NavLink>

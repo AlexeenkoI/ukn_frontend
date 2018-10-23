@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react'
 import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-
-import UsersForm from './usersList/UsersForm'
 import UserEdit from '../components/forms/UserEdit'
 import { getUserList, getUser, updatedUser, deleteUser, clearForm } from '../actions/UserListActions'
 
