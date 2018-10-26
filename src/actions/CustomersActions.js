@@ -6,10 +6,55 @@ export const RECIEVE_CUSTOMER = 'RECIEVE_CUSTOMER';
 export const UPDATE_CUSTOMER = 'UPDATE_CUSTOMER';
 export const DELETE_CUSTOMER = 'DELETE_CUSTOMER';
 export const CREATE_CUSTOMER = 'CREATE_CUSTOMER';
+export const SET_SEARCH_STRING = 'SET_SEARCH_STRING';
+export const RESET_SEARCH_STRING = 'RESET_SEARCH_STRING';
 
-export const getCustomersList = (userId, searchStr) => {
+export const startGetCustomers = () =>{
+    return {
+        type : GET_CUSTOMERS_LIST
+    }
+}
+
+export const getCustomersList = (uId, searchStr) => {
     return (dispatch) => {
         //TO DO
+        dispatch(startGetCustomers())
+        const reqBody = {
+            userId : uId,
+            search : searchStr
+        }
+        fetch('/api/customers/getcustomers',{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                console.log('customers list recieved');
+                console.log(json);
+                dispatch(recieveCustomersList(json.data))
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+}
+
+export const search = (str) => {
+    return {
+        type : SET_SEARCH_STRING,
+        str
+    }
+}
+
+export const resetSearch = () => {
+    return {
+        type : RESET_SEARCH_STRING
     }
 }
 
@@ -20,9 +65,31 @@ export const recieveCustomersList = (data) => {
     }
 }
 
-export const getCurrentCustomer = (userId, customerId) => {
+export const getCurrentCustomer = (uId, customerId) => {
     return (dispatch) => {
         //TO DO
+        const reqBody = {
+            userId : uId,
+        }
+        fetch('/api/customers/getcustomer/' + customerId,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                console.log('customer recieved');
+                console.log(json);
+                dispatch(recieveCustomer(json.data))
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 }
 
@@ -33,15 +100,65 @@ export const recieveCustomer = (data) => {
     }
 }
 
-export const updateCustomer = (userId, formData) => {
+export const updateCustomer = (uId, formData, str) => {
     return (dispatch) => {
         //TO DO
+        const reqBody = {
+            userId : uId,
+            data : formData
+        }
+        fetch('/api/customers/updatecustomer/' + formData.id,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                //console.log('customer recieved');
+                console.log(json);
+                dispatch(getCustomersList(uId, str));
+                message.success(json.msg);
+            }else{
+                console.log('err');
+                console.log(json);
+                //message.warning(json.msg);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            message.warning(err);
+        });
     }
 }
 
-export const deleteCustomer = (userId, deleteId) => {
+export const deleteCustomer = (uId, deleteId, str) => {
     return (dispatch) => {
         //TO DO
+        const reqBody = {
+            userId : uId,
+            deleteId : deleteId
+        }
+        fetch('/api/customers/deletecustomer/' + deleteId,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'DELETE',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            message.success(json.msg)
+            dispatch(getCustomersList(uId, str))
+        })
+        .catch( err => {
+            message.error(err);
+            console.log(err);
+        })
     }
 }
 
@@ -49,4 +166,8 @@ export const insertCustomer = (userId, formData) => {
     return (dispatch) => {
         //TO DO
     }
+}
+
+export const setSearch = (userId, string) => {
+
 }

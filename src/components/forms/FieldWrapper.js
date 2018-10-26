@@ -15,7 +15,7 @@ const formItemLayout = {
   };
   /**
    * Wrapper for antd form Components
-   * @param {*} Component 
+   * @param Component 
    */
   const FieldWrapper = Component => ({ input, meta, children, hasFeedback, label, ...rest }) => {
     const hasError = meta.touched && meta.invalid;

@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Field, reduxForm } from 'redux-form'
 import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse, Upload } from 'antd'
 import FieldWrapper from './FieldWrapper'
-import TextArea from 'antd/lib/input/TextArea';
 
 const AInput = FieldWrapper(Input);
 const ACheckbox = FieldWrapper(Checkbox);

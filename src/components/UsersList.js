@@ -123,7 +123,11 @@ class UsersList extends Component{
                     <div>
                         {this.props.userList.userIsLoading ? 
                             (<Spin/>) :
-                            (<UserEdit onSubmit={this.handleSubmit} initialValues={this.props.userList.currentUserData} userRoles={this.props.user.userRoles} />)
+                            (<UserEdit 
+                                onSubmit={this.handleSubmit} 
+                                initialValues={this.props.userList.currentUserData} 
+                                userRoles={this.props.user.userRoles} 
+                            />)
                         }
                     </div>
                 </Drawer>
