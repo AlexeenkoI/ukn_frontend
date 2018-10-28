@@ -122,10 +122,10 @@ export class CustomersList extends Component {
             />
 
             <Table  
-            rowKey="phone" 
-            columns={columns}
-            dataSource={customers.data}
-            loading = {customers.loading}
+                rowKey="phone" 
+                columns={columns}
+                dataSource={customers.data}
+                loading = {customers.loading}
             />
             <Modal
                 footer={false}

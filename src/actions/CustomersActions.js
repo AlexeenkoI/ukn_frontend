@@ -15,7 +15,7 @@ export const startGetCustomers = () =>{
     }
 }
 
-export const getCustomersList = (uId, searchStr) => {
+export const getCustomersList = (uId, searchStr = '') => {
     return (dispatch) => {
         //TO DO
         dispatch(startGetCustomers())
@@ -162,9 +162,30 @@ export const deleteCustomer = (uId, deleteId, str) => {
     }
 }
 
-export const insertCustomer = (userId, formData) => {
+export const insertCustomer = (uId, formData) => {
     return (dispatch) => {
         //TO DO
+        const reqBody = {
+            userId : uId,
+            data : formData
+        }
+        fetch('/api/customers/createcustomer/',{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'PUT',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            message.success(json.msg)
+            dispatch(getCustomersList(uId))
+        })
+        .catch( err => {
+            message.error(err);
+            console.log(err);
+        })
     }
 }
 

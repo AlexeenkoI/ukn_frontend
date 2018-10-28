@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon } from 'antd'
 import { hashHistory } from 'react-router'
-import { NavLink, withRouter } from 'react-router-dom'
+import { NavLink, withRouter, Link } from 'react-router-dom'
 
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -22,23 +22,33 @@ class LeftMenu extends Component{
             collapsed={this.props.collapsed}
           >
             <div className="logo" >
+            <Link to ="/">
               <img src="/images/ukn_logo2.png" />
+              </Link>
             </div>
             <Menu theme="dark" mode="inline" selectedKeys={[this.props.history.location.pathname]}>
-              <Menu.Item key="/">
-                <NavLink exact={true} to="/" activeClassName="active">
-                  <Icon type="file-text" />
-                  <span>Заявления</span>
+              <SubMenu key="/contracts" title={<span><Icon type="file-text"/><span>Заявления</span></span>}>
+                <Menu.Item key="/contracts">
+                  <NavLink exact={true} to="/contracts" activeClassName="active">
+                    <Icon type="file-text" />
+                    <span>Все заявления</span>
+                  </NavLink>
+                </Menu.Item>
+                <Menu.Item key="/contracts/create">
+                <NavLink exact={true} to="/contracts/create" activeClassName="active">
+                  <Icon type="file-add" />
+                  <span>Создать заявление</span>
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="/users-list">
-                <NavLink exact={true} to="/users-list" activeClassName="active">
+              </SubMenu>
+              <Menu.Item key="/users">
+                <NavLink exact={true} to="/users" activeClassName="active">
                   <Icon type="team" />
                   <span>Сотрудники</span>
                 </NavLink>
               </Menu.Item>
-              <Menu.Item key="/customers-list">
-              <NavLink to="/customers-list"  activeClassName="active">
+              <Menu.Item key="/customers">
+              <NavLink to="/customers"  activeClassName="active">
                 <Icon type="solution" theme="outlined" />
                 <span>Клиенты</span>
               </NavLink>

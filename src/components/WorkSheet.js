@@ -3,6 +3,7 @@ import Preloader from './Preloader'
 import { Table, Input, Button, Icon, Modal, Spin } from 'antd';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 import { DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/ru_RU';
 
@@ -73,8 +74,7 @@ class WorkSheet extends Component{
     }
 
     render(){
-
-
+      const { user } = this.props;
         const columns = [{
           title: '№ Договора',
           dataIndex: 'contract_number',
@@ -118,22 +118,29 @@ class WorkSheet extends Component{
             <Preloader/>
           </div>) :
         ( <div>
+          {user.id <= 2 &&
+            <div>
+              <Link to="/contracts/create"><Button>Создать заявление</Button></Link>
+            </div>
+          }
           <Filters
            user={this.props.user} 
            filterData={this.props.contracts.filterData}
            filters={this.props.contracts.filters}
            loadingState={this.props.contracts.isFetching}
            />
-          <Table  rowKey="id" columns={columns} 
+          <Table  
+            rowKey="id" 
+            columns={columns} 
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
             pagination={{defaultPageSize:10,pageSize:10}} />
           <Modal
-          footer={false}
-          visible={this.state.isModalOn}
-          onCancel={this.closeModalClick}
-          title="Информация о заявке"
+            footer={false}
+            visible={this.state.isModalOn}
+            onCancel={this.closeModalClick}
+            title="Информация о заявке"
           >
             {this.props.contracts.contractLoading ? 
               (<Spin/>):

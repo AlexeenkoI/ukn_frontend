@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import {Switch,Route} from 'react-router-dom'
+import React, { Component, Fragment } from 'react'
+import { Switch, Route, Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import openSocket from 'socket.io-client';
@@ -11,6 +11,10 @@ import UsersList from './UsersList'
 import LoggedUser from './small/LoggedUser'
 import Notificator from './small/Notificator'
 import CustomersList from './CustomersList'
+import CreateContractForm from './forms/CreateContractForm'
+import NotMatch from './NotMatch';
+import HomePage from './HomePage';
+import TopCrumbs from './TopCrumbs';
 
 import { logout } from '../actions/LoginActions'
 import { recieveContractNotification } from '../actions/NotificationsActions'
@@ -70,48 +74,68 @@ class MainOffice extends Component{
 
 
     render(){
+        const { currentUser } = this.props;
+
+        if(currentUser.loggedIn == false){
+            return (
+                <Fragment>
+                    { this.props.location.pathname !=="/login" && <Redirect to="/login"/>}
+                    <Route path="/login" component={AuthWindow}></Route>
+                </Fragment>
+            )
+        }
+        
         return(
-            this.props.currentUser.loggedIn ?
-            (<Layout className="mainContainer">
+            
+            <Layout className="mainContainer">
                 <LeftMenu collapsed={this.state.collapsed}/>
                 <Layout>
                   <Header className="header" style={{ background: '#fff', padding: 0 }}>
-                  <Row type="flex" align="middle">
-                  <Col span={3}>
-                    <div>
-                        <span className="badge-info ant-badge">
-                            <Icon
-                              className="trigger"
-                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                              onClick={this.toggle}
-                              style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
-                            />
-                        </span>
-                        <Notificator notifications={this.props.notifications.contractsNotifications}/>
-                    </div>
-                    </Col>
-                        <Col span={3} offset={18}>
+                    <Row type="flex" justify="space-between" align="middle">
+                        <Col>
+                            <div>
+                                <span className="badge-info ant-badge">
+                                    <Icon
+                                      className="trigger"
+                                      type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                                      onClick={this.toggle}
+                                      style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
+                                    />
+                                </span>
+                                <Notificator notifications={this.props.notifications.contractsNotifications}/>
+                            </div>
+                        </Col>
+                        <Col style={{marginRight:'15px'}}>
                             <LoggedUser
-                             user={this.props.currentUser}
-                             logOut={this.props.logout}
-                             loadProfile={this.props.getProfileData}
-                             onSubmit={this.handleProfileSubmit}
-                             ownProfile = {this.props.userProfile}
-                             isLoading = {this.props.isLoadingProfile}
+                                user={this.props.currentUser}
+                                logOut={this.props.logout}
+                                loadProfile={this.props.getProfileData}
+                                onSubmit={this.handleProfileSubmit}
+                                ownProfile = {this.props.userProfile}
+                                isLoading = {this.props.isLoadingProfile}
                              />
                         </Col>
-                        </Row>
+                    </Row>
                   </Header>
                   <Content style={{ margin: '24px 16px 16px 24px', padding: 24, background: '#fff' }}>
+                    <div style={{padding:'15px'}}>
+                        <TopCrumbs/>
+                    </div>
                     <Switch>
-                        <Route exact path="/" component={WorkSheet}/>
-                        <Route exact path="/users-list" component={UsersList}/>
-                        <Route path="/customers-list" component={CustomersList}/>
+                        {/* Пока главной страницы нет, редиректим с главной на /contracts а с /login на главную */}
+                        <Redirect from ="/login" to="/"/>
+                        <Redirect exact from="/" to="/contracts" />
+                        <Route exact path="/" component={HomePage}/>
+                        <Route exact path="/contracts" component={WorkSheet} />
+                        <Route path="/contracts/create" component={CreateContractForm} />
+                        <Route exact path="/users" component={UsersList}/>
+                        <Route path="/customers" component={CustomersList}/>
+                        <Route component={NotMatch} />
                     </Switch>
                   </Content>
                 </Layout>
-              </Layout>) :
-            <AuthWindow login={this.tryToLogin}/>
+              </Layout>
+                
         )
     }
 }
