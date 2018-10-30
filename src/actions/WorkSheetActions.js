@@ -1,4 +1,4 @@
-import { message } from 'antd'
+import { message, notification } from 'antd'
 
 export const START_GET_CONTRACTS = 'START_GET_CONTRACTS';
 export const RECIEVE_CONTRACTS = 'RECIEVE_CONTRACTS';
@@ -249,4 +249,43 @@ export function getContractFileList(userId, contractId){
 
 export function updateContractFileList(userId, data){
 
+}
+
+export function createContract(uId,formData){
+    return function (dispatch){
+        const reqBody = {
+            userId : uId,
+            data : formData
+        }
+        fetch('/api/contracts/createcontract/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'PUT',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            if(json.success == true){
+                //message.success(json.msg);
+                notification.open({
+                    message : 'Заявка создана',
+                    description : 'Заявление создано и отправлено в работу.',
+                    duration : 3.5
+                })
+                dispatch(getContracts(uId))
+            }else{
+                //message.warning(json.msg);
+                notification.open({
+                    message : 'Заявка не создана',
+                    description : json.msg,
+                    duration : 3.5
+                })
+            }
+        })
+        .catch( err => {
+            message.warning(err);
+        })
+    }
 }

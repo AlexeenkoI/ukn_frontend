@@ -12,6 +12,7 @@ import LoggedUser from './small/LoggedUser'
 import Notificator from './small/Notificator'
 import CustomersList from './CustomersList'
 import CreateContractForm from './forms/CreateContractForm'
+import CustomerEdit from './forms/CustomerEdit'
 import NotMatch from './NotMatch';
 import HomePage from './HomePage';
 import TopCrumbs from './TopCrumbs';
@@ -129,7 +130,8 @@ class MainOffice extends Component{
                         <Route exact path="/contracts" component={WorkSheet} />
                         <Route path="/contracts/create" component={CreateContractForm} />
                         <Route exact path="/users" component={UsersList}/>
-                        <Route path="/customers" component={CustomersList}/>
+                        <Route exact path="/customers" component={CustomersList}/>
+                        <Route exact path="/customers/edit/:id" component={CustomerEdit} />
                         <Route component={NotMatch} />
                     </Switch>
                   </Content>

@@ -1,4 +1,5 @@
 import { message } from 'antd';
+import { history } from 'react-router-dom'
 export const GET_CUSTOMERS_LIST = 'GET_CUSTOMERS_LIST';
 export const RECIEVE_CUSTOMERS_LIST ='RECIEVE_CUSTOMERS_LIST';
 export const GET_CUSTOMER = 'GET_CUSTOMER';
@@ -8,6 +9,7 @@ export const DELETE_CUSTOMER = 'DELETE_CUSTOMER';
 export const CREATE_CUSTOMER = 'CREATE_CUSTOMER';
 export const SET_SEARCH_STRING = 'SET_SEARCH_STRING';
 export const RESET_SEARCH_STRING = 'RESET_SEARCH_STRING';
+export const CLEAR_LAST_INSERTED = 'CLEAR_LAST_INSERTED';
 
 export const startGetCustomers = () =>{
     return {
@@ -165,11 +167,15 @@ export const deleteCustomer = (uId, deleteId, str) => {
 export const insertCustomer = (uId, formData) => {
     return (dispatch) => {
         //TO DO
+        dispatch({
+            type:'INSERTING_OR_UPDATING'
+        })
         const reqBody = {
             userId : uId,
             data : formData
         }
-        fetch('/api/customers/createcustomer/',{
+        console.log(reqBody);
+        fetch('/api/customers/createcustomer',{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -180,7 +186,13 @@ export const insertCustomer = (uId, formData) => {
         .then( res => res.json())
         .then( json => {
             message.success(json.msg)
+            console.log('customer created');
+            console.log(json);
             dispatch(getCustomersList(uId))
+            dispatch({
+                type:'FINISH_INSERTING',
+                data : json.data.insertId
+            })
         })
         .catch( err => {
             message.error(err);
@@ -191,4 +203,11 @@ export const insertCustomer = (uId, formData) => {
 
 export const setSearch = (userId, string) => {
 
+}
+
+export const clearInsert = () => {
+    console.log('clear action');
+    return {
+        type : CLEAR_LAST_INSERTED
+    }
 }

@@ -27,7 +27,9 @@ const initialState = {
         // }
     ],
     searchString : '',
-    currentCustomer : {}
+    currentCustomer : {},
+    updating : false,
+    lastInsertId : ''
 }
 export const GET_CUSTOMERS_LIST = 'GET_CUSTOMERS_LIST';
 export const RECIEVE_CUSTOMERS_LIST ='RECIEVE_CUSTOMERS_LIST';
@@ -62,6 +64,25 @@ export function customersReducer(state = initialState, action){
             return {
                 ...state,
                 searchString : action.str
+            }
+        case 'INSERTING_OR_UPDATING':
+            return {
+                ...state,
+                updating : true,
+            }
+        case 'FINISH_INSERTING':
+            return{
+                ...state,
+                updating : false,
+                lastInsertId : action.data
+            }
+        case 'CLEAR_LAST_INSERTED' : 
+            console.log('clear  data');
+            return {
+                ...state,
+                updating : false,
+                currentCustomer : {},
+                lastInsertId : ''
             }
         case 'RESET_SEARCH_STRING' : 
             return {

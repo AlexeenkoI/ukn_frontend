@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Table, Input, Button, Icon, Modal, Spin, Dropdown, Menu, Popconfirm } from 'antd';
 import { getCustomersList, getCurrentCustomer, updateCustomer, deleteCustomer, insertCustomer, search, resetSearch } from '../actions/CustomersActions';
@@ -66,27 +67,27 @@ export class CustomersList extends Component {
     const columns = [{
         title: 'Имя',
         dataIndex: 'name',
-        key: 'name',
+        //key: 'name',
     },
     {
         title: 'Фамилия',
         dataIndex: 'firstname',
-        key: 'firstname',
+        //key: 'firstname',
     },
     {
         title: 'Отчество',
         dataIndex: 'secondname',
-        key: 'secondname',
+        //key: 'secondname',
     },
     {
         title: 'Почта',
         dataIndex: 'email',
-        key: 'email',
+        //key: 'email',
     },
     {
         title: 'Телефон',
         dataIndex: 'phone',
-        key: 'phone',
+        //key: 'phone',
     },
     {
         title: 'Действия',
@@ -94,7 +95,7 @@ export class CustomersList extends Component {
             const titleString = "Вы уверены что хотите удалить клиента " + record.name + "?";
             const menu = (
                 <Menu>
-                    <Menu.Item key="0"><a onClick={()=>this.openDetail(record.id)}>Подробнее</a></Menu.Item>
+                <Menu.Item key="0"><Link to={"/customers/edit/"+ record.id }>{ /*<a onClick={()=>this.openDetail(record.id)}>Подробнее</a> */}Подробнее</Link></Menu.Item>
                     <Menu.Item key="1">
                         <Popconfirm onConfirm={() => this.deleteAction(record.id)} title={titleString}>
                             <a className="action-title">Удалить</a>
@@ -122,7 +123,7 @@ export class CustomersList extends Component {
             />
 
             <Table  
-                rowKey="phone" 
+                rowKey="id" 
                 columns={columns}
                 dataSource={customers.data}
                 loading = {customers.loading}
