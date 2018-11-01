@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import { Link, Redirect } from 'react-router-dom'
 import UserEdit from '../components/forms/UserEdit'
 import { getUserList, getUser, updatedUser, deleteUser, clearForm } from '../actions/UserListActions'
 
@@ -18,7 +19,8 @@ class UsersList extends Component{
         super(props)
         this.state = {
             is_active : 1,
-            visible:false
+            visible:false,
+            needToRedirect : false
         }
         this.toggleDrawer = this.toggleDrawer.bind(this)
     }
@@ -89,7 +91,8 @@ class UsersList extends Component{
             key : 'Action',
             render : (text,record) => (
                 <div className="action-row">
-                    <a className="action-title" onClick={() => this.toggleDrawer(record.id)}>Редактировать</a>
+                {/*<a className="action-title" onClick={() => this.toggleDrawer(record.id)}>Редактировать</a> */}
+                    <Link to={"/users/edit/" + record.id}>Редактировать</Link>
                     <Popconfirm onConfirm={() => this.deleteAction(record.id)} title="Вы уверены что хотите удалить запись?">
                         <a className="action-title">Удалить</a>
                     </Popconfirm>
@@ -99,7 +102,10 @@ class UsersList extends Component{
         }]
         return(
             <div>
-                <Row><Button onClick={this.createAction}>Добавить Пользователя</Button></Row>
+                <Row>
+                    {/*<Button onClick={this.createAction}>Добавить Пользователя</Button> */}
+                   <Link to="/users/create"> <Button>Добавить пользователя</Button></Link>
+                </Row>
                 <Table  
                     rowKey="id" 
                     columns={columns} 

@@ -21,7 +21,8 @@ class Filters extends Component{
         this.resetFilters.bind(this)
     }
     componentWillMount(){
-        this.props.getFilterData(this.props.user.id);
+        
+        //this.props.getFilterData(this.props.user.id);
     }
 
     handeSubmit = (e) =>{

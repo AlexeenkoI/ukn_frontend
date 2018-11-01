@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/ru_RU';
 
-import { getContracts , setFilters, getContract, updateContract } from '../actions/WorkSheetActions'
+import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData } from '../actions/WorkSheetActions'
 import Filters from './Filters';
 import ContractEdit from './forms/ContractEdit';
 
@@ -24,11 +24,19 @@ class WorkSheet extends Component{
 
     componentWillMount(){
       //if(!this.props.contracts.isLoaded){
-        //Устанавливаем фильтр на текущего пользователя
+        
+      
+        if(!this.props.contracts.isLoaded){
+            //Устанавливаем фильтр на текущего пользователя
         this.props.setFilters('contractor',this.props.user.id);
         //Устанавливаем фильтр по умолчанию на статус заявок - В работе
         this.props.setFilters('status', 2);
-        this.props.getContracts(this.props.user.id,this.props.contracts.filters);
+          console.log('loading filters...');
+          this.props.getFilterData(this.props.user.id);
+         
+          
+        }
+        this.props.applyFilters(this.props.user.id,this.props.contracts.filters);
       //}
     }
 
@@ -106,7 +114,8 @@ class WorkSheet extends Component{
           dataIndex: 'comment',
           key: 'comment',
           render : (text, record)=>{
-            return <a onClick={() => {this.onRecordClick(record.id)}}>Информация</a>
+            return (<Link to={"contracts/edit/" + record.id}>Информация</Link>)
+            //return <a onClick={() => {this.onRecordClick(record.id)}}>Информация</a>
           }
         },{
           title: 'Исполнить до',
@@ -128,6 +137,7 @@ class WorkSheet extends Component{
            filterData={this.props.contracts.filterData}
            filters={this.props.contracts.filters}
            loadingState={this.props.contracts.isFetching}
+           isLoaded={this.props.contracts.isLoaded}
            />
           <Table  
             rowKey="id" 
@@ -146,7 +156,7 @@ class WorkSheet extends Component{
               (<Spin/>):
               (<ContractEdit
                 contractData = {this.props.contracts.currentContract}
-                onSubmit = {this.onContractFormSubmit}
+                //onSubmit = {this.onContractFormSubmit}
                 //isLoading = {this.contracts.contractLoading}
                 statuses = {this.props.contracts.filterData.types}
               />)
@@ -169,7 +179,9 @@ class WorkSheet extends Component{
       getContracts : (id,limit,offset,filterData) => dispatch(getContracts(id,limit,offset,filterData)),
       setFilters : (name, filter) => dispatch(setFilters(name, filter)),
       getContract : (userId, id) => dispatch(getContract(userId,id)),
-      updateContract : (userId, formData, filterData) => dispatch(updateContract(userId,formData,filterData))
+      updateContract : (userId, formData, filterData) => dispatch(updateContract(userId,formData,filterData)),
+      applyFilters : (id, filters) => dispatch(applyFilters(id, filters)),
+      getFilterData : (id) => dispatch(getFilterData(id))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 

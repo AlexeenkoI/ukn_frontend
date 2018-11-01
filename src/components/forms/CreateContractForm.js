@@ -103,6 +103,7 @@ class CreateContractForm extends Component {
                             <Step title="Вид работ" description="Описание, тип" icon={<Icon type="exception" theme="outlined" />} />
                             <Step title="Данные о заявителе" description="" icon={<Icon type="idcard"  />} />
                             <Step title="Срок сдачи" description="Срок сдачи и исполнитель" icon={<Icon type="calendar" />} />
+                            <Step title="Стоимость работ" description="" icon={<Icon type="calculator" theme="outlined" />} />
                         </Steps>
                     </Col>
                 </Row>
@@ -177,8 +178,8 @@ class CreateContractForm extends Component {
                         
                         }
                         {this.state.step > 0 && <Button style={{marginRight:'10px'}} type="primary" onClick={this.decreaseStep}><Icon type="left" /> Назад</Button>}
-                        {this.state.step < 2 && <Button type="primary" onClick={this.increaseStep}>Далее <Icon type="right" /></Button>}
-                        {this.state.step == 2  && (
+                        {this.state.step < 3 && <Button type="primary" onClick={this.increaseStep}>Далее <Icon type="right" /></Button>}
+                        {this.state.step == 3  && (
                             
                             <Button style={{display:"block", marginTop : "25px"}} htmlType="submit" type="primary" disabled={pristine || submitting }>Создать</Button>
                         )} 
@@ -209,6 +210,13 @@ class CreateContractForm extends Component {
                                 <Button type="primary" onClick={this.openForm}><Icon type="user-add" theme="outlined" />Добавить заявителя</Button>
                             </Fragment>
                         }
+                        {this.state.step > 2 &&
+                            <Fragment>
+                                <Field label="Стоимость" name="price" component={AInput} placeholder="Полная стоимость" />
+                                <Field label="Оплачено" name="pre_paid" component={AInput} placeholder="Оплачено" />
+                            </Fragment>
+                        }
+
                     </Col>
                     
                 </Row>

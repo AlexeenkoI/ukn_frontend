@@ -19,6 +19,7 @@ export function getContracts(id,filterData){
             userId : id,
             data : filterData
         }
+        console.log('get contracts...');
         fetch('/api/contracts/getcontracts',{
             headers: {
                 'Accept': 'application/json',
@@ -95,7 +96,7 @@ export function applyFilters(id, filters){
             userId : id,
             data : filters
         }
-        console.log(reqBody)
+        console.log('apply filters...');
         fetch('/api/contracts/getcontracts',{
             headers: {
                 'Accept': 'application/json',
@@ -109,7 +110,7 @@ export function applyFilters(id, filters){
             if(json.success == true){
                 console.log('recieve filter contracts');
                 console.log(json);
-                dispatch(recieveContracts(json.data))
+                dispatch(recieveContracts(json.data, filters))
             }
         })
         .catch(err => {
@@ -134,6 +135,7 @@ export function getFilterData(id){
         const reqBody = {
             userId : id,
         }
+        console.log('get filter data...');
         fetch('/api/contracts/getfilters',{
             headers: {
                 'Accept': 'application/json',
@@ -228,7 +230,7 @@ export function updateContract(id, formData, filterData){
         .then( json => {
             if(json.success == true){
                 message.success(json.msg);
-                dispatch(getContracts(id, filterData))
+                //dispatch(getContracts(id, filterData))
             }else{
                 message.warning(json.msg);
             }

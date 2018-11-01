@@ -13,6 +13,8 @@ import Notificator from './small/Notificator'
 import CustomersList from './CustomersList'
 import CreateContractForm from './forms/CreateContractForm'
 import CustomerEdit from './forms/CustomerEdit'
+import UserEdit from './forms/UserEdit'
+import ContractEdit from './forms/ContractEdit';
 import NotMatch from './NotMatch';
 import HomePage from './HomePage';
 import TopCrumbs from './TopCrumbs';
@@ -23,6 +25,7 @@ import { getUser, updatedUser } from '../actions/UserListActions'
 
 import 'antd/dist/antd.css';
 import { Layout, Icon, Row, Col } from 'antd'
+
 
 const { Header, Content } = Layout;
 const socket = openSocket('http://localhost:3002');
@@ -129,7 +132,10 @@ class MainOffice extends Component{
                         <Route exact path="/" component={HomePage}/>
                         <Route exact path="/contracts" component={WorkSheet} />
                         <Route path="/contracts/create" component={CreateContractForm} />
+                        <Route exact path="/contracts/edit/:id" component={ContractEdit} />
                         <Route exact path="/users" component={UsersList}/>
+                        <Route exact path="/users/create" component={UserEdit}/>
+                        <Route exact path="/users/edit/:id" component={UserEdit}/>
                         <Route exact path="/customers" component={CustomersList}/>
                         <Route exact path="/customers/edit/:id" component={CustomerEdit} />
                         <Route component={NotMatch} />

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
-import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse } from 'antd'
+import { Form, Spin, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse } from 'antd'
 import { Field, reduxForm } from 'redux-form'
+import { Redirect } from 'react-router-dom'
 import { connect, destroy } from 'react-redux'
+import { getUser, updatedUser} from '../../actions/UserListActions'
+import Preloader from '../Preloader'
 const FormItem = Form.Item;
 
 /**
@@ -49,45 +52,74 @@ class UserEdit extends Component{
     constructor(props){
         super(props);
         console.log(this.props);
+        this.state={
+            needToRedirect : false
+        }
     }
 
-    //handleSubmit = values =>{
-    //    console.log(values);
-    //    return false
-    //}
+    componentWillMount(){
+        const { match, user, getOne } = this.props;
+        if(typeof match != 'undefined'){
+            getOne(user.id, match.params.id);
+        }
+    }
+
+    handleSubmit = values =>{
+        const { user, updateOne } = this.props;
+        console.log('submit');
+        delete values.re_password;
+        delete values.status_text;
+        console.log(values);
+        updateOne(user.id, values);
+        this.setState({
+            needToRedirect : true
+        })
+    }
 
     render(){
-        const { handleSubmit, pristine,submitting, reset } = this.props;
+        const { handleSubmit, pristine,submitting, reset, userFetch } = this.props;
         const submit = (values) => console.log(values);
-
+        if(this.state.needToRedirect) return(<Redirect to="/users"/>)
+        if(userFetch)
+            return(<Preloader/>)
+        
         return(
-            <Form onSubmit={handleSubmit}>
-                <Field type="hidden" component="input" name="id"/>
-                <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
-                <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
-                <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
-                <Field label="Логин" name="login" component={AInput} placeholder="" />
-                {this.props.userStatus == 1 &&
-                    <Field label="Статус" component={ASelect}  name="role">
-                        {this.props.userRoles.map(role =>
-                            <Select.Option value={role.id} key={role.id}>
-                              {role.role_name}
-                            </Select.Option>
-                          )}
-                    </Field>
-                }
-                {this.props.userStatus == 1 &&
-                (<Collapse bordered={false}>
-                    <Collapse.Panel
-                    header='Изменить пароль'
-                    >
-                        <Field label="Пароль" name="password" component={AInput} type="password"  />
-                        <Field label="Повторите Пароль" name="re_password" component={AInput} type="password"  />
-                    </Collapse.Panel>
-                </Collapse>)
-                }
-                <Button htmlType="submit" type="primary" disabled={pristine || submitting }>Отправить</Button>
-            </Form>
+            <Row type="flex" justify="left">
+                <Col xs={12} sm={24} md={20} lg={12} xl={8}>
+                    <Form onSubmit={handleSubmit(this.handleSubmit)}>
+                        <Field type="hidden" component="input" name="id"/>
+                        <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
+                        <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
+                        <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
+                        <Field label="Логин" name="login" component={AInput} placeholder="" />
+                        {this.props.userStatus == 1 &&
+                            <Field 
+                                label="Статус" 
+                                component={ASelect}  
+                                name="role"
+                            >
+                                {this.props.user.userRoles.map(role =>
+                                    <Select.Option value={role.id} key={role.id}>
+                                        {role.role_name}
+                                    </Select.Option>
+                                )}
+                            </Field>
+                        }
+                        {this.props.userStatus == 1 &&
+                        (<Collapse bordered={false}>
+                            <Collapse.Panel
+                            style={{border:0}}
+                            header='Изменить пароль'
+                            >
+                                <Field label="Пароль" name="password" component={AInput} type="password"  />
+                                <Field label="Повторите Пароль" name="re_password" component={AInput} type="password"  />
+                            </Collapse.Panel>
+                        </Collapse>)
+                        }
+                        <Button htmlType="submit" type="primary" disabled={pristine || submitting }>Отправить</Button>
+                    </Form>
+                </Col>
+            </Row>
         )
     }
 }
@@ -98,26 +130,37 @@ const validate = values => {
     if(values.password != values.re_password){
         errors.re_password="Пароли должны совпадать.";
     }
+    if(!values.role){
+        errors.role = "Необходимо выбрать роль пользователя";
+    }
   
     return errors;
   }
 
 function mapStateToProps(state, ownProps) {
     return {
+        user : state.user,
         userStatus: state.user.role,
         role : ownProps.userRoles,
-        initialValues: {
-            id: ownProps.initialValues.id ? ownProps.initialValues.id : 0, 
-            is_active: ownProps.initialValues.is_active,
-            name : ownProps.initialValues.name,
-            surename : ownProps.initialValues.surename,
-            login : ownProps.initialValues.login,
-            role : ownProps.initialValues.role
-        }
+        userFetch : state.userList.userIsLoading,
+        initialValues : state.userList.currentUserData,
+        //initialValues: {
+        //    id: ownProps.initialValues.id ? ownProps.initialValues.id : 0, 
+        //    is_active: ownProps.initialValues.is_active,
+        //    name : ownProps.initialValues.name,
+        //    surename : ownProps.initialValues.surename,
+        //    login : ownProps.initialValues.login,
+        //    role : ownProps.initialValues.role
+        //}
     }
 }
 
-export default connect(mapStateToProps)(reduxForm({
+const mapDispatchToProps = dispatch =>({
+    getOne : (uId, id) => dispatch(getUser(uId,id)),
+    updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
   form:'UserForm',
   validate,
   enableReinitialize : true,

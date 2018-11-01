@@ -1,7 +1,9 @@
 const initialState= {
     currentUserId : '',
     isLoading : true,
-    currentUserData : {},
+    currentUserData : {
+        role : 0
+    },
     userIsLoading : false,
     data : []
 }
