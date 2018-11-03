@@ -154,7 +154,8 @@ const mapStateToProps = store =>{
         contracts : store.contracts,
         notifications : store.notifications,
         isLoadingProfile : store.userList.userIsLoading,
-        userProfile : store.userList.currentUserData
+        userProfile : store.userList.currentUserData,
+        settings : store.settings
     }
 }
 

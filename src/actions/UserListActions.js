@@ -119,8 +119,36 @@ export function recieveUserList(data){
     }
 }
 
-export function insertOrUpdateUser(id, data){
-
+export function insertUser(incId, formData){
+    return function(dispatch){
+        const reqBody = {
+            userId : incId,
+            data : formData
+        }
+        fetch('/api/users/createuser/', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'PUT',
+            body : JSON.stringify(reqBody)
+        })
+        .then( res => res.json())
+        .then( json => {
+            if(json.success == true){
+                message.success(json.msg);
+                if(incId === formData.id){
+                    dispatch(rerenderUser(formData));
+                    dispatch(getUserList(incId));
+                }else{
+                    dispatch(getUserList(incId));
+                }
+            }
+        })
+        .catch( err => {
+            console.log(err);
+        })
+    }
 }
 
 export function deleteUser(id,deleteUserId){

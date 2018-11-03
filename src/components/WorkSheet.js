@@ -8,6 +8,8 @@ import { DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/ru_RU';
 
 import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData } from '../actions/WorkSheetActions'
+import { getUserList } from '../actions/UserListActions'
+import { getCustomersList } from '../actions/CustomersActions'
 import Filters from './Filters';
 import ContractEdit from './forms/ContractEdit';
 
@@ -24,7 +26,13 @@ class WorkSheet extends Component{
 
     componentWillMount(){
       //if(!this.props.contracts.isLoaded){
-        
+        const { user, users, getUsers, customers, getCustomers } = this.props;
+        if(users.isLoading){
+          getUsers(user.id);
+        }
+        if(!customers.loaded){
+          getCustomers(user.id)
+        }
       
         if(!this.props.contracts.isLoaded){
             //Устанавливаем фильтр на текущего пользователя
@@ -82,7 +90,7 @@ class WorkSheet extends Component{
     }
 
     render(){
-      const { user } = this.props;
+      const { user, users, customers, settings } = this.props;
         const columns = [{
           title: '№ Договора',
           dataIndex: 'contract_number',
@@ -138,6 +146,9 @@ class WorkSheet extends Component{
            filters={this.props.contracts.filters}
            loadingState={this.props.contracts.isFetching}
            isLoaded={this.props.contracts.isLoaded}
+           settings={settings}
+           users={users.data}
+           customers={customers.data}
            />
           <Table  
             rowKey="id" 
@@ -171,7 +182,10 @@ class WorkSheet extends Component{
     const mapStateToProps = store =>{
       return {
         user : store.user,
-        contracts : store.contracts
+        contracts : store.contracts,
+        users : store.userList,
+        settings : store.settings,
+        customers : store.customersList
       }
     }
 
@@ -181,7 +195,9 @@ class WorkSheet extends Component{
       getContract : (userId, id) => dispatch(getContract(userId,id)),
       updateContract : (userId, formData, filterData) => dispatch(updateContract(userId,formData,filterData)),
       applyFilters : (id, filters) => dispatch(applyFilters(id, filters)),
-      getFilterData : (id) => dispatch(getFilterData(id))
+      getFilterData : (id) => dispatch(getFilterData(id)),
+      getUsers : (id) => dispatch(getUserList(id)),
+      getCustomers : (id) => dispatch(getCustomersList(id))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 

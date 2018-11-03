@@ -78,7 +78,7 @@ class Filters extends Component{
                         onChange={this.handleContractorChange}
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                        {this.props.filterData ? this.props.filterData.users.map(usr => <Select.Option key={usr.id} value={usr.id}>{usr.name}</Select.Option>): ''}
+                       {this.props.users.map(usr => <Select.Option key={usr.id} value={usr.id}>{usr.name}</Select.Option>)}
                         </Select>
                         </FormItem>
                     </Col>
@@ -106,7 +106,7 @@ class Filters extends Component{
                                 value = {this.props.filters.status}
                                 onChange={this.handleStatusChange}
                             >
-                                {this.props.filterData ? this.props.filterData.types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}
+                                {this.props.filterData ? this.props.settings.status_types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}
                             </Select>
                     
                         </FormItem>
@@ -128,7 +128,9 @@ class Filters extends Component{
                                 showSearch
                                 style={{width:'100%'}}
                                 placeholder="Заказчик"
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             >
+                            {this.props.customers.map(customer => <Select.Option key={customer.id} value={customer.id}>{`${customer.name} ${customer.firstname} ${customer.secondname}`}</Select.Option>)}
                             </Select>
                         </FormItem>
                     </Col>
@@ -165,6 +167,7 @@ class Filters extends Component{
     }
 }
 //const FiltersForm = Form.create()(Filters);
+
 
 const mapDispatchToProps = dispatch =>({
     setFilters : (name, filter) => dispatch(setFilters(name, filter)),

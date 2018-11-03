@@ -114,7 +114,7 @@ export const updateCustomer = (uId, formData, str) => {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            method:'POST',
+            method:'PUT',
             body : JSON.stringify(reqBody)
         })
         .then(res => res.json())

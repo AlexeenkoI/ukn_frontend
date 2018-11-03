@@ -16,7 +16,7 @@ export function tryToLogin(auth,pass,isRemember){
                 password : pass
             }
         }
-        fetch('/api/users/login',{
+        fetch('/api/login',{
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

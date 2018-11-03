@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form'
+import { Redirect } from 'react-router-dom'
 import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse, Upload } from 'antd'
 import FieldWrapper from './FieldWrapper'
-import {insertCustomer, getCurrentCustomer, clearInsert} from '../../actions/CustomersActions'
+import {insertCustomer, updateCustomer, getCurrentCustomer, clearInsert} from '../../actions/CustomersActions'
 
 const AInput = FieldWrapper(Input);
 const ACheckbox = FieldWrapper(Checkbox);
@@ -11,6 +12,9 @@ const ACheckbox = FieldWrapper(Checkbox);
 class CustomerEdit extends Component {
     constructor(props){
         super(props)
+        this.state = {
+            needRedirect : false
+        }
     }
     componentWillMount(){
         const { match, user, getOne } = this.props;
@@ -26,12 +30,20 @@ class CustomerEdit extends Component {
     }
 
     submitForm = (values) => {
-        const { user, insertOne } = this.props;
-        insertOne(user.id, values);
+        const { user, insertOne, updateOne } = this.props;
+        if(values.id > 0){
+            updateOne(user.id, values);
+        }else{
+            insertOne(user.id, values);
+        }
+        this.setState({
+            needRedirect : true
+          })
     }
 
     render() {
         const { handleSubmit, pristine,submitting, reset, fetching, newForm, match } = this.props;
+        if(this.state.needRedirect) return(<Redirect to="/customers"/>)
         return (
             <Row>
                 <Col >
@@ -70,6 +82,7 @@ const validate = values => {
   
   const mapDispatchToProps = dispatch =>({
    insertOne : (uid, formData) => dispatch(insertCustomer(uid, formData)),
+   updateOne : (uid, formData) => dispatch(updateCustomer(uid, formData)),
    getOne : (uid, id) => dispatch(getCurrentCustomer(uid, id)),
    clearAll : () => dispatch(clearInsert())
   })

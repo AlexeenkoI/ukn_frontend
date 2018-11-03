@@ -5,7 +5,8 @@ import { userReducer } from './User'
 import { contractsReducer } from './Contracts'
 import { notificationsReducer } from './Notifications'
 import { userListReducer } from './UserList'
-import { customersReducer} from './Customers'
+import { customersReducer } from './Customers'
+import { settingsReducer } from './Settings'
 
 export const rootReducer = combineReducers({
     user : userReducer,
@@ -13,6 +14,7 @@ export const rootReducer = combineReducers({
     notifications : notificationsReducer,
     userList : userListReducer,
     form : formReducer,
-    customersList : customersReducer
+    customersList : customersReducer,
+    settings : settingsReducer
 })
 

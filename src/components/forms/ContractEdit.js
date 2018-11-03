@@ -81,7 +81,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, reset, user, contractFetching} = this.props;
+    const {handleSubmit, pristine,submitting, reset, user, contractFetching, settings} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(this.state.needRedirect) return(<Redirect to="/contracts"/>)
 
@@ -93,7 +93,7 @@ class ContractEdit extends Component {
         <Field label="Номер договора" name="contract_number" component={AInput} disabled={disabler} placeholder="Фамилия" />
         <Field label="Адрес" name="address" component={ATextArea} placeholder="" disabled={disabler} />
         <Field label="Статус" component={ASelect} name="status">
-          {this.props.contractStatuses.map( status => 
+          {settings.status_types.map( status => 
             <Select.Option value={status.id} key={status.id}>
             {status.type}
           </Select.Option>
@@ -140,6 +140,7 @@ function mapStateToProps(state, ownProps) {
       contractFetching : state.contracts.contractLoading,
       uploadAction : '/',
       contractStatuses : state.contracts.filterData.types,
+      settings : state.settings,
       initialValues: state.contracts.currentContract,
       //initialValues : {
       //  id : ownProps.contractData.id,

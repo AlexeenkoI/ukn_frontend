@@ -1,5 +1,6 @@
 const initialState = {
     loading: false,
+    loaded : false,
     data : [
         // {
         //     id :'1',
@@ -51,6 +52,7 @@ export function customersReducer(state = initialState, action){
             return {
                 ...state,
                 loading : false,
+                loaded : true,
                 data : action.data
             }; 
         case 'RECIEVE_CUSTOMER' :

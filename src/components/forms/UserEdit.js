@@ -3,7 +3,7 @@ import { Form, Spin, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, C
 import { Field, reduxForm } from 'redux-form'
 import { Redirect } from 'react-router-dom'
 import { connect, destroy } from 'react-redux'
-import { getUser, updatedUser} from '../../actions/UserListActions'
+import { getUser, updatedUser, insertUser} from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 const FormItem = Form.Item;
 
@@ -65,19 +65,28 @@ class UserEdit extends Component{
     }
 
     handleSubmit = values =>{
-        const { user, updateOne } = this.props;
+        const { user, updateOne, createOne } = this.props;
         console.log('submit');
         delete values.re_password;
         delete values.status_text;
+        if(values.is_active == true){
+            values.is_active = 1;
+        }else{
+            values.is_active = 0;
+        }
         console.log(values);
-        updateOne(user.id, values);
+        if(values.id > 0){
+            updateOne(user.id, values);
+        }else{
+            createOne(user.id, values);
+        }
         this.setState({
             needToRedirect : true
         })
     }
 
     render(){
-        const { handleSubmit, pristine,submitting, reset, userFetch } = this.props;
+        const { handleSubmit, pristine,submitting, reset, userFetch, settings } = this.props;
         const submit = (values) => console.log(values);
         if(this.state.needToRedirect) return(<Redirect to="/users"/>)
         if(userFetch)
@@ -98,9 +107,9 @@ class UserEdit extends Component{
                                 component={ASelect}  
                                 name="role"
                             >
-                                {this.props.user.userRoles.map(role =>
+                                {settings.roles.map(role =>
                                     <Select.Option value={role.id} key={role.id}>
-                                        {role.role_name}
+                                        {role.role}
                                     </Select.Option>
                                 )}
                             </Field>
@@ -142,6 +151,7 @@ function mapStateToProps(state, ownProps) {
         user : state.user,
         userStatus: state.user.role,
         role : ownProps.userRoles,
+        settings : state.settings,
         userFetch : state.userList.userIsLoading,
         initialValues : state.userList.currentUserData,
         //initialValues: {
@@ -157,6 +167,7 @@ function mapStateToProps(state, ownProps) {
 
 const mapDispatchToProps = dispatch =>({
     getOne : (uId, id) => dispatch(getUser(uId,id)),
+    createOne : (uId, formData) => dispatch(insertUser(uId, formData)),
     updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData))
 })
 
