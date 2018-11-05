@@ -7,6 +7,14 @@ import { getUser, updatedUser, insertUser} from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 const FormItem = Form.Item;
 
+const defaultGrid = {
+    xs : 12,
+    sm : 24, 
+    md : 20,
+    lg : 12,  
+    xl : 8,
+}
+
 /**
  *  Redux field with antd https://codesandbox.io/s/jzyl70wpk
  */
@@ -51,7 +59,6 @@ const makeField = Component => ({ input, meta, children, hasFeedback, label, ...
 class UserEdit extends Component{
     constructor(props){
         super(props);
-        console.log(this.props);
         this.state={
             needToRedirect : false
         }
@@ -86,7 +93,7 @@ class UserEdit extends Component{
     }
 
     render(){
-        const { handleSubmit, pristine,submitting, reset, userFetch, settings } = this.props;
+        const { handleSubmit, pristine,submitting, reset, userFetch, settings, grid } = this.props;
         const submit = (values) => console.log(values);
         if(this.state.needToRedirect) return(<Redirect to="/users"/>)
         if(userFetch)
@@ -94,7 +101,7 @@ class UserEdit extends Component{
         
         return(
             <Row type="flex" justify="left">
-                <Col xs={12} sm={24} md={20} lg={12} xl={8}>
+                <Col {...grid} >
                     <Form onSubmit={handleSubmit(this.handleSubmit)}>
                         <Field type="hidden" component="input" name="id"/>
                         <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
@@ -154,6 +161,7 @@ function mapStateToProps(state, ownProps) {
         settings : state.settings,
         userFetch : state.userList.userIsLoading,
         initialValues : state.userList.currentUserData,
+        grid : ownProps.gridSettings  || defaultGrid
         //initialValues: {
         //    id: ownProps.initialValues.id ? ownProps.initialValues.id : 0, 
         //    is_active: ownProps.initialValues.is_active,

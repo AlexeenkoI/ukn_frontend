@@ -79,8 +79,7 @@ class CreateContractForm extends Component {
 
     onFormSubmit = (values) => {
         const { user, createOne } = this.props;
-        console.log('from submitted');
-        console.log(values);
+        values.date_deadline = Date.parse(values.date_deadline);
         createOne(user.id, values);
         this.setState({
             needToRedirect:true
@@ -93,7 +92,8 @@ class CreateContractForm extends Component {
         })
     }
     render() {
-        const { handleSubmit, pristine,submitting, reset, workTypes, customers, contractors } = this.props;
+        const { handleSubmit, pristine,submitting, reset, workTypes, customers, contractors, statuses } = this.props;
+        console.log(workTypes);
         if(this.state.needToRedirect) return( <Redirect to="/contracts"/>)
         return (
             <Fragment>
@@ -120,11 +120,11 @@ class CreateContractForm extends Component {
                             showSearch
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                         >
-                            {workTypes.map( type =>{
+                            {workTypes.map( type =>
                                 <Select.Option value={type.id} key={type.id}>
                                     {type.work_type}
                                 </Select.Option>
-                            })}
+                            )}
                         </Field>
                         <Field label="Дополнительная информация" name="comment" component={ATextArea} />
                         { this.state.step > 1 &&
@@ -161,18 +161,11 @@ class CreateContractForm extends Component {
                                     
                                 >
                                 {/* TO DO лист статусов заявок */}
-                                <Select.Option key={1} value={1}>
-                                Создан
-                                </Select.Option>
-                                <Select.Option key={2} value={2}>
-                                В работе
-                                </Select.Option>
-                                <Select.Option key={3} value={3}>
-                                Выполнен
-                                </Select.Option>
-                                <Select.Option key={4} value={4}>
-                                Завершен
-                                </Select.Option>
+                                {statuses.map(status =>
+                                    <Select.Option key={status.id} value={status.id}>
+                                        {status.type}
+                                    </Select.Option>
+                                    )}
                                 </Field>
                             </Fragment>
                         
@@ -212,8 +205,13 @@ class CreateContractForm extends Component {
                         }
                         {this.state.step > 2 &&
                             <Fragment>
-                                <Field label="Стоимость" name="price" component={AInput} placeholder="Полная стоимость" />
-                                <Field label="Оплачено" name="pre_paid" component={AInput} placeholder="Оплачено" />
+                                <Field 
+                                    label="Стоимость" 
+                                    name="price" 
+                                    component={AInput} 
+                                    placeholder="Полная стоимость" 
+                                    addonAfter="руб" />
+                                <Field label="Оплачено/Внесено" name="paid" component={AInput} placeholder="Оплачено" addonAfter="руб" />
                             </Fragment>
                         }
 
@@ -228,7 +226,10 @@ class CreateContractForm extends Component {
                     title="Добавить клиента"
                     destroyOnClose={true}
                 >
-                    <CustomerEdit  />
+                    <CustomerEdit
+                        noRedirect={true}
+                        gridSettings = {{ xs : 24, sm : 24, md : 24,lg : 24,  xl : 24}}
+                    />
                 </Modal>
             </Fragment>
         );
@@ -247,11 +248,8 @@ const validate = values => {
         customers : state.customersList.data,
         contractors : state.userList.data,
         st : state.customersList,
-        workTypes : [{}],
-        //userStatus : state.user,
-        //uploadAction : '/',
-        //contractStatuses : ownProps.statuses,
-        //initialValues: ownProps.contractData,
+        workTypes : state.settings.work_types,
+        statuses : state.settings.status_types,
         initialValues : {
             customer_id : state.customersList.lastInsertId || 0,
             contractor : 0,

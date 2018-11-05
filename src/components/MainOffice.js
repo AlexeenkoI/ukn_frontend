@@ -138,6 +138,7 @@ class MainOffice extends Component{
                         <Route exact path="/users/edit/:id" component={UserEdit}/>
                         <Route exact path="/customers" component={CustomersList}/>
                         <Route exact path="/customers/edit/:id" component={CustomerEdit} />
+                        <Route exact path="/customers/createcustomer" component={CustomerEdit} />
                         <Route component={NotMatch} />
                     </Switch>
                   </Content>

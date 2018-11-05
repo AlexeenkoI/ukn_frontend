@@ -124,6 +124,10 @@ export const updateCustomer = (uId, formData, str) => {
                 console.log(json);
                 dispatch(getCustomersList(uId, str));
                 message.success(json.msg);
+                dispatch({
+                    type:'FINISH_INSERTING',
+                    data : json.data.insertId
+                })
             }else{
                 console.log('err');
                 console.log(json);

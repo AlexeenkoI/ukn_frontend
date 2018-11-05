@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Row, Col, Form, Button, Input, DatePicker, Select, Icon, Collapse  } from 'antd';
 import { setFilters , applyFilters, resetFilters, getFilterData } from '../actions/WorkSheetActions'
+import moment from 'moment'
 
 
 const FormItem = Form.Item;
@@ -45,11 +46,13 @@ class Filters extends Component{
     }
 
     handleDateFrom = (date, value) => {
-        this.props.setFilters('date_started',Date.parse(value));
+        console.log(date);
+        console.log(moment(date).format("X"));
+        this.props.setFilters('date_started',moment(date).format("X"));
     }
 
     handleDateTo = (date, value) => {
-        this.props.setFilters('date_deadline',Date.parse(value));
+        this.props.setFilters('date_deadline',moment(date).format("X"));
     }
 
     resetFilters = () => {

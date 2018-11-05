@@ -276,7 +276,7 @@ export function createContract(uId,formData){
                     description : 'Заявление создано и отправлено в работу.',
                     duration : 3.5
                 })
-                dispatch(getContracts(uId))
+                //dispatch(getContracts(uId))
             }else{
                 //message.warning(json.msg);
                 notification.open({

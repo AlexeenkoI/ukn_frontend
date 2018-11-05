@@ -62,6 +62,7 @@ class LoggedUser extends Component{
                         onSubmit={this.onFormSubmit} 
                         initialValues={this.props.ownProfile} 
                         userRoles={this.props.user.userRoles}
+                        gridSettings = {{ xs : 24, sm : 24, md : 24,lg : 24,  xl : 24}}
                     />)
                 }
                    

@@ -9,6 +9,14 @@ import {insertCustomer, updateCustomer, getCurrentCustomer, clearInsert} from '.
 const AInput = FieldWrapper(Input);
 const ACheckbox = FieldWrapper(Checkbox);
 
+const defaultGrid = {
+    xs : 12,
+    sm : 24, 
+    md : 20,
+    lg : 12,  
+    xl : 8,
+  }
+
 class CustomerEdit extends Component {
     constructor(props){
         super(props)
@@ -25,8 +33,9 @@ class CustomerEdit extends Component {
     }
 
     componentWillUnmount(){
-        const { clearAll } = this.props
-        clearAll();
+        const { clearAll, noRedirect } = this.props
+        if(!noRedirect)
+            clearAll();
     }
 
     submitForm = (values) => {
@@ -42,11 +51,11 @@ class CustomerEdit extends Component {
     }
 
     render() {
-        const { handleSubmit, pristine,submitting, reset, fetching, newForm, match } = this.props;
-        if(this.state.needRedirect) return(<Redirect to="/customers"/>)
+        const { handleSubmit, pristine,submitting, reset, fetching, newForm, match, noRedirect, grid } = this.props;
+        if(this.state.needRedirect &&(!noRedirect)) return(<Redirect to="/customers"/>)
         return (
             <Row>
-                <Col >
+                <Col {...grid} >
                     <Form onSubmit={handleSubmit(this.submitForm)}>
                         <Field type="hidden" component="input" name="id"/>
                         <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
@@ -72,9 +81,11 @@ const validate = values => {
     return {
         user: state.user,
         userStatus : '',
+        noRedirect : ownProps.noRedirect || false,
         newForm : state.customersList.currentCustomer.id,
         fetching : state.customersList.updating,
         contractStatuses : ownProps.statuses,
+        grid : ownProps.gridSettings || defaultGrid,
         initialValues : state.customersList.currentCustomer
         
     }
