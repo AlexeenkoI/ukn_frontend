@@ -118,10 +118,11 @@ class ContractEdit extends Component {
   cReq = (data) => {
       data.custom_id = 2;
       console.log(data);
-      setTimeout(()=>{
-        //data.onSuccess();
-        data.onError();
-      },1000);
+      //setTimeout(()=>{
+      //  //data.onSuccess();
+      //  data.onError();
+      //},1000);
+
 
   }
 
@@ -185,7 +186,7 @@ class ContractEdit extends Component {
                 <Upload 
                   action={this.props.uploadAction} 
                   onChange={this.uploadFiles}  
-                  customRequest={this.cReq} 
+                  //customRequest={this.cReq} 
                   multiple={true} 
                   data={{id: 2}}
                 >
@@ -219,7 +220,7 @@ function mapStateToProps(state, ownProps) {
       user : state.user,
       userStatus : state.user,
       contractFetching : state.contracts.contractLoading,
-      uploadAction : '/',
+      uploadAction : '/api/upload',
       userList : state.userList,
       contractStatuses : state.contracts.filterData.types,
       settings : state.settings,

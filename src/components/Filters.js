@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Row, Col, Form, Button, Input, DatePicker, Select, Icon, Collapse  } from 'antd';
-import { setFilters , applyFilters, resetFilters, getFilterData } from '../actions/WorkSheetActions'
+import { setFilters , applyFilters, resetFilters, getFilterData, setPage } from '../actions/WorkSheetActions'
 import moment from 'moment'
 
 
@@ -12,14 +12,14 @@ const FormItem = Form.Item;
 class Filters extends Component{
     constructor(props){
         super(props);
-        this.handeSubmit.bind(this);
-        this.handleInputChange.bind(this);
-        this.handleContractorChange.bind(this);
-        this.handleStatusChange.bind(this);
-        this.clearSearchString.bind(this)
-        this.handleDateFrom.bind(this)
-        this.handleDateTo.bind(this)
-        this.resetFilters.bind(this)
+        this.handeSubmit = this.handeSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleContractorChange = this.handleContractorChange.bind(this);
+        this.handleStatusChange = this.handleStatusChange.bind(this);
+        this.clearSearchString = this.clearSearchString.bind(this)
+        this.handleDateFrom = this.handleDateFrom.bind(this)
+        this.handleDateTo = this.handleDateTo.bind(this)
+        this.resetFilters = this.resetFilters.bind(this)
     }
     componentWillMount(){
         
@@ -41,6 +41,10 @@ class Filters extends Component{
         this.props.setFilters('status',value);
     }
 
+    handleCustomerChange = value => {
+        this.props.setFilters('customer_id',value);
+    }
+
     clearSearchString = () => {
         this.props.setFilters('whereString','');
     }
@@ -57,6 +61,7 @@ class Filters extends Component{
 
     resetFilters = () => {
         this.props.resetFilters(this.props.user.id,this.props.filters);
+        this.props.setPage(1);
         //this.props.applyFilters('contractor',this.props.user.id);
     }
     render(){
@@ -118,9 +123,9 @@ class Filters extends Component{
                         <FormItem
                             label="Период"
                         >
-                            <DatePicker style={{width:'40%'}} placeholder="C" onChange={this.handleDateFrom}/>
+                            <DatePicker style={{width:'40%'}} placeholder="C" value={this.props.filters.date_started == '' ? null : moment.unix(this.props.filters.date_started) } format="YYYY-MM-DD" onChange={this.handleDateFrom}/>
                             -
-                            <DatePicker style={{width:'40%'}} placeholder="По" onChange={this.handleDateTo}/>
+                            <DatePicker style={{width:'40%'}} placeholder="По" value={this.props.filters.date_deadline == '' ? null : moment.unix(this.props.filters.date_deadline) } format="YYYY-MM-DD" onChange={this.handleDateTo}/>
                         </FormItem>
                     </Col>
                     <Col span={2}>
@@ -132,7 +137,9 @@ class Filters extends Component{
                                 style={{width:'100%'}}
                                 placeholder="Заказчик"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={this.handleCustomerChange}
                             >
+                            <Select.Option key="0" value={0}>Не выбран</Select.Option>
                             {this.props.customers.map(customer => <Select.Option key={customer.id} value={customer.id}>{`${customer.name} ${customer.firstname} ${customer.secondname}`}</Select.Option>)}
                             </Select>
                         </FormItem>
@@ -176,7 +183,8 @@ const mapDispatchToProps = dispatch =>({
     setFilters : (name, filter) => dispatch(setFilters(name, filter)),
     applyFilters : (id, filters) => dispatch(applyFilters(id, filters)),
     resetFilters : (id, filters) => dispatch(resetFilters(id, filters)),
-    getFilterData : (id) => dispatch(getFilterData(id))
+    getFilterData : (id) => dispatch(getFilterData(id)),
+    setPage : (page) => dispatch(setPage(page))
 })
 
 //export default Filters

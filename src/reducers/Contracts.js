@@ -1,18 +1,19 @@
 const initialState = {
     isLoaded : false,
     isFetching : false,
-    limit : 10,
+    page : 1,
     filters : {
       address : "",
       contract_number : "",
       date_started : "",
       date_deadline : "",
       customer : "",
+      customer_id : "",
       contractor : "",
       status : "",
       type_of_work : "",
-      limit : "",
-      offset : "",
+      limit : 10,
+      offset : 0,
       whereString : "",
     },
     filterData : {
@@ -38,6 +39,11 @@ const initialState = {
           isLoaded : true,
           isFetching : false,
           data : action.data
+        }
+      case 'PAGE_CHANGE':
+        return {
+          ...state,
+          page : action.pageNum
         }
       case 'ERROR_RECIEVE_CONTRACTS':
         return {

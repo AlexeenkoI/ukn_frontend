@@ -44,6 +44,21 @@ const DateWrapper = ({ input, meta, children, hasFeedback, label, value, format,
     );
   };
 
+  const Multiselect = ({ input, meta, children, hasFeedback, label, value, format, ...rest }) => {
+    const hasError = meta.touched && meta.invalid;
+    return (
+      <FormItem
+        {...formItemLayout}
+        label={label}
+        validateStatus={hasError ? "error" : "success"}
+        hasFeedback={hasFeedback && hasError}
+        help={hasError && meta.error}
+      >
+        <Select {...input} {...rest} mode="multiple" />
+      </FormItem>
+    );
+  }
+
 class CreateContractForm extends Component {
     constructor(props){
         super(props);
@@ -80,10 +95,11 @@ class CreateContractForm extends Component {
     onFormSubmit = (values) => {
         const { user, createOne } = this.props;
         values.date_deadline = Date.parse(values.date_deadline);
-        createOne(user.id, values);
-        this.setState({
-            needToRedirect:true
-        })
+        console.log(values);
+        //createOne(user.id, values);
+        //this.setState({
+        //    needToRedirect:true
+        //})
     }
 
     openForm = () => {
@@ -133,12 +149,10 @@ class CreateContractForm extends Component {
                                     label="Исполнитель" 
                                     name="contractor" 
                                     component={ASelect}
+                                    mode="multiple"
                                     showSearch
                                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} 
                                     >
-                                    <Select.Option key="0" value={0}>
-                                        Не указан
-                                    </Select.Option>
                                     { contractors.map( contractor =>
                                         <Select.Option key={contractor.id} value={contractor.id}>
                                             {contractor.name}
@@ -252,7 +266,7 @@ const validate = values => {
         statuses : state.settings.status_types,
         initialValues : {
             customer_id : state.customersList.lastInsertId || 0,
-            contractor : 0,
+            contractor : [],
             status : 1
         }
     }

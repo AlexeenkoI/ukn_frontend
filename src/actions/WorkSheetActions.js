@@ -120,14 +120,26 @@ export function applyFilters(id, filters){
     }
 }
 
+export function setPage(pageNum){
+    return{
+        type : "PAGE_CHANGE",
+        pageNum
+    }
+}
+
 export function resetFilters(id,filters){
     for(var key in filters){
-        if(filters[key] !=='limit'){
+        if(filters[key] !=='limit' && filters[key] !== 'offset'){
             filters[key] = '';
         }
     }
     filters.contractor = id;
-    return getContracts(id,filters);
+    filters.status = 2;
+    filters.date_started = '';
+    filters.date_deadline= '';
+    filters.limit = 10;
+    filters.offset = 0;
+    return applyFilters(id,filters);
 }
 
 export function getFilterData(id){

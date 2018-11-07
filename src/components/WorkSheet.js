@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import Preloader from './Preloader'
-import { Table, Input, Button, Icon, Modal, Spin } from 'antd';
+import { Table, Input, Button, Icon, Modal, Spin, Pagination } from 'antd';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import { DatePicker } from 'antd';
 import locale from 'antd/lib/date-picker/locale/ru_RU';
 
-import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData } from '../actions/WorkSheetActions'
+import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData, setPage } from '../actions/WorkSheetActions'
 import { getUserList } from '../actions/UserListActions'
 import { getCustomersList } from '../actions/CustomersActions'
 import Filters from './Filters';
@@ -40,7 +40,7 @@ class WorkSheet extends Component{
         //Устанавливаем фильтр по умолчанию на статус заявок - В работе
         this.props.setFilters('status', 2);
           console.log('loading filters...');
-          this.props.getFilterData(this.props.user.id);
+          //this.props.getFilterData(this.props.user.id);
          
           
         }
@@ -57,8 +57,21 @@ class WorkSheet extends Component{
         this.props.resetFilter(this.props.user.id,this.props.contracts.filters);
 
     }
-    onPaginationChange = () =>{
-      console.log('change listener');
+    onPaginationChange = (page) =>{
+      const { contracts, setPage } = this.props;
+      console.log('pagination listener, page:');
+      console.log(page);
+      let offset =  page.current == 1 ? 0 : contracts.filters.limit * (page.current-1);
+      setPage(page.current)
+      this.props.setFilters('offset', offset);
+      this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
+    }
+    onPageSizeChange = (current, pageSize) => {
+      console.log('page size changed');
+      console.log(current);
+      console.log(pageSize);
+      this.props.setFilters('limit',pageSize);
+      this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
     }
 
     onCalendarChange = (date, string)=>{
@@ -156,7 +169,10 @@ class WorkSheet extends Component{
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
-            pagination={{defaultPageSize:10,pageSize:10}} />
+            pagination={{total:40, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
+            
+            //pagination={{defaultPageSize:10,pageSize:10}} 
+            />
           <Modal
             footer={false}
             visible={this.state.isModalOn}
@@ -197,7 +213,8 @@ class WorkSheet extends Component{
       applyFilters : (id, filters) => dispatch(applyFilters(id, filters)),
       getFilterData : (id) => dispatch(getFilterData(id)),
       getUsers : (id) => dispatch(getUserList(id)),
-      getCustomers : (id) => dispatch(getCustomersList(id))
+      getCustomers : (id) => dispatch(getCustomersList(id)),
+      setPage : (page) => dispatch(setPage(page))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 
