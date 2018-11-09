@@ -38,7 +38,8 @@ const initialState = {
           ...state,
           isLoaded : true,
           isFetching : false,
-          data : action.data
+          data : action.data,
+          count : action.count
         }
       case 'PAGE_CHANGE':
         return {

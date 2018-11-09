@@ -1,18 +1,12 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm } from 'antd'
+import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm, Input, Icon } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link, Redirect } from 'react-router-dom'
 import UserEdit from '../components/forms/UserEdit'
-import { getUserList, getUser, updatedUser, deleteUser, clearForm } from '../actions/UserListActions'
+import { getUserList, getUser, updatedUser, deleteUser, clearForm, addCondition, clearSearchStr, setPage } from '../actions/UserListActions'
 
-const data = [{
-    id : 1,
-    is_active : 1,
-    name : 'Игорь',
-    surename : 'Алексеенко',
-    position : 'Инженер'
-}]
+const Search = Input.Search;
 
 class UsersList extends Component{
     constructor(props){
@@ -40,8 +34,8 @@ class UsersList extends Component{
     }
 
     componentWillMount(){
-        console.log('mount user-list');
-        this.props.getUserList(this.props.user.id);
+        const { user, userList, getUserList } = this.props;
+       getUserList(user.id, userList.searchData);
     }
 
     handleSubmit = (values) => {
@@ -61,7 +55,28 @@ class UsersList extends Component{
 
     }
 
+    submitSearch = (str) => {
+        const { user, addCond, userList, getUserList, resetSearch } = this.props;
+        //addCond('searchString', str);
+        getUserList(user.id, userList.searchData);
+    }
+    onPaginationChange = (page) => {
+        const { user, addCond, userList, getUserList, setPage } = this.props
+        let offset =  page.current == 1 ? 0 : userList.searchData.limit * (page.current-1);
+        setPage(page.current)
+        addCond('offset',offset);
+        getUserList(user.id, userList.searchData);
+
+    }
+    onPageSizeChange = (current, pageSize) => {
+        const { user, userList, addCond, getUserList } = this.props
+
+        addCond('limit',pageSize);
+        getUserList(user.id, userList.searchData);
+    }
+
     render(){
+        const { users, userList, addCond } = this.props;
         const columns = [
         {
             title : 'Активность',
@@ -101,17 +116,31 @@ class UsersList extends Component{
             )
         }]
         return(
+           
             <div>
                 <Row>
                     {/*<Button onClick={this.createAction}>Добавить Пользователя</Button> */}
                    <Link to="/users/create"> <Button>Добавить пользователя</Button></Link>
                 </Row>
+                <Row>
+                <Search
+                    placeholder="Поиск..."
+                    value={userList.searchData.whereString}
+                    onChange={e => addCond('whereString',e.target.value)}
+                    onSearch={this.submitSearch}
+                    style={{ maxWidth: 400 }}
+                    suffix={userList.searchData.whereString.length > 0 ? <span key={userList.searchData.whereString} className="closePicker" onClick={e => addCond('whereString','')}><Icon type="close" theme="outlined" /></span> : ''}
+                    enterButton
+                />
+                </Row>
                 <Table  
                     rowKey="id" 
                     columns={columns} 
                     dataSource={this.props.userList.data}
-                    pagination={false}
+                    pagination={true}
                     loading={this.props.userList.isLoading}
+                    onChange={this.onPaginationChange}
+                    pagination={{total:userList.count, pageSize : userList.searchData.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : userList.page }}
                 />
                 <Drawer
                     width="640"
@@ -150,11 +179,14 @@ const mapStateToProps = store =>{
   }
 
 const mapDispatchToProps = dispatch =>({
-    getUserList : (id) => dispatch(getUserList(id)),
+    getUserList : (id, condition) => dispatch(getUserList(id, condition)),
     getCurrentUser : (authUserId, incUserId) => dispatch(getUser(authUserId, incUserId)),
     updatedUser : (authorizeId, formData) => dispatch(updatedUser(authorizeId, formData)),
     clearForm : () => dispatch(clearForm()),
-    deleteById : (id, deleteId) => dispatch(deleteUser(id, deleteId))
+    addCond : (type, value) => dispatch(addCondition(type, value)),
+    resetSearch : () => dispatch(clearSearchStr()),
+    deleteById : (id, deleteId) => dispatch(deleteUser(id, deleteId)),
+    setPage : (page) => dispatch(setPage(page))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(UsersList));

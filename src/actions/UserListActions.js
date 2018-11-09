@@ -9,13 +9,16 @@ export const UPDATE_ERROR = 'UPDATE_ERROR';
 export const GET_USER = 'GET_USER';
 export const RECIEVE_USER = 'RECIEVE_USER';
 export const CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER';
+export const ADD_CONDITION = 'ADD_CONDITION';
+export const CLEAR_SEARCH_STRING = 'CLEAR_SEARCH_STRING';
 
 
-export function getUserList(id){
+export function getUserList(id , condition){
     return function(dispatch){
        // dispatch(fetchUsers());
         const reqBody = {
             userId : id,
+            data : condition
         }
         fetch('/api/users/getusers',{
             headers: {
@@ -75,6 +78,27 @@ export function recieveUser(json){
 export function fetchUser(){
     return {
         type: GET_USER
+    }
+}
+
+export function addCondition(conType, value){
+    return {
+        type : ADD_CONDITION,
+        conType,
+        value
+    }
+}
+
+export function clearSearchStr(){
+    return {
+        type : CLEAR_SEARCH_STRING
+    }
+}
+
+export function setPage(page){
+    return {
+        type: "SET_PAGE",
+        page
     }
 }
 

@@ -31,7 +31,7 @@ export function getContracts(id,filterData){
         .then(res => res.json())
         .then(json => {
             if(json.success == true){
-                dispatch(recieveContracts(json.data))
+                dispatch(recieveContracts(json))
             }
         })
         .catch(err => {
@@ -54,7 +54,8 @@ export function recieveContracts(res){
         type : RECIEVE_CONTRACTS,
         isFetching : false,
         isLoaded : true,
-        data : res
+        data : res.data,
+        count : res.count
     }
 }
 
@@ -110,7 +111,7 @@ export function applyFilters(id, filters){
             if(json.success == true){
                 console.log('recieve filter contracts');
                 console.log(json);
-                dispatch(recieveContracts(json.data, filters))
+                dispatch(recieveContracts(json, filters))
             }
         })
         .catch(err => {

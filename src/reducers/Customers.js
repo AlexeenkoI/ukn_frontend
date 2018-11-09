@@ -1,6 +1,7 @@
 const initialState = {
     loading: false,
     loaded : false,
+    count : 0,
     data : [
         // {
         //     id :'1',
@@ -27,7 +28,11 @@ const initialState = {
         //     phone : '33333333' 
         // }
     ],
-    searchString : '',
+    searchData:{
+        searchString : '',
+        limit : 10,
+        offset : 0
+    },
     currentCustomer : {},
     updating : false,
     lastInsertId : ''
@@ -53,7 +58,8 @@ export function customersReducer(state = initialState, action){
                 ...state,
                 loading : false,
                 loaded : true,
-                data : action.data
+                data : action.data.data,
+                count : action.data.count
             }; 
         case 'RECIEVE_CUSTOMER' :
             return {

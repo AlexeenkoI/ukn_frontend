@@ -169,7 +169,7 @@ class WorkSheet extends Component{
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
-            pagination={{total:40, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
+            pagination={{total:this.props.contracts.count, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
             
             //pagination={{defaultPageSize:10,pageSize:10}} 
             />

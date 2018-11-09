@@ -38,7 +38,7 @@ export const getCustomersList = (uId, searchStr = '') => {
             if(json.success == true){
                 console.log('customers list recieved');
                 console.log(json);
-                dispatch(recieveCustomersList(json.data))
+                dispatch(recieveCustomersList(json))
             }
         })
         .catch(err => {

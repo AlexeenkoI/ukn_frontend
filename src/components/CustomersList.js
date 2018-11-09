@@ -46,20 +46,20 @@ export class CustomersList extends Component {
     console.log('submit search');
     console.log(str);
     onSearch(str);
-    getCustomers(user.id, customers.searchString);
+    getCustomers(user.id, customers.searchData.searchString);
   }
 
   handleFormSubmit = (values) => {
       const { user, customers, updateOne } = this.props;
       console.log('handle');
       console.log(values);
-      updateOne(user.id, values, customers.searchString);
+      updateOne(user.id, values, customers.searchData.searchString);
       this.closeModal();
   }
   deleteAction = (deleteId) => {
     const { user, customers, deleteOne } = this.props;
     console.log('delete ' + deleteId);
-    deleteOne(user.id, deleteId, customers.searchString)
+    deleteOne(user.id, deleteId, customers.searchData.searchString)
   }
 
   render() {
@@ -118,7 +118,7 @@ export class CustomersList extends Component {
                 onChange={e => this.props.onSearch(e.target.value)}
                 onSearch={this.submitSearch}
                 style={{ maxWidth: 400 }}
-                suffix={customers.searchString.length > 0 ? <span key={customers.searchString} className="closePicker"><Icon type="close" theme="outlined" onClick={this.clearSearchString}/></span> : ''}
+                suffix={customers.searchData.searchString.length > 0 ? <span key={customers.searchData.searchString} className="closePicker"><Icon type="close" theme="outlined" onClick={this.clearSearchString}/></span> : ''}
                 enterButton
             />
 
