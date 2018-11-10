@@ -138,7 +138,9 @@ class Filters extends Component{
                                 placeholder="Заказчик"
                                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                 onChange={this.handleCustomerChange}
+                                defaultActiveFirstOption={true}
                             >
+                            <Select.Option key={0} value={0}>Не выбран</Select.Option>
                             {this.props.customers.map(customer => <Select.Option key={customer.id} value={customer.id}>{`${customer.name} ${customer.firstname} ${customer.secondname}`}</Select.Option>)}
                             </Select>
                         </FormItem>

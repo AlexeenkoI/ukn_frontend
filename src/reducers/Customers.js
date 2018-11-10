@@ -2,6 +2,7 @@ const initialState = {
     loading: false,
     loaded : false,
     count : 0,
+    page : 1,
     data : [
         // {
         //     id :'1',
@@ -29,7 +30,7 @@ const initialState = {
         // }
     ],
     searchData:{
-        searchString : '',
+        whereString : '',
         limit : 10,
         offset : 0
     },
@@ -68,10 +69,19 @@ export function customersReducer(state = initialState, action){
             };
         case 'CREATE_CUSTOMER' : 
             return state;
-        case 'SET_SEARCH_STRING' : 
+        case 'ADD_CONDITION':
+            console.log('change condition');
+            console.log(action);
+            let newData = state.searchData;
+            newData[action.conType] = action.value;
             return {
                 ...state,
-                searchString : action.str
+                searchData : newData
+            }
+        case 'SET_PAGE' : 
+            return {
+                ...state,
+                page : action.page
             }
         case 'INSERTING_OR_UPDATING':
             return {

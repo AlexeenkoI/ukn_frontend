@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Table, Input, Button, Icon, Modal, Spin, Dropdown, Menu, Popconfirm } from 'antd';
-import { getCustomersList, getCurrentCustomer, updateCustomer, deleteCustomer, insertCustomer, search, resetSearch } from '../actions/CustomersActions';
+import { getCustomersList, getCurrentCustomer, updateCustomer, deleteCustomer, insertCustomer, search, resetSearch, setSearch, setPage } from '../actions/CustomersActions';
 import CustomerEdit from '../components/forms/CustomerEdit'
 const Search = Input.Search;
 
@@ -43,16 +43,14 @@ export class CustomersList extends Component {
 
   submitSearch = (str) => {
     const { user, customers,  onSearch, getCustomers } = this.props;
-    console.log('submit search');
-    console.log(str);
-    onSearch(str);
-    getCustomers(user.id, customers.searchData.searchString);
+    //console.log('submit search');
+    //console.log(str);
+    //onSearch(str);
+    getCustomers(user.id, customers.searchData);
   }
 
   handleFormSubmit = (values) => {
       const { user, customers, updateOne } = this.props;
-      console.log('handle');
-      console.log(values);
       updateOne(user.id, values, customers.searchData.searchString);
       this.closeModal();
   }
@@ -62,8 +60,21 @@ export class CustomersList extends Component {
     deleteOne(user.id, deleteId, customers.searchData.searchString)
   }
 
+  onPaginationChange = (page) => {
+    const { user, customers, setCondition, setPage, getCustomers} = this.props;
+    let offset =  page.current == 1 ? 0 : customers.searchData.limit * (page.current-1);
+    setPage(page.current);
+    setCondition('offset', offset);
+    getCustomers(user.id, customers.searchData);
+  }
+  onPageSizeChange = (current, pageSize) => {
+    const { user, customers, setCondition, getCustomers} = this.props;
+    setCondition('limit', pageSize);
+    getCustomers(user.id, customers.searchData)
+  }
+
   render() {
-    const { customers } = this.props;
+    const { customers, setCondition } = this.props;
     const columns = [{
         title: 'Имя',
         dataIndex: 'name',
@@ -114,11 +125,11 @@ export class CustomersList extends Component {
         <Fragment>
             <Search
                 placeholder="Поиск..."
-                value={customers.searchString}
-                onChange={e => this.props.onSearch(e.target.value)}
+                value={customers.searchData.whereString}
+                onChange={e => setCondition('whereString', e.target.value)}
                 onSearch={this.submitSearch}
                 style={{ maxWidth: 400 }}
-                suffix={customers.searchData.searchString.length > 0 ? <span key={customers.searchData.searchString} className="closePicker"><Icon type="close" theme="outlined" onClick={this.clearSearchString}/></span> : ''}
+                suffix={customers.searchData.whereString.length > 0 ? <span key={customers.searchData.whereString} className="closePicker"><Icon type="close" theme="outlined" onClick={e => setCondition('whereString', '')}/></span> : ''}
                 enterButton
             />
 
@@ -127,6 +138,8 @@ export class CustomersList extends Component {
                 columns={columns}
                 dataSource={customers.data}
                 loading = {customers.loading}
+                onChange={this.onPaginationChange}
+                pagination={{total:customers.count, pageSize : customers.searchData.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : customers.page }}
             />
             <Modal
                 footer={false}
@@ -155,8 +168,10 @@ const mapDispatchToProps = dispatch => ({
     updateOne : (userId, formData, searchStr) => dispatch(updateCustomer(userId, formData, searchStr)),
     deleteOne : (userId, deleteId, str) => dispatch(deleteCustomer(userId, deleteId , str)),
     insertOne : (userId, formData) => dispatch(insertCustomer(userId,formData)),
-    onSearch : (str) => dispatch(search(str)),
-    clearSearch  : (str) => dispatch(resetSearch(str))
+    //onSearch : (str) => dispatch(search(str)),
+    //clearSearch  : (str) => dispatch(resetSearch(str))
+    setCondition : (type, value) => dispatch(setSearch(type, value)),
+    setPage : (page) => dispatch(setPage(page))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(CustomersList)

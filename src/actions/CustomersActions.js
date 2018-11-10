@@ -17,13 +17,13 @@ export const startGetCustomers = () =>{
     }
 }
 
-export const getCustomersList = (uId, searchStr = '') => {
+export const getCustomersList = (uId, searchData = '') => {
     return (dispatch) => {
         //TO DO
         dispatch(startGetCustomers())
         const reqBody = {
             userId : uId,
-            search : searchStr
+            data : searchData
         }
         fetch('/api/customers/getcustomers',{
             headers: {
@@ -205,8 +205,19 @@ export const insertCustomer = (uId, formData) => {
     }
 }
 
-export const setSearch = (userId, string) => {
+export const setSearch = (conType, value) => {
+    return {
+        type : "ADD_CONDITION",
+        conType,
+        value
+    }
+}
 
+export const setPage = (page) => {
+    return {
+        type: "SET_PAGE",
+        page
+    }
 }
 
 export const clearInsert = () => {
