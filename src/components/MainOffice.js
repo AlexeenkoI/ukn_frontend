@@ -15,9 +15,11 @@ import CreateContractForm from './forms/CreateContractForm'
 import CustomerEdit from './forms/CustomerEdit'
 import UserEdit from './forms/UserEdit'
 import ContractEdit from './forms/ContractEdit';
+import SettingsEditor from './forms/SettingsEditor'
 import NotMatch from './NotMatch';
 import HomePage from './HomePage';
 import TopCrumbs from './TopCrumbs';
+import SettingsList from './settings/SettingsList'
 
 import { logout } from '../actions/LoginActions'
 import { recieveContractNotification } from '../actions/NotificationsActions'
@@ -139,6 +141,9 @@ class MainOffice extends Component{
                         <Route exact path="/customers" component={CustomersList}/>
                         <Route exact path="/customers/edit/:id" component={CustomerEdit} />
                         <Route exact path="/customers/createcustomer" component={CustomerEdit} />
+                        <Route exact path="/settings" component={SettingsList} />
+                        <Route exact path="/settings/:type" component={SettingsEditor} />
+
                         <Route component={NotMatch} />
                     </Switch>
                   </Content>

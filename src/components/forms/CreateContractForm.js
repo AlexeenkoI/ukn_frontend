@@ -262,8 +262,8 @@ const validate = values => {
         customers : state.customersList.data,
         contractors : state.userList.data,
         st : state.customersList,
-        workTypes : state.settings.work_types,
-        statuses : state.settings.status_types,
+        workTypes : state.settings.data.work_types,
+        statuses : state.settings.data.status_types,
         initialValues : {
             customer_id : state.customersList.lastInsertId || 0,
             contractor : [],

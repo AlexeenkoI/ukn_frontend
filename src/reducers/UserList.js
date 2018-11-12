@@ -17,9 +17,12 @@ const initialState= {
 
 export function userListReducer(state = initialState, action){
     switch(action.type){
+        case 'GET_USERS_LIST':
+            return {
+                ...state,
+                isLoading : true
+            }
         case 'RECIEVE_USERS_LIST':
-            console.log('recieve');
-            console.log(action);
             return {
                 ...state,
                 isLoading : false,

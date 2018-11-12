@@ -48,12 +48,18 @@ class LeftMenu extends Component{
                 </NavLink>
               </Menu.Item>
               <Menu.Item key="/customers">
-              <NavLink to="/customers"  activeClassName="active">
-                <Icon type="solution" theme="outlined" />
-                <span>Клиенты</span>
-              </NavLink>
-            </Menu.Item>
+                <NavLink to="/customers"  activeClassName="active">
+                  <Icon type="solution" theme="outlined" />
+                  <span>Клиенты</span>
+                </NavLink>
+              </Menu.Item>
               <SubMenu key="sub1" title={<span><Icon type="setting"/><span>Настройки</span></span>}>
+                <Menu.Item>
+                  <NavLink to="/settings"  activeClassName="active">
+                    <Icon type="setting" theme="outlined" />
+                  <span>Все</span>
+                  </NavLink>
+                </Menu.Item>
                 <Menu.Item key="sub1_2">
                   <Icon type="exception"/>
                   Статусы

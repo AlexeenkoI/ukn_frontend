@@ -15,7 +15,7 @@ export const CLEAR_SEARCH_STRING = 'CLEAR_SEARCH_STRING';
 
 export function getUserList(id , condition){
     return function(dispatch){
-       // dispatch(fetchUsers());
+        dispatch(fetchUsers());
         const reqBody = {
             userId : id,
             data : condition
@@ -72,6 +72,11 @@ export function recieveUser(json){
     return {
         type : RECIEVE_USER,
         json
+    }
+}
+export function fetchUsers(){
+    return{
+        type : GET_USERS_LIST
     }
 }
 

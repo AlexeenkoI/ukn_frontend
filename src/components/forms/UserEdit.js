@@ -158,7 +158,7 @@ function mapStateToProps(state, ownProps) {
         user : state.user,
         userStatus: state.user.role,
         role : ownProps.userRoles,
-        settings : state.settings,
+        settings : state.settings.data,
         userFetch : state.userList.userIsLoading,
         initialValues : state.userList.currentUserData,
         grid : ownProps.gridSettings  || defaultGrid

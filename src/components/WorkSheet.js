@@ -170,16 +170,14 @@ class WorkSheet extends Component{
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
             pagination={{total:this.props.contracts.count, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
-            
-            //pagination={{defaultPageSize:10,pageSize:10}} 
-            />
+          />
           <Modal
             footer={false}
             visible={this.state.isModalOn}
             onCancel={this.closeModalClick}
             title="Информация о заявке"
           >
-            {this.props.contracts.contractLoading ? 
+            {/* this.props.contracts.contractLoading ? 
               (<Spin/>):
               (<ContractEdit
                 contractData = {this.props.contracts.currentContract}
@@ -187,7 +185,7 @@ class WorkSheet extends Component{
                 //isLoading = {this.contracts.contractLoading}
                 statuses = {this.props.contracts.filterData.types}
               />)
-            }
+              */}
             
           </Modal>
           </div>
@@ -200,7 +198,7 @@ class WorkSheet extends Component{
         user : store.user,
         contracts : store.contracts,
         users : store.userList,
-        settings : store.settings,
+        settings : store.settings.data,
         customers : store.customersList
       }
     }

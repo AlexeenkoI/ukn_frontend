@@ -11,7 +11,8 @@ const menuMap = {
     "/customers/create" : "Добавить клиента",
     "/contracts" : "Заявления",
     "/contracts/edit" : "Редактировать заявку",
-    "/contracts/create" : "Создать заявку"
+    "/contracts/create" : "Создать заявку",
+    "/settings" : "Настройки"
 }
 
 

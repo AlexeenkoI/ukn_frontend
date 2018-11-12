@@ -151,6 +151,7 @@ class ContractEdit extends Component {
               label="Исполнитель" 
               name="contractor" 
               component={ASelect}
+              //mode="multiple"
               showSearch
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} 
             >
@@ -223,7 +224,7 @@ function mapStateToProps(state, ownProps) {
       uploadAction : '/api/upload',
       userList : state.userList,
       contractStatuses : state.contracts.filterData.types,
-      settings : state.settings,
+      settings : state.settings.data,
       grid : ownProps.gridSettings || defaultGrid,
       initialValues: state.contracts.currentContract,
       //initialValues : {
