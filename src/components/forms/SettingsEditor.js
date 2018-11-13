@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { Form, Input, Col, Row, Icon, Button } from 'antd'
-import {} from '../../actions/SettingsActions'
+import { updateValue, createRow, clearRow } from '../../actions/SettingsActions'
+
 const FormItem = Form.Item;
 
 const formItemLayout = {
@@ -31,6 +32,12 @@ export class SettingsEditor extends Component {
         console.log(match.params.type);
     }
 
+    componentWillUnmount(){
+        const { clearRow } = this.props;
+        //Освобождаем стор для создания полей
+        clearRow();
+    }
+
     onFormSubmit = (values) => {
         console.log('submitting');
         console.log(values);
@@ -47,36 +54,48 @@ export class SettingsEditor extends Component {
     }
 
   render() {
-    const { settings, match } = this.props;
+    const { settings, match, setFieldValue, createRow } = this.props;
     const values = settings.data[match.params.type];
+    console.log(settings.newData);
     return (
       <Fragment>
         <div>
             {settings.description[match.params.type].name}
         </div>
         <Col span={4}>
-          
                 {values.map( (item, pos) =>
                     Object.keys(item).map( (field, index) =>
-                        
                         field === 'id' ? 
                             (<Input type="hidden" key={index} name={field} value={values[pos][field]} />)
                                 :
                             (
                                 <FormItem {...formItemLayout} key={index}>
-                                    <Input style={{width:"50%", marginRight : "10px"}} type="text"  name={field} value={values[pos][field]} onChange={(e) =>this.onFieldChange(values[pos]['id'], e.target.value)} />
-                                    <Button onClick={(e)=>this.onFieldSubmit(values[pos]['id'], values[pos][field])}><Icon type="edit" />Изменить</Button>
+                                    <Input 
+                                        style={{width:"50%", marginRight : "10px"}} 
+                                        type="text"  
+                                        name={field} 
+                                        value={values[pos][field]} 
+                                        onChange={(e) => setFieldValue(match.params.type, pos, field, e.target.value)}
+                                    />
+                                    <Button 
+                                        onClick={(e)=>this.onFieldSubmit(values[pos]['id'], values[pos][field])}
+                                        loading={settings.settingsUpdating}
+                                    >
+                                        <Icon type="edit"/>
+                                        Изменить
+                                    </Button>
                                 </FormItem>
                             ),
                             
                         )
                 )}
                 <FormItem {...formItemLayout}>
-                    <Input type="text" style={{width: "50%", marginRight : "10px"}} name={settings.data[match.params.type]} />
-                    <Button type="primary"><Icon type="check" />Добавить</Button>
+                { Object.keys(values[0]).map( (field, index) =>
+                    field !== 'id' &&
+                    (<Input type="text" style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
+                )}
+                    <Button type="primary" disabled={settings.newData === 'undefined'}><Icon type="check" />Добавить</Button>
                 </FormItem>
-                
-                
         </Col>
         
       </Fragment>
@@ -90,7 +109,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps =  (dispatch) => ({
-  
+  setFieldValue : (itemType, itemPos, itemField, value) => dispatch(updateValue(itemType, itemPos, itemField, value)),
+  createRow : (itemType, itemField, value) => dispatch(createRow(itemType, itemField, value)),
+  clearRow : () => dispatch(clearRow())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsEditor)

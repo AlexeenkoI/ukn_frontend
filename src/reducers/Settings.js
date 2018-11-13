@@ -24,11 +24,34 @@ const initialState = {
             {id : 3, type : "Выполнен"},
             {id : 4, type : "Завершен"},
         ]
-    }
+    },
+    newData : {},
+    settingsUpdating : false
 }
 
 export function settingsReducer(state = initialState, action) {
     switch(action.type){
+        case "CHANGE_VALUE" : 
+            let newData = state.data;
+            newData[action.itemType][action.itemPos][action.itemField] = action.value;
+            return {
+                ...state,
+                newData
+            }
+        case "CREATE_VALUE" : 
+            let newRow = {};
+            const key = "table";
+            newRow[key] = action.itemType;
+            newRow[action.itemField] = action.value;
+            return {
+                ...state,
+                newData : newRow
+            }
+        case "CLEAR_ROW" : 
+            return {
+                ...state,
+                newData : {}
+            }
         default:
             return state;
     }

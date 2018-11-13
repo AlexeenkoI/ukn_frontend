@@ -12,7 +12,10 @@ const menuMap = {
     "/contracts" : "Заявления",
     "/contracts/edit" : "Редактировать заявку",
     "/contracts/create" : "Создать заявку",
-    "/settings" : "Настройки"
+    "/settings" : "Настройки",
+    "/settings/work_types" : "Виды работ",
+    "/settings/roles" : "Виды ролей",
+    "/settings/status_types" : "Настройки",
 }
 
 
