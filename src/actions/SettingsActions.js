@@ -1,3 +1,5 @@
+import { message } from 'antd';
+
 export const START_LOADING = "START_LOADING"
 export const SETTINGS_LOADED = "SETTINGS_LOADED"
 export const LOAD_SETTINGS = "LOAD SETTINGS"
@@ -31,6 +33,7 @@ export const updateValue = ( itemType, itemPos, itemField, value) => {
 }
 
 export const createRow = ( itemType, itemField, value) => {
+    if(value === '') return clearRow();
     return {
         type : CREATE_VALUE,
         itemType,
@@ -49,6 +52,35 @@ export const getSettings = (userId, condition = '') => {
     return (dispatch) => {
         dispatch(startLoading());
         //TO DO
+        const reqBody = {
+            userId : userId,
+        }
+        fetch('/api/settings/getsettings',{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                console.log('succsess answer');
+                console.log(json);
+                message.success(json.msg)
+            }else{
+                console.log('error anser');
+                console.log(json);
+                message.warn(json);
+            }
+            dispatch(finishLoading())
+        })
+        .catch(err => {
+            //console.log(err);
+            message.warn('Ошибка');
+            dispatch(finishLoading())
+        });
 
     }
 }
@@ -66,14 +98,93 @@ export const deleteSetting = (userId, type, settingId) => {
     }
 }
 
-export const updateSetting = (userId, type, settingId) => {
+export const updateSetting = (userId, type, setting) => {
     return (dispatch) => {
         //TO DO
+        const updId = setting.id;
+        delete setting.id;
+        dispatch(startUpdate())
+        const reqBody = {
+            userId : userId,
+            data : setting
+        }
+        
+        fetch(`/api/${type}/update${type}/${updId}`,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                console.log('succsess answer');
+                console.log(json);
+                message.success(json.msg)
+                //dispatch(getSettings(userId))
+            }else{
+                console.log('error anser');
+                console.log(json);
+                message.warn(json);
+            }
+            dispatch(finishUpdate())
+        })
+        .catch(err => {
+            //console.log(err);
+            message.warn('Ошибка');
+            dispatch(finishUpdate())
+        });
     }
 }
 
-export const insertSetting = (userId, type) => {
+export const insertSetting = (userId, type, insertValues) => {
     return (dispatch) => {
         // TO DO
+        dispatch(startUpdate())
+        const reqBody = {
+            userId : userId,
+            data : insertValues
+        }
+        fetch(`/api/${type}/create${type}`,{
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method:'POST',
+            body : JSON.stringify(reqBody)
+        })
+        .then(res => res.json())
+        .then(json => {
+            if(json.success == true){
+                console.log('succsess answer');
+                console.log(json);
+                message.success(json.msg)
+                //dispatch(getSettings(userId))
+            }else{
+                console.log('error anser');
+                console.log(json);
+                message.warn(json);
+            }
+            dispatch(finishUpdate())
+        })
+        .catch(err => {
+            console.log('err');
+            message.warn('Ошибка');
+            dispatch(finishUpdate())
+        });
+    }
+}
+
+export const startUpdate = () => {
+    return {
+        type : "START_UPDATE"
+    }
+}
+
+export const finishUpdate = () => {
+    return {
+        type : "FINISH_UPDATE"
     }
 }

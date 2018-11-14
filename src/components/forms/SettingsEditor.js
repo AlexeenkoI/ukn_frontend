@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
 import { Form, Input, Col, Row, Icon, Button } from 'antd'
-import { updateValue, createRow, clearRow } from '../../actions/SettingsActions'
+import { updateValue, createRow, clearRow, insertSetting, updateSetting } from '../../actions/SettingsActions'
 
 const FormItem = Form.Item;
 
@@ -54,7 +54,7 @@ export class SettingsEditor extends Component {
     }
 
   render() {
-    const { settings, match, setFieldValue, createRow } = this.props;
+    const { user, settings, match, setFieldValue, createRow, performInsert, performUpdate } = this.props;
     const values = settings.data[match.params.type];
     console.log(settings.newData);
     return (
@@ -78,10 +78,12 @@ export class SettingsEditor extends Component {
                                         onChange={(e) => setFieldValue(match.params.type, pos, field, e.target.value)}
                                     />
                                     <Button 
-                                        onClick={(e)=>this.onFieldSubmit(values[pos]['id'], values[pos][field])}
+                                        //onClick={(e)=>this.onFieldSubmit(values[pos]['id'], values[pos][field])}
+                                        onClick={() => performUpdate(user.id, match.params.type, values[pos])}
                                         loading={settings.settingsUpdating}
+                                        icon={<Icon type="edit"/>}
                                     >
-                                        <Icon type="edit"/>
+                                        
                                         Изменить
                                     </Button>
                                 </FormItem>
@@ -92,9 +94,17 @@ export class SettingsEditor extends Component {
                 <FormItem {...formItemLayout}>
                 { Object.keys(values[0]).map( (field, index) =>
                     field !== 'id' &&
-                    (<Input type="text" style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
+                    (<Input type="text" key={index} style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
                 )}
-                    <Button type="primary" disabled={settings.newData === 'undefined'}><Icon type="check" />Добавить</Button>
+                    <Button 
+                        type="primary" 
+                        disabled={settings.newData.hasOwnProperty("table") ? false : true} 
+                        onClick={() => performInsert(user.id, match.params.type, settings.newData)}
+                        loading={settings.settingsUpdating}
+                        icon={<Icon type="check" />}
+                    >
+                        Добавить
+                    </Button>
                 </FormItem>
         </Col>
         
@@ -111,7 +121,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps =  (dispatch) => ({
   setFieldValue : (itemType, itemPos, itemField, value) => dispatch(updateValue(itemType, itemPos, itemField, value)),
   createRow : (itemType, itemField, value) => dispatch(createRow(itemType, itemField, value)),
-  clearRow : () => dispatch(clearRow())
+  clearRow : () => dispatch(clearRow()),
+  performInsert : (userId, settingType, values) => dispatch(insertSetting(userId, settingType, values)),
+  performUpdate : (userId, settingType, settings) => dispatch(updateSetting(userId, settingType, settings))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsEditor)

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Row, Card, Icon } from 'antd'
+import  Preloader  from '../Preloader'
 import { getSettings } from '../../actions/SettingsActions'
 import { withRouter } from 'react-router'
 import { Link, Redirect } from 'react-router-dom'
@@ -24,7 +25,8 @@ export class SettingsList extends Component {
     const keys = Object.keys(settings.data);
     return (
       <Row type="flex" justify="start" style={{flexWrap:"wrap"}}>
-        { keys.map( (setting, pos) =>
+        {settings.loading ? <Preloader/> :
+         keys.map( (setting, pos) =>
           <Card
             style={{ margin : "15px", width : "300px" }}
             className="settings-card"

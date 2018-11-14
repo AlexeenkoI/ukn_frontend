@@ -1,5 +1,5 @@
 const initialState = {
-    settings_loaded : true,
+    settings_loaded : false,
     loading : false,
     description : {
         work_types : { name : "Виды работ", description : "Виды выполняемых работ"},
@@ -51,6 +51,27 @@ export function settingsReducer(state = initialState, action) {
             return {
                 ...state,
                 newData : {}
+            }
+        case "START_UPDATE" : 
+            return {
+                ...state,
+                settingsUpdating : true
+            }
+        case "FINISH_UPDATE" : 
+            return {
+                ...state,
+                settingsUpdating : false
+            }
+        case "START_LOADING" : 
+            return {
+                ...state,
+                loading : true
+            }
+        case "SETTINGS_LOADED" : 
+            return {
+                ...state,
+                loading : false,
+                settings_loaded : true
             }
         default:
             return state;

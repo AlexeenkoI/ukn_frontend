@@ -3,32 +3,7 @@ const initialState = {
     loaded : false,
     count : 0,
     page : 1,
-    data : [
-        // {
-        //     id :'1',
-        //     name : 'name1',
-        //     firstname : 'fio1',
-        //     secondname : 'otch1',
-        //     email : 'test@test1.ru',
-        //     phone : '123123123' 
-        // },
-        // {
-        //     id :'2',
-        //     name : 'name2',
-        //     firstname : 'fio2',
-        //     secondname : 'otch2',
-        //     email : 'test@test2.ru',
-        //     phone : '222222222' 
-        // },
-        // {
-        //     id :'3',
-        //     name : 'name3',
-        //     firstname : 'fio3',
-        //     secondname : 'otch3',
-        //     email : 'test@test3.ru',
-        //     phone : '33333333' 
-        // }
-    ],
+    data : [],
     searchData:{
         whereString : '',
         limit : 10,
