@@ -34,7 +34,8 @@ class Filters extends Component{
         this.props.setFilters('whereString',e.target.value);
     }
     handleContractorChange = (value) => {
-        this.props.setFilters('contractor',value);
+        //this.props.setFilters('contractor',value);
+        this.props.setFilters('contractor', {id : value});
     }
 
     handleStatusChange = (value) => {
@@ -81,7 +82,8 @@ class Filters extends Component{
                         showSearch
                         style={{ width: '100%' }}
                         defaultValue={this.props.user.id}
-                        value={this.props.filters.contractor}
+                        //value={this.props.filters.contractor}
+                        value={this.props.filters.contractor.id}
                         placeholder="Исполнитель"
                         onChange={this.handleContractorChange}
                         filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
