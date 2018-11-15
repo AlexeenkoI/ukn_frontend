@@ -1,11 +1,12 @@
 import React, { Component, Fragment } from 'react'
-import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm, Input, Icon } from 'antd'
+import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm, Input, Icon, Menu, Dropdown } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link, Redirect } from 'react-router-dom'
 import UserEdit from '../components/forms/UserEdit'
 import { getUserList, getUser, updatedUser, deleteUser, clearForm, addCondition, clearSearchStr, setPage } from '../actions/UserListActions'
 
+const MenuItem = Menu.Item
 const Search = Input.Search;
 
 class UsersList extends Component{
@@ -104,16 +105,25 @@ class UsersList extends Component{
         {
             title : 'Действия',
             key : 'Action',
-            render : (text,record) => (
-                <div className="action-row">
-                {/*<a className="action-title" onClick={() => this.toggleDrawer(record.id)}>Редактировать</a> */}
-                    <Link to={"/users/edit/" + record.id}>Редактировать</Link>
-                    <Popconfirm onConfirm={() => this.deleteAction(record.id)} title="Вы уверены что хотите удалить запись?">
-                        <a className="action-title">Удалить</a>
-                    </Popconfirm>
-                </div>
+            render : (text,record) => {
+                const titleString = "Вы уверены что хотите удалить пользователя " + record.name + "?";
+                const menu = (
+                    <Menu>
+                        <Menu.Item key="0"><Link to={"/users/edit/" + record.id}>Редактировать</Link></Menu.Item>
+                        <Menu.Item key="1">
+                            <Popconfirm onConfirm={() => this.deleteAction(record.id)} title={titleString}>
+                                <a className="action-title">Удалить</a>
+                            </Popconfirm>
+                        </Menu.Item>
+                    </Menu>
+                )
+                return (
+                    <Dropdown overlay={menu} trigger={['click']}>
+                        <a>Действия <Icon type="down" /></a>
+                    </Dropdown>
+                    )
                 
-            )
+            }
         }]
         return(
            

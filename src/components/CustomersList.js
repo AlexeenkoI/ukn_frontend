@@ -106,7 +106,7 @@ export class CustomersList extends Component {
             const titleString = "Вы уверены что хотите удалить клиента " + record.name + "?";
             const menu = (
                 <Menu>
-                <Menu.Item key="0"><Link to={"/customers/edit/"+ record.id }>{ /*<a onClick={()=>this.openDetail(record.id)}>Подробнее</a> */}Подробнее</Link></Menu.Item>
+                    <Menu.Item key="0"><Link to={"/customers/edit/"+ record.id }>{ /*<a onClick={()=>this.openDetail(record.id)}>Подробнее</a> */}Подробнее</Link></Menu.Item>
                     <Menu.Item key="1">
                         <Popconfirm onConfirm={() => this.deleteAction(record.id)} title={titleString}>
                             <a className="action-title">Удалить</a>
