@@ -121,7 +121,14 @@ class WorkSheet extends Component{
         },{
           title: 'Вид кадастровых работ',
           dataIndex: 'type_of_work',
-          key: 'type_of_work'
+          key: 'type_of_work',
+          render : (_, record) => {
+ 
+            const type = settings.work_types.find(item => {
+              return item.id === record.type_of_work;
+            });
+            return type.work_type || "Не указано" ;
+          }
         },{
           title: 'Исполнитель',
           dataIndex: 'name',
