@@ -234,6 +234,7 @@ class CreateContractForm extends Component {
                     <CustomerEdit
                         noRedirect={true}
                         gridSettings = {{ xs : 24, sm : 24, md : 24,lg : 24,  xl : 24}}
+                        onAdd={this.toggleCreateCustomersForm}
                     />
                 </Modal>
             </Fragment>

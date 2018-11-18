@@ -149,6 +149,7 @@ class UsersList extends Component{
                     loading={this.props.userList.isLoading}
                     onChange={this.onPaginationChange}
                     pagination={{total:userList.count, pageSize : userList.searchData.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : userList.page }}
+                    locale={{ emptyText : "Пользователей не найдено"}}
                 />
                 <Drawer
                     width="640"

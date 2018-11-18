@@ -167,6 +167,7 @@ class WorkSheet extends Component{
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
             pagination={{total:this.props.contracts.count, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
+            locale={{ emptyText : "Заявок не найдено"}}
           />
           <Modal
             footer={false}

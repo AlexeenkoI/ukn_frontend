@@ -119,6 +119,7 @@ export class CustomersList extends Component {
     }]
     return (
         <Fragment>
+            <Link to="/customers/createcustomer">Создать клиента</Link>
             <Search
                 placeholder="Поиск..."
                 value={customers.searchData.whereString}
@@ -136,6 +137,7 @@ export class CustomersList extends Component {
                 loading = {customers.loading}
                 onChange={this.onPaginationChange}
                 pagination={{total:customers.count, pageSize : customers.searchData.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : customers.page }}
+                locale={{ emptyText : "Клиентов не найдено"}}
             />
             <Modal
                 footer={false}

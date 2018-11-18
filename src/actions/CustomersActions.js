@@ -16,6 +16,7 @@ export const startGetCustomers = () =>{
     }
 }
 
+
 export const getCustomersList = (uId, searchData = '') => {
     return (dispatch) => {
         //TO DO
@@ -34,8 +35,15 @@ export const getCustomersList = (uId, searchData = '') => {
         })
         .then(res => res.json())
         .then(json => {
+            console.log('resieve customers');
+            console.log(json);
             if(json.success === true){
                 dispatch(recieveCustomersList(json))
+            }else{
+                dispatch({
+                    type : "ERROR_RECIEVE"
+                })
+                message.error(`Ошибка ${json.msg.toString()}`)
             }
         })
         .catch(err => {

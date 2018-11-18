@@ -25,7 +25,8 @@ class CustomerEdit extends Component {
     }
     componentWillMount(){
         const { match, user, getOne } = this.props;
-        if(typeof match !== 'undefined'){
+        //console.log(Object.keys(match.params).length);
+        if(typeof match !== 'undefined' && Object.keys(match.params).length !== 0){
             getOne(user.id, match.params.id);
         }
 
@@ -38,7 +39,7 @@ class CustomerEdit extends Component {
     }
 
     submitForm = (values) => {
-        const { user, insertOne, updateOne } = this.props;
+        const { user, insertOne, updateOne, callback } = this.props;
         if(values.id > 0){
             updateOne(user.id, values);
         }else{
@@ -47,6 +48,9 @@ class CustomerEdit extends Component {
         this.setState({
             needRedirect : true
           })
+        if(callback){
+            callback();
+        }
     }
 
     render() {
@@ -59,10 +63,10 @@ class CustomerEdit extends Component {
                         <Field type="hidden" component="input" name="id"/>
                         <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
                         <Field label="Фамилия" name="firstname" component={AInput} placeholder="Фамилия" />
-                        <Field label="Отчество" name="secondname" component={AInput} placeholder="Фамилия" />
-                        <Field label="Почта" type="email" name="email" component={AInput} placeholder="Фамилия" />
-                        <Field label="Телефон" name="phone" component={AInput} placeholder="Фамилия" />
-                        <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{typeof match !== 'undefined' ? "Изменить" : "Создать"}</Button>
+                        <Field label="Отчество" name="secondname" component={AInput} placeholder="Отчество" />
+                        <Field label="Почта" type="email" name="email" component={AInput} placeholder="Почта" />
+                        <Field label="Телефон" name="phone" component={AInput} placeholder="Теелфон" />
+                        <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{(typeof match !== 'undefined' && Object.keys(match.params).length !== 0) ? "Изменить" : "Создать"}</Button>
                     </Form>
                 </Col>
             </Row>
@@ -81,11 +85,12 @@ const validate = values => {
         user: state.user,
         userStatus : '',
         noRedirect : ownProps.noRedirect || false,
-        newForm : state.customersList.currentCustomer.id,
+        newForm : state.customersList.currentCustomer.id || 0,
         fetching : state.customersList.updating,
         contractStatuses : ownProps.statuses,
         grid : ownProps.gridSettings || defaultGrid,
-        initialValues : state.customersList.currentCustomer
+        initialValues : state.customersList.currentCustomer,
+        callback : ownProps.onAdd || false
         
     }
   }

@@ -91,7 +91,7 @@ class UserEdit extends Component{
     }
 
     render(){
-        const { handleSubmit, pristine,submitting, userFetch, settings, grid } = this.props;
+        const { handleSubmit, pristine, submitting, userFetch, settings, grid } = this.props;
         if(this.state.needToRedirect) return(<Redirect to="/users"/>)
         if(userFetch)
             return(<Preloader/>)
@@ -143,6 +143,19 @@ const validate = values => {
     if(values.password !== values.re_password){
         errors.re_password="Пароли должны совпадать.";
     }
+    if(!values.name){
+        errors.name = "Необходимо указать имя пользователя."
+    }
+    if(/^[а-яёА-ЯЁ]+$/.test(values.name) === false){
+        errors.name = "Имя пользователя обязательно и  должно содержать только кириллицу"
+    }
+    if(!values.login){
+        errors.login = "Необходимо указать Логин"
+    }
+    if(/^[a-zA-Z1-9]+$/.test(values.login) === false){
+        errors.login = "В логине могут использоваться только латинские буквы и цифры"
+    }
+
     if(!values.role){
         errors.role = "Необходимо выбрать роль пользователя";
     }

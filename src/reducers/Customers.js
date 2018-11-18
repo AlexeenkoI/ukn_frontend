@@ -82,6 +82,11 @@ export function customersReducer(state = initialState, action){
                 ...state,
                 searchString : ''
             }
+        case 'ERROR_RECIEVE' : 
+            return {
+                ...state,
+                loading : false
+            }
         default:
             return state;
     }
