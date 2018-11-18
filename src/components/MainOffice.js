@@ -82,7 +82,7 @@ class MainOffice extends Component{
     render(){
         const { currentUser } = this.props;
 
-        if(currentUser.loggedIn == false){
+        if(currentUser.loggedIn === false){
             return (
                 <Fragment>
                     { this.props.location.pathname !=="/login" && <Redirect to="/login"/>}

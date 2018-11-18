@@ -65,7 +65,7 @@ export const getSettings = (userId, condition = '') => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('succsess answer');
                 console.log(json);
                 message.success(json.msg)
@@ -119,7 +119,7 @@ export const updateSetting = (userId, type, setting) => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('succsess answer');
                 console.log(json);
                 message.success(json.msg)
@@ -157,7 +157,7 @@ export const insertSetting = (userId, type, insertValues) => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('succsess answer');
                 console.log(json);
                 message.success(json.msg)

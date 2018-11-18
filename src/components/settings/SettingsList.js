@@ -1,18 +1,12 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Row, Card, Icon } from 'antd'
 import  Preloader  from '../Preloader'
 import { getSettings } from '../../actions/SettingsActions'
 import { withRouter } from 'react-router'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export class SettingsList extends Component {
-
-  constructor(props){
-    super(props)
-
-  }
 
   componentWillMount(){
     const { loadSettings } = this.props;

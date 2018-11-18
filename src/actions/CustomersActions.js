@@ -1,5 +1,4 @@
 import { message } from 'antd';
-import { history } from 'react-router-dom'
 export const GET_CUSTOMERS_LIST = 'GET_CUSTOMERS_LIST';
 export const RECIEVE_CUSTOMERS_LIST ='RECIEVE_CUSTOMERS_LIST';
 export const GET_CUSTOMER = 'GET_CUSTOMER';
@@ -35,9 +34,7 @@ export const getCustomersList = (uId, searchData = '') => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
-                console.log('customers list recieved');
-                console.log(json);
+            if(json.success === true){
                 dispatch(recieveCustomersList(json))
             }
         })
@@ -83,9 +80,7 @@ export const getCurrentCustomer = (uId, customerId) => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
-                console.log('customer recieved');
-                console.log(json);
+            if(json.success === true){
                 dispatch(recieveCustomer(json.data))
             }
         })
@@ -119,9 +114,8 @@ export const updateCustomer = (uId, formData, str) => {
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 //console.log('customer recieved');
-                console.log(json);
                 dispatch(getCustomersList(uId, str));
                 message.success(json.msg);
                 dispatch({

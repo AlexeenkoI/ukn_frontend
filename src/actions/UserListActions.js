@@ -30,7 +30,7 @@ export function getUserList(id , condition){
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('user list recieved');
                 dispatch(recieveUserList(json))
             }
@@ -58,7 +58,7 @@ export function getUser(currUserId, incUserId){
         })
         .then( res => res.json())
         .then( json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('User recieved');
                 console.log(json);
                 
@@ -124,7 +124,7 @@ export function updatedUser(incId,formData){
         })
         .then( res => res.json())
         .then( json => {
-            if(json.success == true){
+            if(json.success === true){
                 message.success(json.msg);
                 if(incId === formData.id){
                     dispatch(rerenderUser(formData));
@@ -164,7 +164,7 @@ export function insertUser(incId, formData){
         })
         .then( res => res.json())
         .then( json => {
-            if(json.success == true){
+            if(json.success === true){
                 message.success(json.msg);
                 if(incId === formData.id){
                     dispatch(rerenderUser(formData));

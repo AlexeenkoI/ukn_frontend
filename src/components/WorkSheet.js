@@ -1,17 +1,14 @@
 import React, { Component } from 'react'
 import Preloader from './Preloader'
-import { Table, Input, Button, Icon, Modal, Spin, Pagination } from 'antd';
+import { Table, Button, Modal } from 'antd';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
-import { DatePicker } from 'antd';
-import locale from 'antd/lib/date-picker/locale/ru_RU';
 
 import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData, setPage } from '../actions/WorkSheetActions'
 import { getUserList } from '../actions/UserListActions'
 import { getCustomersList } from '../actions/CustomersActions'
 import Filters from './Filters';
-import ContractEdit from './forms/ContractEdit';
 
 
 class WorkSheet extends Component{
@@ -61,7 +58,7 @@ class WorkSheet extends Component{
       const { contracts, setPage } = this.props;
       console.log('pagination listener, page:');
       console.log(page);
-      let offset =  page.current == 1 ? 0 : contracts.filters.limit * (page.current-1);
+      let offset =  page.current === 1 ? 0 : contracts.filters.limit * (page.current-1);
       setPage(page.current)
       this.props.setFilters('offset', offset);
       this.props.applyFilters(this.props.user.id, this.props.contracts.filters);

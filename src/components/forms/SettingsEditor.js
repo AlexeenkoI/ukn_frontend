@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Link, Redirect } from 'react-router-dom'
-import { Form, Input, Col, Row, Icon, Button } from 'antd'
+import { Form, Input, Col, Icon, Button } from 'antd'
 import { updateValue, createRow, clearRow, insertSetting, updateSetting } from '../../actions/SettingsActions'
 
 const FormItem = Form.Item;

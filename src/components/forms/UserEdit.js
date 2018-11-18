@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Form, Spin, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse } from 'antd'
+import { Form, Input, Button, Checkbox, Select, Row, Col, Collapse } from 'antd'
 import { Field, reduxForm } from 'redux-form'
 import { Redirect } from 'react-router-dom'
-import { connect, destroy } from 'react-redux'
+import { connect } from 'react-redux'
 import { getUser, updatedUser, insertUser} from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 const FormItem = Form.Item;
@@ -66,22 +66,20 @@ class UserEdit extends Component{
 
     componentWillMount(){
         const { match, user, getOne } = this.props;
-        if(typeof match != 'undefined'){
+        if(typeof match !== 'undefined'){
             getOne(user.id, match.params.id);
         }
     }
 
     handleSubmit = values =>{
         const { user, updateOne, createOne } = this.props;
-        console.log('submit');
         delete values.re_password;
         delete values.status_text;
-        if(values.is_active == true){
+        if(values.is_active === true){
             values.is_active = 1;
         }else{
             values.is_active = 0;
         }
-        console.log(values);
         if(values.id > 0){
             updateOne(user.id, values);
         }else{
@@ -93,8 +91,7 @@ class UserEdit extends Component{
     }
 
     render(){
-        const { handleSubmit, pristine,submitting, reset, userFetch, settings, grid } = this.props;
-        const submit = (values) => console.log(values);
+        const { handleSubmit, pristine,submitting, userFetch, settings, grid } = this.props;
         if(this.state.needToRedirect) return(<Redirect to="/users"/>)
         if(userFetch)
             return(<Preloader/>)
@@ -108,7 +105,7 @@ class UserEdit extends Component{
                         <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
                         <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
                         <Field label="Логин" name="login" component={AInput} placeholder="" />
-                        {this.props.userStatus == 1 &&
+                        {this.props.userStatus === 1 &&
                             <Field 
                                 label="Статус" 
                                 component={ASelect}  
@@ -121,7 +118,7 @@ class UserEdit extends Component{
                                 )}
                             </Field>
                         }
-                        {this.props.userStatus == 1 &&
+                        {this.props.userStatus === 1 &&
                         (<Collapse bordered={false}>
                             <Collapse.Panel
                             style={{border:0}}
@@ -143,7 +140,7 @@ class UserEdit extends Component{
 
 const validate = values => {
     const errors = {};
-    if(values.password != values.re_password){
+    if(values.password !== values.re_password){
         errors.re_password="Пароли должны совпадать.";
     }
     if(!values.role){

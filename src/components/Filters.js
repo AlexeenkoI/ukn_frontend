@@ -125,9 +125,9 @@ class Filters extends Component{
                         <FormItem
                             label="Период"
                         >
-                            <DatePicker style={{width:'40%'}} placeholder="C" value={this.props.filters.date_started == '' ? null : moment.unix(this.props.filters.date_started) } format="YYYY-MM-DD" onChange={this.handleDateFrom}/>
+                            <DatePicker style={{width:'40%'}} placeholder="C" value={this.props.filters.date_started === '' ? null : moment.unix(this.props.filters.date_started) } format="YYYY-MM-DD" onChange={this.handleDateFrom}/>
                             -
-                            <DatePicker style={{width:'40%'}} placeholder="По" value={this.props.filters.date_deadline == '' ? null : moment.unix(this.props.filters.date_deadline) } format="YYYY-MM-DD" onChange={this.handleDateTo}/>
+                            <DatePicker style={{width:'40%'}} placeholder="По" value={this.props.filters.date_deadline === '' ? null : moment.unix(this.props.filters.date_deadline) } format="YYYY-MM-DD" onChange={this.handleDateTo}/>
                         </FormItem>
                     </Col>
                     <Col span={2}>

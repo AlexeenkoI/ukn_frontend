@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Table, Input, Button, Icon, Modal, Spin, Dropdown, Menu, Popconfirm } from 'antd';
-import { getCustomersList, getCurrentCustomer, updateCustomer, deleteCustomer, insertCustomer, search, resetSearch, setSearch, setPage } from '../actions/CustomersActions';
+import { Table, Input, Icon, Modal, Dropdown, Menu, Popconfirm } from 'antd';
+import { getCustomersList, getCurrentCustomer, updateCustomer, deleteCustomer, insertCustomer, setSearch, setPage } from '../actions/CustomersActions';
 import CustomerEdit from '../components/forms/CustomerEdit'
 const Search = Input.Search;
 
@@ -42,10 +41,7 @@ export class CustomersList extends Component {
   }
 
   submitSearch = (str) => {
-    const { user, customers,  onSearch, getCustomers } = this.props;
-    //console.log('submit search');
-    //console.log(str);
-    //onSearch(str);
+    const { user, customers, getCustomers } = this.props;
     getCustomers(user.id, customers.searchData);
   }
 
@@ -62,7 +58,7 @@ export class CustomersList extends Component {
 
   onPaginationChange = (page) => {
     const { user, customers, setCondition, setPage, getCustomers} = this.props;
-    let offset =  page.current == 1 ? 0 : customers.searchData.limit * (page.current-1);
+    let offset =  page.current === 1 ? 0 : customers.searchData.limit * (page.current-1);
     setPage(page.current);
     setCondition('offset', offset);
     getCustomers(user.id, customers.searchData);

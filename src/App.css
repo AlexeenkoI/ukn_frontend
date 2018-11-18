@@ -87,6 +87,18 @@ body {
   display:block;
   padding:5px;
 }
+.closePicker{
+  margin-right:10px;
+  transition : all 0.3s ease-in-out;
+  cursor: pointer;
+}
+.closePicker i{
+  transition: all .3s ease-in-out;
+}
+.closePicker:hover i{
+  transform: rotate(180deg);
+  transition: all 0.3s ease-in-out
+}
 
 /* Контракты */
 .add-info-row{

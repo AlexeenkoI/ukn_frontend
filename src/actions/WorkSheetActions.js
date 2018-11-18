@@ -30,7 +30,7 @@ export function getContracts(id,filterData){
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 dispatch(recieveContracts(json))
             }
         })
@@ -108,7 +108,7 @@ export function applyFilters(id, filters){
         })
         .then(res => res.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log('recieve filter contracts');
                 console.log(json);
                 dispatch(recieveContracts(json, filters))
@@ -160,7 +160,7 @@ export function getFilterData(id){
         .then(res => res.json())
         .then(json => {
             console.log(json);
-            if(json.success == true){
+            if(json.success === true){
                 dispatch(recieveFilters(json))
             }
         })
@@ -199,7 +199,7 @@ export function getContract(user, contractId){
         .then(json => {
             console.log('contract recieved');
             console.log(json);
-            if(json.success == true){
+            if(json.success === true){
                 dispatch(recieveContract(json.data));
             }else{
                 message.warning(json.msg);
@@ -241,7 +241,7 @@ export function updateContract(id, formData, filterData){
         })
         .then( res => res.json())
         .then( json => {
-            if(json.success == true){
+            if(json.success === true){
                 message.success(json.msg);
                 //dispatch(getContracts(id, filterData))
             }else{
@@ -282,7 +282,7 @@ export function createContract(uId,formData){
         })
         .then( res => res.json())
         .then( json => {
-            if(json.success == true){
+            if(json.success === true){
                 //message.success(json.msg);
                 notification.open({
                     message : 'Заявка создана',

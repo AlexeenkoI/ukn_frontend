@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form'
 import { Redirect } from 'react-router-dom'
-import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse, Upload } from 'antd'
+import { Form, Input, Button, Row, Col } from 'antd'
 import FieldWrapper from './FieldWrapper'
 import {insertCustomer, updateCustomer, getCurrentCustomer, clearInsert} from '../../actions/CustomersActions'
 
 const AInput = FieldWrapper(Input);
-const ACheckbox = FieldWrapper(Checkbox);
 
 const defaultGrid = {
     xs : 12,
@@ -26,7 +25,7 @@ class CustomerEdit extends Component {
     }
     componentWillMount(){
         const { match, user, getOne } = this.props;
-        if(typeof match != 'undefined'){
+        if(typeof match !== 'undefined'){
             getOne(user.id, match.params.id);
         }
 
@@ -51,7 +50,7 @@ class CustomerEdit extends Component {
     }
 
     render() {
-        const { handleSubmit, pristine,submitting, reset, fetching, newForm, match, noRedirect, grid } = this.props;
+        const { handleSubmit, pristine,submitting, fetching, match, noRedirect, grid } = this.props;
         if(this.state.needRedirect &&(!noRedirect)) return(<Redirect to="/customers"/>)
         return (
             <Row>
@@ -63,7 +62,7 @@ class CustomerEdit extends Component {
                         <Field label="Отчество" name="secondname" component={AInput} placeholder="Фамилия" />
                         <Field label="Почта" type="email" name="email" component={AInput} placeholder="Фамилия" />
                         <Field label="Телефон" name="phone" component={AInput} placeholder="Фамилия" />
-                        <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{typeof match != 'undefined' ? "Изменить" : "Создать"}</Button>
+                        <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{typeof match !== 'undefined' ? "Изменить" : "Создать"}</Button>
                     </Form>
                 </Col>
             </Row>

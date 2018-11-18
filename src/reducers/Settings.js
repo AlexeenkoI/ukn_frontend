@@ -10,7 +10,7 @@ const initialState = {
     data : {
         work_types : [
             {id : 1, work_type : "Схема"},
-            {id : 2, work_type : "Схема + М\П"},
+            {id : 2, work_type : "Схема + Межевой План"},
             {id : 3, work_type : "Межевой план"}
         ],
         roles : [

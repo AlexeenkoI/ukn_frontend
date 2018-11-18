@@ -1,12 +1,11 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Table, Drawer, Checkbox, Divider, Spin, Row, Button, Popconfirm, Input, Icon, Menu, Dropdown } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import UserEdit from '../components/forms/UserEdit'
 import { getUserList, getUser, updatedUser, deleteUser, clearForm, addCondition, clearSearchStr, setPage } from '../actions/UserListActions'
 
-const MenuItem = Menu.Item
 const Search = Input.Search;
 
 class UsersList extends Component{
@@ -57,13 +56,13 @@ class UsersList extends Component{
     }
 
     submitSearch = (str) => {
-        const { user, addCond, userList, getUserList, resetSearch } = this.props;
+        const { user, userList, getUserList } = this.props;
         //addCond('searchString', str);
         getUserList(user.id, userList.searchData);
     }
     onPaginationChange = (page) => {
         const { user, addCond, userList, getUserList, setPage } = this.props
-        let offset =  page.current == 1 ? 0 : userList.searchData.limit * (page.current-1);
+        let offset =  page.current === 1 ? 0 : userList.searchData.limit * (page.current-1);
         setPage(page.current)
         addCond('offset',offset);
         getUserList(user.id, userList.searchData);
@@ -77,14 +76,14 @@ class UsersList extends Component{
     }
 
     render(){
-        const { users, userList, addCond } = this.props;
+        const { userList, addCond } = this.props;
         const columns = [
         {
             title : 'Активность',
             dataIndex : 'is_active',
             key : 'is_active',
             render : (text,record) => (
-                <Checkbox checked={true} checked={record.is_active} />
+                <Checkbox checked={record.is_active} />
             )
         },
         {
@@ -147,7 +146,6 @@ class UsersList extends Component{
                     rowKey="id" 
                     columns={columns} 
                     dataSource={this.props.userList.data}
-                    pagination={true}
                     loading={this.props.userList.isLoading}
                     onChange={this.onPaginationChange}
                     pagination={{total:userList.count, pageSize : userList.searchData.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : userList.page }}

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form'
 import { Redirect } from 'react-router-dom'
-import { Form, Icon, Input, Button, Modal, Checkbox, Select, Row, Col, Divider, Collapse, Steps, DatePicker } from 'antd';
+import { Form, Icon, Input, Button, Modal, Select, Row, Col, Steps, DatePicker } from 'antd';
 import FieldWrapper from './FieldWrapper'
 import CustomerEdit from '../forms/CustomerEdit'
 import moment from 'moment'
@@ -15,7 +15,6 @@ const Step = Steps.Step;
 const AInput = FieldWrapper(Input);
 const ASelect = FieldWrapper(Select);
 const ATextArea = FieldWrapper(Input.TextArea);
-const ADate = FieldWrapper(DatePicker)
 const FormItem = Form.Item;
 const formItemLayout = {
     labelCol: {
@@ -39,25 +38,11 @@ const DateWrapper = ({ input, meta, children, hasFeedback, label, value, format,
         hasFeedback={hasFeedback && hasError}
         help={hasError && meta.error}
       >
-        <DatePicker {...input} {...rest} value={input.value == '' ? null : moment(input.value) } />
+        <DatePicker {...input} {...rest} value={input.value === '' ? null : moment(input.value) } />
       </FormItem>
     );
   };
 
-  const Multiselect = ({ input, meta, children, hasFeedback, label, value, format, ...rest }) => {
-    const hasError = meta.touched && meta.invalid;
-    return (
-      <FormItem
-        {...formItemLayout}
-        label={label}
-        validateStatus={hasError ? "error" : "success"}
-        hasFeedback={hasFeedback && hasError}
-        help={hasError && meta.error}
-      >
-        <Select {...input} {...rest} mode="multiple" />
-      </FormItem>
-    );
-  }
 
 class CreateContractForm extends Component {
     constructor(props){
@@ -114,7 +99,7 @@ class CreateContractForm extends Component {
         })
     }
     render() {
-        const { handleSubmit, pristine,submitting, reset, workTypes, customers, contractors, statuses } = this.props;
+        const { handleSubmit, pristine,submitting, workTypes, customers, contractors, statuses } = this.props;
         console.log(workTypes);
         if(this.state.needToRedirect) return( <Redirect to="/contracts"/>)
         return (
@@ -192,7 +177,7 @@ class CreateContractForm extends Component {
                         }
                         {this.state.step > 0 && <Button style={{marginRight:'10px'}} type="primary" onClick={this.decreaseStep}><Icon type="left" /> Назад</Button>}
                         {this.state.step < 3 && <Button type="primary" onClick={this.increaseStep}>Далее <Icon type="right" /></Button>}
-                        {this.state.step == 3  && (
+                        {this.state.step === 3  && (
                             
                             <Button style={{display:"block", marginTop : "25px"}} htmlType="submit" type="primary" disabled={pristine || submitting }>Создать</Button>
                         )} 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon } from 'antd'
-import { hashHistory } from 'react-router'
 import { NavLink, withRouter, Link } from 'react-router-dom'
 
 const { Sider } = Layout;
@@ -23,7 +22,7 @@ class LeftMenu extends Component{
           >
             <div className="logo" >
             <Link to ="/">
-              <img src="/images/ukn_logo2.png" />
+              <img src="/images/ukn_logo2.png" alt="ukn_logo" />
               </Link>
             </div>
             <Menu theme="dark" mode="inline" selectedKeys={[this.props.history.location.pathname]}>

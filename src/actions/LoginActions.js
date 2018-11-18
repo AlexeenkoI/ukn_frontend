@@ -26,7 +26,7 @@ export function tryToLogin(auth,pass,isRemember){
         })
         .then(response => response.json())
         .then(json => {
-            if(json.success == true){
+            if(json.success === true){
                 console.log(json);
                 dispatch(successLogin(json))
                 if(isRemember){

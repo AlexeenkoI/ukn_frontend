@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
-import { Form, Icon, Input, Button, Checkbox, Select, Row, Col, Divider, Collapse, Upload, DatePicker } from 'antd'
+import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker } from 'antd'
 import FieldWrapper from './FieldWrapper'
 import { getContract, updateContract} from '../../actions/WorkSheetActions'
 import { getUserList } from '../../actions/UserListActions'
@@ -20,10 +19,8 @@ const defaultGrid = {
 
 
 const AInput = FieldWrapper(Input);
-const ACheckbox = FieldWrapper(Checkbox);
 const ASelect = FieldWrapper(Select);
 const ATextArea = FieldWrapper(Input.TextArea);
-const AUpload = FieldWrapper(Upload);
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
@@ -48,7 +45,7 @@ const DateWrapper = ({ input, meta, children, hasFeedback, label, value, format,
       hasFeedback={hasFeedback && hasError}
       help={hasError && meta.error}
     >
-      <DatePicker {...input} {...rest} value={input.value == '' ? null : moment(input.value) } format="YYYY-MM-DD" />
+      <DatePicker {...input} {...rest} value={input.value === '' ? null : moment(input.value) } format="YYYY-MM-DD" />
     </FormItem>
   );
 };
@@ -67,7 +64,7 @@ class ContractEdit extends Component {
   componentWillMount = () =>{
     const { match, user, getOne, userList, getUsers } = this.props;
     console.log(this.props);
-    if(typeof match != 'undefined'){
+    if(typeof match !== 'undefined'){
       getOne(user.id, match.params.id);
     }
 
@@ -127,7 +124,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, reset, user, contractFetching, settings , grid, userList} = this.props;
+    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(this.state.needRedirect) return(<Redirect to="/contracts"/>)
 
