@@ -91,7 +91,7 @@ class UserEdit extends Component{
     }
 
     render(){
-        const { handleSubmit, pristine, submitting, userFetch, settings, grid } = this.props;
+        const { user, handleSubmit, pristine, submitting, userFetch, settings, grid, initialValues } = this.props;
         if(this.state.needToRedirect) return(<Redirect to="/users"/>)
         if(userFetch)
             return(<Preloader/>)
@@ -101,7 +101,9 @@ class UserEdit extends Component{
                 <Col {...grid} >
                     <Form onSubmit={handleSubmit(this.handleSubmit)}>
                         <Field type="hidden" component="input" name="id"/>
-                        <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
+                        {user.id !== initialValues.id &&
+                            <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
+                        }
                         <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
                         <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
                         <Field label="Логин" name="login" component={AInput} placeholder="" />

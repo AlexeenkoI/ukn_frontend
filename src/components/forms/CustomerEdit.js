@@ -65,7 +65,7 @@ class CustomerEdit extends Component {
                         <Field label="Фамилия" name="firstname" component={AInput} placeholder="Фамилия" />
                         <Field label="Отчество" name="secondname" component={AInput} placeholder="Отчество" />
                         <Field label="Почта" type="email" name="email" component={AInput} placeholder="Почта" />
-                        <Field label="Телефон" name="phone" component={AInput} placeholder="Теелфон" />
+                        <Field addonBefore="+7" label="Телефон" name="phone" component={AInput} placeholder="Теелфон" />
                         <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{(typeof match !== 'undefined' && Object.keys(match.params).length !== 0) ? "Изменить" : "Создать"}</Button>
                     </Form>
                 </Col>
@@ -76,6 +76,24 @@ class CustomerEdit extends Component {
 
 const validate = values => {
     const errors = {};
+    if(!values.name){
+        errors.name = "Необходимо указать имя."
+    }
+    if(/^[а-яёА-ЯЁ]+$/.test(values.name) === false){
+        errors.name = "Имя обязательно и  должно содержать только кириллицу."
+    }
+    if(!values.firstname){
+        errors.firstname = "Необходимо указать фамилию."
+    }
+    if(/^[а-яёА-ЯЁ]+$/.test(values.firstname) === false){
+        errors.firstname = "Фамилия обязательна и  должна содержать только кириллицу."
+    }
+    if(!values.phone){
+        errors.phone = "Телефон обязателен к заполнению"
+    }
+    if(/^[1-90-9]+$/.test(values.phone) === false){
+        errors.phone = "Телефон должен состоять только из цифр."
+    }
   
     return errors;
   }
