@@ -123,7 +123,6 @@ class WorkSheet extends Component{
           dataIndex: 'type_of_work',
           key: 'type_of_work',
           render : (_, record) => {
- 
             const type = settings.work_types.find(item => {
               return item.id === record.type_of_work;
             });

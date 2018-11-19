@@ -244,7 +244,33 @@ class CreateContractForm extends Component {
 
 const validate = values => {
     const errors = {};
-  
+    if(!values.address){
+        errors.address = "Укажите адрес работ."
+    }
+    if(!values.customer_id){
+        errors.customer_id = "Вы должны выбрать клиента."
+    }
+    if(!values.status){
+        errors.status = "Присвойте заявлению статус."
+    }
+    if(!values.date_deadline){
+        errors.date_deadline = "Выберите дату окончания работ."
+    }
+    if(!values.contractor || values.contractor === []){
+        errors.contractor = "Выберите исполнителя."
+    }
+    if(!values.type_of_work){
+        errors.type_of_work = "Выберите тип работ"
+    }
+    if(!values.price){
+        errors.price = "Поле стоимость должно быть заполнено."
+    }
+    if(/^[1-90-9]+$/.test(values.price) === false){
+        errors.price = "Поле должно быть заполнено числами."
+    }
+    if(/^[1-90-9]+$/.test(values.paid) === false){
+        errors.paid = "Поле должно быть заполнено числами."
+    }
     return errors;
   }
   

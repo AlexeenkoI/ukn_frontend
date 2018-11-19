@@ -27,9 +27,12 @@ class Notificator extends Component{
     }
 
     render(){
+        const { notifications } = this.props;
         const content = (
             <div>
-            {this.props.notifications.data.length>0 ? this.props.notifications.data.map(item =><div key={item.id}>{item.msg}</div>) : <div>Пусто</div>}
+            {notifications.data.length > 0 ? 
+                notifications.data.map(item =><div key={item.id}>{item.msg}</div>) 
+                : <div>Уведомлений нет</div>}
             </div>
         );
         return(
@@ -38,7 +41,7 @@ class Notificator extends Component{
                 trigger="click"
                 visible={this.state.visible}
                 onVisibleChange={this.handleVisibleChange}
-                title={this.props.notifications.data.length > 0 ? 'Новые уведомления' : 'Новых уведомлений нет'}
+                title={notifications.data.length > 0 ? 'Новые уведомления' : 'Новых уведомлений нет'}
             >
                 <Badge count={this.state.count} className="badge-info">
                     <Icon type="message" theme="outlined" style={{ fontSize: 22, cursor :'pointer', marginLeft:15 }} />

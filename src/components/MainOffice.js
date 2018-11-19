@@ -86,7 +86,7 @@ class MainOffice extends Component{
             return (
                 <Fragment>
                     { this.props.location.pathname !=="/login" && <Redirect to="/login"/>}
-                    <Route path="/login" component={AuthWindow}></Route>
+                    <Route path="/login" component={AuthWindow}/>
                 </Fragment>
             )
         }
