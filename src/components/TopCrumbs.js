@@ -15,7 +15,7 @@ const menuMap = {
     "/settings" : "Настройки",
     "/settings/work_types" : "Виды работ",
     "/settings/roles" : "Виды ролей",
-    "/settings/status_types" : "Настройки",
+    "/settings/status_types" : "Статусы заявлений",
 }
 
 

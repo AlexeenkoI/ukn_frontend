@@ -58,137 +58,136 @@ const makeField = Component => ({ input, meta, children, hasFeedback, label, ...
  */
 class UserEdit extends Component{
     constructor(props){
-        super(props);
-        this.state={
-            needToRedirect : false
-        }
+      super(props);
+      this.state={
+        needToRedirect : false
+      }
     }
 
     componentWillMount(){
-        const { match, user, getOne } = this.props;
-        if(typeof match !== 'undefined'){
-            getOne(user.id, match.params.id);
-        }
+      const { match, user, getOne } = this.props;
+      if(typeof match !== 'undefined'){
+        getOne(user.id, match.params.id);
+      }
     }
 
     handleSubmit = values =>{
-        const { user, updateOne, createOne } = this.props;
-        delete values.re_password;
-        delete values.status_text;
-        if(values.is_active === true){
-            values.is_active = 1;
-        }else{
-            values.is_active = 0;
-        }
-        if(values.id > 0){
-            updateOne(user.id, values);
-        }else{
-            createOne(user.id, values);
-        }
-        this.setState({
+      const { user, updateOne, createOne } = this.props;
+      delete values.re_password;
+      delete values.status_text;
+      if(values.is_active === true){
+        values.is_active = 1;
+      }else{
+        values.is_active = 0;
+      }
+      if(values.id > 0){
+        updateOne(user.id, values);
+      }else{
+        createOne(user.id, values);
+      }
+      this.setState({
             needToRedirect : true
-        })
+      })
     }
 
     render(){
-        const { user, handleSubmit, pristine, submitting, userFetch, settings, grid, initialValues } = this.props;
-        if(this.state.needToRedirect) return(<Redirect to="/users"/>)
-        if(userFetch)
-            return(<Preloader/>)
-        
-        return(
-            <Row type="flex" justify="left">
-                <Col {...grid} >
-                    <Form onSubmit={handleSubmit(this.handleSubmit)}>
-                        <Field type="hidden" component="input" name="id"/>
-                        {user.id !== initialValues.id &&
-                            <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
-                        }
-                        <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
-                        <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
-                        <Field label="Логин" name="login" component={AInput} placeholder="" />
-                        {this.props.userStatus === 1 &&
-                            <Field 
-                                label="Статус" 
-                                component={ASelect}  
-                                name="role"
-                            >
-                                {settings.roles.map(role =>
-                                    <Select.Option value={role.id} key={role.id}>
-                                        {role.role}
-                                    </Select.Option>
-                                )}
-                            </Field>
-                        }
-                        {this.props.userStatus === 1 &&
-                        (<Collapse bordered={false}>
-                            <Collapse.Panel
-                            style={{border:0}}
-                            header='Изменить пароль'
-                            >
-                                <Field label="Пароль" name="password" component={AInput} type="password"  />
-                                <Field label="Повторите Пароль" name="re_password" component={AInput} type="password"  />
-                            </Collapse.Panel>
-                        </Collapse>)
-                        }
-                        <Button htmlType="submit" type="primary" disabled={pristine || submitting }>Отправить</Button>
-                    </Form>
-                </Col>
-            </Row>
-        )
+      const { user, handleSubmit, pristine, submitting, userFetch, settings, grid, initialValues } = this.props;
+      if(this.state.needToRedirect) return(<Redirect to="/users"/>)
+      if(userFetch) return <Preloader/>
+
+      return(
+        <Row type="flex" justify="left">
+          <Col {...grid} >
+            <Form onSubmit={handleSubmit(this.handleSubmit)}>
+              <Field type="hidden" component="input" name="id"/>
+              {user.id !== initialValues.id &&
+                <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
+              }
+              <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
+              <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
+              <Field label="Логин" name="login" component={AInput} placeholder="" />
+              {this.props.userStatus === 1 &&
+                <Field 
+                  label="Статус" 
+                  component={ASelect}  
+                  name="role"
+                >
+                  {settings.roles.map(role =>
+                      <Select.Option value={role.id} key={role.id}>
+                          {role.role}
+                      </Select.Option>
+                  )}
+                </Field>
+              }
+              {this.props.userStatus === 1 &&
+              (<Collapse bordered={false}>
+                  <Collapse.Panel
+                  style={{border:0}}
+                  header='Изменить пароль'
+                  >
+                    <Field label="Пароль" name="password" component={AInput} type="password"  />
+                    <Field label="Повторите Пароль" name="re_password" component={AInput} type="password"  />
+                  </Collapse.Panel>
+              </Collapse>)
+              }
+              <Button htmlType="submit" type="primary" disabled={pristine || submitting }>Отправить</Button>
+            </Form>
+          </Col>
+        </Row>
+      )
     }
 }
 
 
 const validate = values => {
-    const errors = {};
-    if(values.password !== values.re_password){
-        errors.re_password="Пароли должны совпадать.";
-    }
-    if(!values.name){
-        errors.name = "Необходимо указать имя пользователя."
-    }
-    if(/^[а-яёА-ЯЁ]+$/.test(values.name) === false){
-        errors.name = "Имя пользователя обязательно и  должно содержать только кириллицу"
-    }
-    if(!values.login){
-        errors.login = "Необходимо указать Логин"
-    }
-    if(/^[a-zA-Z1-9]+$/.test(values.login) === false){
-        errors.login = "В логине могут использоваться только латинские буквы и цифры"
-    }
-
-    if(!values.role){
-        errors.role = "Необходимо выбрать роль пользователя";
-    }
+  const errors = {};
+  if(values.password !== values.re_password){
+      errors.re_password="Пароли должны совпадать.";
+  }
+  if(!values.name){
+      errors.name = "Необходимо указать имя пользователя."
+  }
+  if(/^[а-яёА-ЯЁ]+$/.test(values.name) === false){
+      errors.name = "Имя пользователя обязательно и  должно содержать только кириллицу"
+  }
+  if(!values.login){
+      errors.login = "Необходимо указать Логин"
+  }
+  if(/^[a-zA-Z1-9]+$/.test(values.login) === false){
+      errors.login = "В логине могут использоваться только латинские буквы и цифры"
+  }
   
-    return errors;
+  if(!values.role){
+      errors.role = "Необходимо выбрать роль пользователя";
+  }
+  
+  return errors;
   }
 
 function mapStateToProps(state, ownProps) {
-    return {
-        user : state.user,
-        userStatus: state.user.role,
-        role : ownProps.userRoles,
-        settings : state.settings.data,
-        userFetch : state.userList.userIsLoading,
-        initialValues : state.userList.currentUserData,
-        grid : ownProps.gridSettings  || defaultGrid
-        //initialValues: {
-        //    id: ownProps.initialValues.id ? ownProps.initialValues.id : 0, 
-        //    is_active: ownProps.initialValues.is_active,
-        //    name : ownProps.initialValues.name,
-        //    surename : ownProps.initialValues.surename,
-        //    login : ownProps.initialValues.login,
-        //    role : ownProps.initialValues.role
-        //}
-    }
+  return {
+    user : state.user,
+    userStatus: state.user.role,
+    role : ownProps.userRoles,
+    settings : state.settings.data,
+    userFetch : state.userList.userIsLoading,
+    initialValues : state.userList.currentUserData,
+    grid : ownProps.gridSettings  || defaultGrid
+    //initialValues: {
+    //    id: ownProps.initialValues.id ? ownProps.initialValues.id : 0, 
+    //    is_active: ownProps.initialValues.is_active,
+    //    name : ownProps.initialValues.name,
+    //    surename : ownProps.initialValues.surename,
+    //    login : ownProps.initialValues.login,
+    //    role : ownProps.initialValues.role
+    //}
+  }
 }
 
 const mapDispatchToProps = dispatch =>({
-    getOne : (uId, id) => dispatch(getUser(uId,id)),
-    createOne : (uId, formData) => dispatch(insertUser(uId, formData)),
-    updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData))
+  getOne : (uId, id) => dispatch(getUser(uId,id)),
+  createOne : (uId, formData) => dispatch(insertUser(uId, formData)),
+  updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

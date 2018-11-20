@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form'
-
 import { userReducer } from './User'
 import { contractsReducer } from './Contracts'
 import { notificationsReducer } from './Notifications'
@@ -9,12 +8,12 @@ import { customersReducer } from './Customers'
 import { settingsReducer } from './Settings'
 
 export const rootReducer = combineReducers({
-    user : userReducer,
-    contracts : contractsReducer,
-    notifications : notificationsReducer,
-    userList : userListReducer,
-    form : formReducer,
-    customersList : customersReducer,
-    settings : settingsReducer
+  user : userReducer,
+  contracts : contractsReducer,
+  notifications : notificationsReducer,
+  userList : userListReducer,
+  form : formReducer,
+  customersList : customersReducer,
+  settings : settingsReducer
 })
 

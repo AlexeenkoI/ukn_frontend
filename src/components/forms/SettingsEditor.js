@@ -7,49 +7,29 @@ import { updateValue, createRow, clearRow, insertSetting, updateSetting } from '
 const FormItem = Form.Item;
 
 const formItemLayout = {
-    labelCol: {
-      xl: { span: 24 },
-      xs: { span: 24 },
-      sm: { span: 24 }
-    },
-    wrapperCol: {
-      xl: { span: 24 },
-      xs: { span: 24 },
-      sm: { span: 24 }
-    }
-  };
+  labelCol: {
+    xl: { span: 24 },
+    xs: { span: 24 },
+    sm: { span: 24 }
+  },
+  wrapperCol: {
+    xl: { span: 24 },
+    xs: { span: 24 },
+    sm: { span: 24 }
+  }
+};
 
 export class SettingsEditor extends Component {
-    constructor(props){
-        super(props);
-        this.onFormSubmit = this.onFormSubmit.bind(this);
-        this.onFieldChange = this.onFieldChange.bind(this);
-    }
 
     componentWillMount(){
-        const { match } = this.props;
-        console.log(match.params.type);
+      const { match } = this.props;
+      console.log(match.params.type);
     }
 
     componentWillUnmount(){
-        const { clearRow } = this.props;
-        //Освобождаем стор для создания полей
-        clearRow();
-    }
-
-    onFormSubmit = (values) => {
-        console.log('submitting');
-        console.log(values);
-        return false;
-    }
-
-    onFieldChange = (id, value) => {
-        console.log('id item + ' + id);
-        console.log('value ' + value)
-    }
-    onFieldSubmit = (id, value) => {
-        console.log('id item + ' + id);
-        console.log('value ' + value)
+      const { clearRow } = this.props;
+      //Освобождаем стор для создания полей
+      clearRow();
     }
 
   render() {
@@ -59,54 +39,49 @@ export class SettingsEditor extends Component {
     return (
       <Fragment>
         <div>
-            {settings.description[match.params.type].name}
+          {settings.description[match.params.type].name}
         </div>
         <Col span={4}>
-                {values.map( (item, pos) =>
-                    Object.keys(item).map( (field, index) =>
-                        field === 'id' ? 
-                            (<Input type="hidden" key={index} name={field} value={values[pos][field]} />)
-                                :
-                            (
-                                <FormItem {...formItemLayout} key={index}>
-                                    <Input 
-                                        style={{width:"50%", marginRight : "10px"}} 
-                                        type="text"  
-                                        name={field} 
-                                        value={values[pos][field]} 
-                                        onChange={(e) => setFieldValue(match.params.type, pos, field, e.target.value)}
-                                    />
-                                    <Button 
-                                        //onClick={(e)=>this.onFieldSubmit(values[pos]['id'], values[pos][field])}
-                                        onClick={() => performUpdate(user.id, match.params.type, values[pos])}
-                                        loading={settings.settingsUpdating}
-                                        icon={<Icon type="edit"/>}
-                                    >
-                                        
-                                        Изменить
-                                    </Button>
-                                </FormItem>
-                            ),
-                            
-                        )
-                )}
-                <FormItem {...formItemLayout}>
-                { Object.keys(values[0]).map( (field, index) =>
-                    field !== 'id' &&
-                    (<Input type="text" key={index} style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
-                )}
-                    <Button 
-                        type="primary" 
-                        disabled={settings.newData.hasOwnProperty("table") ? false : true} 
-                        onClick={() => performInsert(user.id, match.params.type, settings.newData)}
-                        loading={settings.settingsUpdating}
-                        icon={<Icon type="check" />}
-                    >
-                        Добавить
-                    </Button>
+          {values.map( (item, pos) =>
+            Object.keys(item).map((field, index) =>
+              field === 'id' ? 
+              (<Input type="hidden" key={index} name={field} value={values[pos][field]} />)
+                :
+              (<FormItem {...formItemLayout} key={index}>
+                  <Input 
+                    style={{width:"50%", marginRight : "10px"}} 
+                    type="text"  
+                    name={field} 
+                    value={values[pos][field]} 
+                    onChange={(e) => setFieldValue(match.params.type, pos, field, e.target.value)}
+                  />
+                  <Button 
+                    onClick={() => performUpdate(user.id, match.params.type, values[pos])}
+                    loading={settings.settingsUpdating}
+                    icon="edit"
+                  >
+                    Изменить
+                  </Button>
                 </FormItem>
+              ),   
+            )
+          )}
+          <FormItem {...formItemLayout}>
+          { Object.keys(values[0]).map( (field, index) =>
+            field !== 'id' &&
+            (<Input type="text" key={index} style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
+          )}
+              <Button 
+                type="primary" 
+                disabled={settings.newData.hasOwnProperty("table") ? false : true} 
+                onClick={() => performInsert(user.id, match.params.type, settings.newData)}
+                loading={settings.settingsUpdating}
+                icon="check"
+              >
+                Добавить
+              </Button>
+          </FormItem>
         </Col>
-        
       </Fragment>
     )
   }

@@ -126,9 +126,9 @@ class ContractEdit extends Component {
   render() {
     const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList} = this.props;
     const disabler = user.role > 1 ? true : false;
-    if(this.state.needRedirect) return(<Redirect to="/contracts"/>)
+    if(this.state.needRedirect) return <Redirect to="/contracts"/>
 
-    if(contractFetching) return(<Preloader/>)
+    if(contractFetching) return <Preloader/>
 
     return (
       <Row>
@@ -211,50 +211,43 @@ const validate = values => {
   const errors = {};
   console.log(values);
   if(!values.customer_id){
-      errors.customer_id = "Вы должны выбрать клиента."
+    errors.customer_id = "Вы должны выбрать клиента."
   }
   if(!values.status){
-      errors.status = "Присвойте заявлению статус."
+    errors.status = "Присвойте заявлению статус."
   }
   if(!values.date_deadline){
-      errors.date_deadline = "Выберите дату окончания работ."
+    errors.date_deadline = "Выберите дату окончания работ."
   }
   if(!values.contractor || values.contractor === []){
-      errors.contractor = "Выберите исполнителя."
+    errors.contractor = "Выберите исполнителя."
   }
   if(!values.type_of_work){
-      errors.type_of_work = "Выберите тип работ"
+    errors.type_of_work = "Выберите тип работ"
   }
   if(!values.price){
-      errors.price = "Поле стоимость должно быть заполнено."
+    errors.price = "Поле стоимость должно быть заполнено."
   }
   if(/^[1-90-9]+$/.test(values.price) === false){
-      errors.price = "Поле должно быть заполнено числами."
+    errors.price = "Поле должно быть заполнено числами."
   }
   if(/^[1-90-9]+$/.test(values.paid) === false){
-      errors.paid = "Поле должно быть заполнено числами."
+    errors.paid = "Поле должно быть заполнено числами."
   }
   return errors;
 }
 
 function mapStateToProps(state, ownProps) {
   return {
-      user : state.user,
-      userStatus : state.user,
-      contractFetching : state.contracts.contractLoading,
-      uploadAction : '/api/upload',
-      userList : state.userList,
-      contractStatuses : state.contracts.filterData.types,
-      settings : state.settings.data,
-      grid : ownProps.gridSettings || defaultGrid,
-      initialValues: state.contracts.currentContract,
-      //initialValues : {
-      //  id : ownProps.contractData.id,
-      //  contract_number : ownProps.contractData.contract_number,
-      //  address : ownProps.contractData.address,
-      //  status : ownProps.contractData.status,
-//
-      //}
+    user : state.user,
+    userStatus : state.user,
+    contractFetching : state.contracts.contractLoading,
+    uploadAction : '/api/upload',
+    userList : state.userList,
+    contractStatuses : state.contracts.filterData.types,
+    settings : state.settings.data,
+    grid : ownProps.gridSettings || defaultGrid,
+    initialValues: state.contracts.currentContract,
   }
 }
 
@@ -271,9 +264,3 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
   destroyOnUnmount: true
 })(ContractEdit))
 
-//export default connect(mapStateToProps, mapDispatchToProps)(ContractEdit)
-//export default ContractEdit = reduxForm({
-//    form: 'ContractForm',
-//    //validate, // a unique identifier for this form
-//
-//},mapStateToProps)(ContractEdit)
