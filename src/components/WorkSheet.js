@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 
-import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData, setPage } from '../actions/WorkSheetActions'
+import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData, setPage, setLimit } from '../actions/WorkSheetActions'
 import { getUserList } from '../actions/UserListActions'
 import { getCustomersList } from '../actions/CustomersActions'
 import Filters from './Filters';
@@ -33,7 +33,7 @@ class WorkSheet extends Component{
   
     if(!this.props.contracts.isLoaded){
         //Устанавливаем фильтр на текущего пользователя
-    this.props.setFilters('contractor',this.props.user.id);
+    this.props.setFilters('contractor',[this.props.user.id]);
     //Устанавливаем фильтр по умолчанию на статус заявок - В работе
     this.props.setFilters('status', 2);
       console.log('loading filters...');
@@ -60,14 +60,17 @@ class WorkSheet extends Component{
     console.log(page);
     let offset =  page.current === 1 ? 0 : contracts.filters.limit * (page.current-1);
     setPage(page.current)
-    this.props.setFilters('offset', offset);
+    //this.props.setFilters('offset', offset);
     this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
   }
   onPageSizeChange = (current, pageSize) => {
+    const { setLimit } = this.props;
     console.log('page size changed');
     console.log(current);
     console.log(pageSize);
-    this.props.setFilters('limit',pageSize);
+    setLimit(pageSize);
+    //this.props.setFilters('limit',pageSize);
+
     this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
   }
 
@@ -170,7 +173,7 @@ class WorkSheet extends Component{
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
-            pagination={{total:this.props.contracts.count, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
+            pagination={{total:this.props.contracts.total, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
             locale={{ emptyText : "Заявок не найдено"}}
           />
           <Modal
@@ -204,7 +207,8 @@ class WorkSheet extends Component{
       getFilterData : (id) => dispatch(getFilterData(id)),
       getUsers : (id) => dispatch(getUserList(id)),
       getCustomers : (id) => dispatch(getCustomersList(id)),
-      setPage : (page) => dispatch(setPage(page))
+      setPage : (page) => dispatch(setPage(page)),
+      setLimit : (limit) => dispatch(setLimit(limit))
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 

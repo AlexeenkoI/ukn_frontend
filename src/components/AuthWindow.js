@@ -3,7 +3,7 @@ import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 
-import {tryToLogin} from '../actions/LoginActions';
+import {tryToLogin, successLogin} from '../actions/LoginActions';
 
 const FormItem = Form.Item;
 
@@ -20,16 +20,14 @@ class AuthWindow extends Component{
     }
 
     componentWillMount(){
-        document.body.style.backgroundColor = "#E0F2F1";
-        if(this.getCookie("autoLogin")){
-         
-         //this.handleSubmit();
-          //this.props.form.validateFields((err, values) => {
-          //  if (!err) {
-          //    this.props.loginAction(values.userName, values.password, values.remember);
-          //  }
-          //});
-        }
+      const {autoLogIn} = this.props;
+      document.body.style.backgroundColor = "#E0F2F1";
+      //Автологин из локального хранилища
+      if(localStorage.getItem('is_remember')){
+        let data = {}; 
+        data.data = JSON.parse(localStorage.getItem('currentUser'));
+        autoLogIn(data);
+      }
     }
      getCookie(name) {
         var matches = document.cookie.match(new RegExp(
@@ -99,7 +97,8 @@ const mapStateToProps = store =>{
 }
 
 const mapDispatchToProps = dispatch =>({
-  loginAction : (login, password, isRemember) => dispatch(tryToLogin(login,password,isRemember))
+  loginAction : (login, password, isRemember) => dispatch(tryToLogin(login,password,isRemember)),
+  autoLogIn : (userData) => dispatch(successLogin(userData))
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(WrappedNormalLoginForm));

@@ -43,11 +43,11 @@ export const getCustomersList = (uId, searchData = '') => {
         dispatch({
             type : "ERROR_RECIEVE"
         })
-        message.error(`Ошибка ${json.msg.toString()}`)
+        message.error(`Ошибка ${json.message.toString()}`)
       }
     })
     .catch(err => {
-        console.log(err);
+        message.warning(err.message);
     });
   }
 }
@@ -93,7 +93,7 @@ export const getCurrentCustomer = (uId, customerId) => {
       }
     })
     .catch(err => {
-      console.log(err);
+      message.warning(err);
     });
   }
 }
@@ -137,7 +137,6 @@ export const updateCustomer = (uId, formData, str) => {
       }
     })
     .catch(err => {
-      console.log(err);
       message.warning(err);
     });
   }
@@ -165,7 +164,6 @@ export const deleteCustomer = (uId, deleteId, str) => {
     })
     .catch( err => {
       message.error(err);
-      console.log(err);
     })
   }
 }
@@ -223,7 +221,6 @@ export const setPage = (page) => {
 }
 
 export const clearInsert = () => {
-  console.log('clear action');
   return {
     type : CLEAR_LAST_INSERTED
   }

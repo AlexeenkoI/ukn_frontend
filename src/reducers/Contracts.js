@@ -2,6 +2,7 @@ const initialState = {
     isLoaded : false,
     isFetching : false,
     page : 1,
+    limit : 10,
     filters : {
       address : "",
       contract_number : "",
@@ -12,8 +13,6 @@ const initialState = {
       contractor : "",
       status : "",
       type_of_work : "",
-      limit : 10,
-      offset : 0,
       whereString : "",
     },
     filterData : {
@@ -38,13 +37,20 @@ const initialState = {
           ...state,
           isLoaded : true,
           isFetching : false,
+          page : action.page,
+          
           data : action.data,
-          count : action.count
+          total : action.total
         }
       case 'PAGE_CHANGE':
         return {
           ...state,
           page : action.pageNum
+        }
+      case 'SET_LIMIT':
+        return {
+          ...state,
+          limit : action.limit
         }
       case 'ERROR_RECIEVE_CONTRACTS':
         return {

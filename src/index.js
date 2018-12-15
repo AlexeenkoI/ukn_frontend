@@ -17,10 +17,10 @@ const history = createHistory()
 const store = createStore(rootReducer,applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
-    <Provider store={store} history={history}>
-        <Router>
-            <App />
-        </Router>
-    </Provider>,
-     document.getElementById('root'));
+  <Provider store={store} history={history}>
+    <Router>
+      <App />
+    </Router>
+  </Provider>,
+  document.getElementById('root'));
 registerServiceWorker();

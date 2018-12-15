@@ -35,7 +35,8 @@ class Filters extends Component{
   }
   handleContractorChange = (value) => {
     //this.props.setFilters('contractor',value);
-    this.props.setFilters('contractor', {id : value});
+    //this.props.setFilters('contractor', {id : value});
+    this.props.setFilters('contractor', [value]);
   }
 
   handleStatusChange = (value) => {
@@ -103,7 +104,7 @@ class Filters extends Component{
                     showSearch
                     style={{ width: '100%' }}
                     placeholder="Статус"
-                    value = {this.props.filters.status}
+                    value={this.props.filters.status}
                     onChange={this.handleStatusChange}
                   >
                     {this.props.filterData ? this.props.settings.status_types.map(item => <Select.Option key={item.id} value={item.id}>{item.type}</Select.Option>) : ''}

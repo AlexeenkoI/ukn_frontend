@@ -20,7 +20,7 @@ export function getContracts(id,filterData){
       data : filterData
     }
     console.log('get contracts...');
-    fetch('/api/contracts/getcontracts',{
+    fetch('/api/contracts/getall',{
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
@@ -54,8 +54,9 @@ export function recieveContracts(res){
     type : RECIEVE_CONTRACTS,
     isFetching : false,
     isLoaded : true,
-    data : res.data,
-    count : res.count
+    data : res.data.data,
+    total : res.data.total,
+    page : res.data.page
   }
 }
 
@@ -82,6 +83,8 @@ export function setFilters(name, filter){
   }
 }
 
+
+
 export function startFilterQuery(){
   return {
     type : APPLY_FILTERS,
@@ -90,6 +93,8 @@ export function startFilterQuery(){
 }
 
 export function applyFilters(id, filters){
+  const token = localStorage.getItem('app_token');
+  console.log(filters);
   return function(dispatch){
     dispatch(startFilterQuery());
     const reqBody = {
@@ -97,10 +102,11 @@ export function applyFilters(id, filters){
       data : filters
     }
     console.log('apply filters...');
-    fetch('/api/contracts/getcontracts',{
+    fetch('/api/contracts/getall',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'POST',
       body : JSON.stringify(reqBody)
@@ -124,6 +130,13 @@ export function setPage(pageNum){
   return{
     type : "PAGE_CHANGE",
     pageNum
+  }
+}
+
+export function setLimit(limit){
+  return {
+    type : "SET_LIMIT",
+    limit
   }
 }
 

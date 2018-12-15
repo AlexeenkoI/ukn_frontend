@@ -12,7 +12,6 @@ import './styles/animate.css';
  */
 
 class App extends Component {
-  
   render() {
     return (
       <LocaleProvider locale={ru_RU}>

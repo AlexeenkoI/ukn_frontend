@@ -209,7 +209,6 @@ class ContractEdit extends Component {
 
 const validate = values => {
   const errors = {};
-  console.log(values);
   if(!values.customer_id){
     errors.customer_id = "Вы должны выбрать клиента."
   }

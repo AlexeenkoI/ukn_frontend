@@ -21,8 +21,8 @@ class LeftMenu extends Component{
         collapsed={this.props.collapsed}
       >
         <div className="logo" >
-        <Link to ="/">
-          <img src="/images/ukn_logo2.png" alt="ukn_logo" />
+          <Link to ="/">
+           <img src="/images/ukn_logo2.png" alt="ukn_logo" />
           </Link>
         </div>
         <Menu theme="dark" mode="inline" selectedKeys={[this.props.history.location.pathname]}>
@@ -34,11 +34,11 @@ class LeftMenu extends Component{
               </NavLink>
             </Menu.Item>
             <Menu.Item key="/contracts/create">
-            <NavLink exact={true} to="/contracts/create" activeClassName="active">
-              <Icon type="file-add" />
-              <span>Создать заявление</span>
-            </NavLink>
-          </Menu.Item>
+              <NavLink exact={true} to="/contracts/create" activeClassName="active">
+                <Icon type="file-add" />
+                <span>Создать заявление</span>
+              </NavLink>
+            </Menu.Item>
           </SubMenu>
           <Menu.Item key="/users">
             <NavLink exact={true} to="/users" activeClassName="active">

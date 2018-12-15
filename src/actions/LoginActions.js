@@ -28,19 +28,21 @@ export function tryToLogin(auth,pass,isRemember){
     .then(json => {
       if(json.success === true){
         console.log(json);
+        localStorage.setItem('app_token',json.auth_token);
+        message.success(json.message, 1.5);
         dispatch(successLogin(json))
         if(isRemember){
-            // document.cookie = "autoLogin=true";
+          // document.cookie = "autoLogin=true";
+          //Запоминаем конкретного пользака без его пароля, он нам не нужен
+          localStorage.setItem('is_remember', true);
+          localStorage.setItem('currentUser',JSON.stringify(json.data));
         }
       }else{
         dispatch(errorLogin(json))
-        message.error(json.errMsg, 2.5)
-        .then(() => console.log('finished error popup'));
+        message.error(json.message, 2.5)
       }
     })
     .then(() =>{ 
-      if(isRemember)
-        document.cookie = "autoLogin=true;"
     })
     .catch(err => dispatch(errorLogin(err)))
   }
@@ -55,7 +57,7 @@ export function startLogin(){
 export function successLogin(incData){
   return{
     type : LOGIN_SUCCESS,
-    data : incData.data[0],
+    data : incData.data,
     userRoles : incData.userRoles,
     isFetching : false
   }
@@ -69,9 +71,45 @@ export function errorLogin(msg){
   }
 }
 
+/**
+ * Логаут из приложения
+ * 1 - отправляем запрос на апи с просьбой кильнуть текущий токен конкретного пользака
+ * 2 - киляем токен в локальном хранилище
+ * 3 - посылаем действие о разлогинивании
+ */
 export function logout(){
-  document.cookie = "auth_id=;";
-  return {
-      type : LOGOUT
+  return function(dispatch){
+    const token = localStorage.getItem('app_token');
+    fetch('/api/logout',{
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
+      },
+      method:'POST',
+    })
+    .then(response => response.json())
+    .then(json => {
+      console.log('logout data')
+      console.log(json)
+      if(json.success){
+        message.success(json.message,1.5);
+        localStorage.removeItem('app_token');
+        localStorage.removeItem('is_remember');
+        localStorage.removeItem('currentUser');
+        
+        dispatch({
+          type : LOGOUT
+        })
+      }
+
+      //return {
+      //  type : LOGOUT
+      //}
+    })
+    .catch(err => {
+      message.error(err.message, 2);
+    })
   }
+
 }

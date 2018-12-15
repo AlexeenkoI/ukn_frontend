@@ -30,7 +30,7 @@ import { Layout, Icon, Row, Col } from 'antd'
 
 
 const { Header, Content } = Layout;
-const socket = openSocket('http://localhost:3002');
+//const socket = openSocket('http://localhost:3333');
 
 
 /**
@@ -60,17 +60,18 @@ class MainOffice extends Component{
       });
     }
   componentWillMount(){
-      socket.on('updateContracts',(res)=>{
-        console.log('hey hey im socket event');
-        console.log(res);
-        this.props.recieveContractNotification(res);
-        //dispatch(initialItems(res))
-      })
+
+      //socket.on('updateContracts',(res)=>{
+      //  console.log('hey hey im socket event');
+      //  console.log(res);
+      //  this.props.recieveContractNotification(res);
+      //  //dispatch(initialItems(res))
+      //})
   }
 
   componentWillUnmount() {
-    socket.disconnect();
-    console.log("Disconnecting Socket as component will unmount");
+    //socket.disconnect();
+    //console.log("Disconnecting Socket as component will unmount");
   }
 
   handleProfileSubmit = values => {
@@ -96,29 +97,29 @@ class MainOffice extends Component{
         <Layout>
           <Header className="header" style={{ background: '#fff', padding: 0 }}>
             <Row type="flex" justify="space-between" align="middle">
-                <Col>
-                    <div>
-                        <span className="badge-info ant-badge">
-                            <Icon
-                              className="trigger"
-                              type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
-                              onClick={this.toggle}
-                              style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
-                            />
-                        </span>
-                        <Notificator notifications={this.props.notifications.contractsNotifications}/>
-                    </div>
-                </Col>
-                <Col style={{marginRight:'15px'}}>
-                  <LoggedUser
-                    user={this.props.currentUser}
-                    logOut={this.props.logout}
-                    loadProfile={this.props.getProfileData}
-                    onSubmit={this.handleProfileSubmit}
-                    ownProfile = {this.props.userProfile}
-                    isLoading = {this.props.isLoadingProfile}
-                  />
-                </Col>
+              <Col>
+                <div>
+                  <span className="badge-info ant-badge">
+                    <Icon
+                      className="trigger"
+                      type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                      onClick={this.toggle}
+                      style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
+                    />
+                  </span>
+                  <Notificator notifications={this.props.notifications.contractsNotifications}/>
+                </div>
+              </Col>
+              <Col style={{marginRight:'15px'}}>
+                <LoggedUser
+                  user={this.props.currentUser}
+                  logOut={this.props.logout}
+                  loadProfile={this.props.getProfileData}
+                  onSubmit={this.handleProfileSubmit}
+                  ownProfile = {this.props.userProfile}
+                  isLoading = {this.props.isLoadingProfile}
+                />
+              </Col>
             </Row>
           </Header>
           <Content style={{ margin: '24px 16px 16px 24px', padding: 24, background: '#fff' }}>
