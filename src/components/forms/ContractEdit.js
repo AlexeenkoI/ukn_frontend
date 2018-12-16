@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker } from 'antd'
 import FieldWrapper from './FieldWrapper'
-import { getContract, updateContract} from '../../actions/WorkSheetActions'
+import { getContract, updateContract, contractLeaving} from '../../actions/WorkSheetActions'
 import { getUserList } from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 import moment from 'moment'
@@ -88,6 +88,11 @@ class ContractEdit extends Component {
     }
   }
 
+  componentWillUnmount(){
+    const { leaveContract } = this.props;
+    leaveContract();
+  }
+
   uploadFiles = (files) => {
     const status = files.file.status;
     if(status === 'uploading'){
@@ -122,9 +127,9 @@ class ContractEdit extends Component {
     delete values.name;
    
     insertOne(user.id, values);
-    this.setState({
-      needRedirect : true
-    })
+    //this.setState({
+    //  needRedirect : true
+    //})
   }
 
   cReq = (data) => {
@@ -139,9 +144,9 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList, initialValues} = this.props;
+    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList, needRedirect} = this.props;
     const disabler = user.role > 1 ? true : false;
-    if(this.state.needRedirect) return <Redirect to="/contracts"/>
+    if(needRedirect) return <Redirect to="/contracts"/>
 
     if(contractFetching) return <Preloader/>
 
@@ -263,13 +268,15 @@ function mapStateToProps(state, ownProps) {
     grid : ownProps.gridSettings || defaultGrid,
     tv : state.contracts.currentContract,
     initialValues: state.contracts.currentContract,
+    needRedirect : state.contracts.contractIsUpdated
   }
 }
 
 const mapDispatchToProps = dispatch =>({
   getOne : (uId, contractId) => dispatch(getContract(uId, contractId)),
   insertOne : (uId, formData, filterData) => dispatch(updateContract(uId,formData,filterData)),
-  getUsers : (uid) => dispatch(getUserList(uid))
+  getUsers : (uid) => dispatch(getUserList(uid)),
+  leaveContract : () => dispatch(contractLeaving())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

@@ -271,6 +271,7 @@ export function updateContract(id, formData, filterData){
       if(json.success === true){
         message.success(json.message);
         //dispatch(getContracts(id, filterData))
+        dispatch(contractIsUpdated());
       }else{
         message.warning(json.message);
       }
@@ -291,6 +292,18 @@ export function getContractFileList(userId, contractId){
 
 export function updateContractFileList(userId, data){
 
+}
+
+export function contractIsUpdated(){
+  return {
+    type : "CONTRACT_UPDATED"
+  }
+}
+
+export function contractLeaving(){
+  return {
+    type : "CONTRACT_LEAVED"
+  }
 }
 
 export function createContract(uId,formData){

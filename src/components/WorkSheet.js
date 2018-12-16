@@ -36,7 +36,7 @@ class WorkSheet extends Component{
     this.props.setFilters('contractor',[this.props.user.id]);
     //Устанавливаем фильтр по умолчанию на статус заявок - В работе
     this.props.setFilters('status', 2);
-      console.log('loading filters...');
+      //console.log('loading filters...');
       //this.props.getFilterData(this.props.user.id);
       
       

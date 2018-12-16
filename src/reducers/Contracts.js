@@ -22,6 +22,7 @@ const initialState = {
     },
     data : [],
     contractLoading: false,
+    contractIsUpdated : false,
     currentContract : {}
   }
   
@@ -91,6 +92,16 @@ const initialState = {
           ...state,
           contractLoading : false,
           currentContract 
+        }
+      case 'CONTRACT_UPDATED':
+        return {
+          ...state,
+          contractIsUpdated : true
+        }
+      case 'CONTRACT_LEAVED' : 
+        return {
+          ...state,
+          contractIsUpdated : false
         }
       default:
         return state;
