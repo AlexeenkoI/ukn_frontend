@@ -23,14 +23,16 @@ export function userListReducer(state = initialState, action){
         isLoading : true
       }
     case 'RECIEVE_USERS_LIST':
+      console.log('user list');
+      console.log(action);
       return {
         ...state,
         isLoading : false,
-        data : action.data.users,
-        count : action.data.count
+        data : action.data.data.data,
+        count : action.data.total
       }
     case 'RECIEVE_USER':
-      const currentUserData = action.json.data[0];
+      const currentUserData = action.json.data;
       const userRoles = action.json.userRoles;
       return {
         ...state,

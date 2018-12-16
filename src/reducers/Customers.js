@@ -30,17 +30,20 @@ export function customersReducer(state = initialState, action){
         loading : true
       };
     case 'RECIEVE_CUSTOMERS_LIST' :
+    console.log('RECIEVE_CUSTOMERS_LIST');
+    console.log(action);
       return {
         ...state,
         loading : false,
         loaded : true,
-        data : action.data.data,
-        count : action.data.count
+        page : action.data.data.page,
+        data : action.data.data.data,
+        count : action.data.data.total
       }; 
     case 'RECIEVE_CUSTOMER' :
       return {
         ...state,
-        currentCustomer : action.data[0]
+        currentCustomer : action.data
       };
     case 'CREATE_CUSTOMER' : 
       return state;

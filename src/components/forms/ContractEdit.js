@@ -50,6 +50,21 @@ const DateWrapper = ({ input, meta, children, hasFeedback, label, value, format,
   );
 };
 
+const MultipleSelectWrapper = ({ input, meta, children, hasFeedback, label, value, ...rest }) => {
+  const hasError = meta.touched && meta.invalid;
+  return (
+    <FormItem
+      {...formItemLayout}
+      label={label}
+      validateStatus={hasError ? "error" : "success"}
+      hasFeedback={hasFeedback && hasError}
+      help={hasError && meta.error}
+    >
+      <Select {...input} {...rest} value={input.value ? input.value : []} children={children} />
+    </FormItem>
+  );
+};
+
 
 class ContractEdit extends Component {
   constructor(props){
@@ -124,7 +139,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList} = this.props;
+    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList, initialValues} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(this.state.needRedirect) return <Redirect to="/contracts"/>
 
@@ -147,8 +162,8 @@ class ContractEdit extends Component {
             <Field 
               label="Исполнитель" 
               name="contractor" 
-              component={ASelect}
-              //mode="multiple"
+              component={MultipleSelectWrapper}
+              mode="multiple"
               showSearch
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0} 
             >
@@ -246,6 +261,7 @@ function mapStateToProps(state, ownProps) {
     contractStatuses : state.contracts.filterData.types,
     settings : state.settings.data,
     grid : ownProps.gridSettings || defaultGrid,
+    tv : state.contracts.currentContract,
     initialValues: state.contracts.currentContract,
   }
 }

@@ -20,10 +20,12 @@ export function getUserList(id , condition){
       userId : id,
       data : condition
     }
-    fetch('/api/users/getusers',{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/users/getall',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'POST',
       body : JSON.stringify(reqBody)
@@ -32,6 +34,7 @@ export function getUserList(id , condition){
     .then(json => {
       if(json.success === true){
         console.log('user list recieved');
+        console.log(json);
         dispatch(recieveUserList(json))
       }
     })
@@ -48,19 +51,20 @@ export function getUser(currUserId, incUserId){
       userId : currUserId,
       loadId : incUserId
     }
-    fetch('/api/users/getuser/'+ incUserId,{
+
+    const token = localStorage.getItem('app_token');
+    fetch('/api/users/get/'+ incUserId,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
-      method:'POST',
-      body : JSON.stringify(reqBody)
+      method:'GET',
+      //body : JSON.stringify(reqBody)
     })
     .then( res => res.json())
     .then( json => {
       if(json.success === true){
-        console.log('User recieved');
-        console.log(json);
         dispatch(recieveUser(json))
       }
     })
@@ -113,10 +117,12 @@ export function updatedUser(incId,formData){
       data : formData
     }
     const id = formData.id ? formData.id : '';
-    fetch('/api/users/updateuser/' + id,{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/users/update/' + id,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)
@@ -152,10 +158,12 @@ export function insertUser(incId, formData){
       userId : incId,
       data : formData
     }
-    fetch('/api/users/createuser/', {
+    const token = localStorage.getItem('app_token');
+    fetch('/api/users/create/', {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)
@@ -188,10 +196,12 @@ export function deleteUser(id,deleteUserId){
       userId : id,
       deleteId : deleteUserId
     }
-    fetch('/api/users/deleteuser/' + deleteUserId,{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/users/delete/' + deleteUserId,{
       headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`
       },
       method:'DELETE',
       body : JSON.stringify(reqBody)

@@ -79,14 +79,15 @@ class CreateContractForm extends Component {
 
     onFormSubmit = (values) => {
       const { user, createOne } = this.props;
-      values.date_deadline = Date.parse(values.date_deadline);
-
+      //values.date_deadline = Date.parse(values.date_deadline);
+      values.date_deadline = moment(values.date_deadline).format("X");
       let sendValues = {...values};
-      let modifiedContractors = sendValues.contractor.map(val => {
-        let obj = {id : val}
-        return obj;
-      })
-      sendValues.contractor = modifiedContractors;
+      console.log(sendValues);
+     // let modifiedContractors = sendValues.contractor.map(val => {
+     //   let obj = {id : val}
+     //   return obj;
+     // })
+     // sendValues.contractor = modifiedContractors;
       createOne(user.id, sendValues);
       this.setState({
         needToRedirect:true

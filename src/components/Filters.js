@@ -28,7 +28,7 @@ class Filters extends Component{
 
   handeSubmit = (e) =>{
     e.preventDefault();
-    this.props.applyFilters(this.props.user.id,this.props.filters);
+    this.props.applyFilters(this.props.user.id,this.props.applyData);
   }
   handleInputChange = (e, parameter) => {
     this.props.setFilters('whereString',e.target.value);
@@ -62,7 +62,7 @@ class Filters extends Component{
   }
 
   resetFilters = () => {
-    this.props.resetFilters(this.props.user.id,this.props.filters);
+    this.props.resetFilters(this.props.user.id,this.props.applyData);
     this.props.setPage(1);
     //this.props.applyFilters('contractor',this.props.user.id);
   }
@@ -78,11 +78,12 @@ class Filters extends Component{
                     showSearch
                     style={{ width: '100%' }}
                     defaultValue={this.props.user.id}
-                    value={this.props.filters.contractor.id}
+                    value={this.props.filters.contractor[0] }
                     placeholder="Исполнитель"
                     onChange={this.handleContractorChange}
                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                   >
+                    <Select.Option key={0} value={null}>Все</Select.Option>
                     {this.props.users.map(usr => <Select.Option key={usr.id} value={usr.id}>{usr.name}</Select.Option>)}
                   </Select>
                 </FormItem>

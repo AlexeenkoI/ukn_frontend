@@ -37,8 +37,8 @@ const initialState = {
           ...state,
           isLoaded : true,
           isFetching : false,
+          //page : action.lastPage ? action.lastPage : action.page,
           page : action.page,
-          
           data : action.data,
           total : action.total
         }
@@ -85,7 +85,8 @@ const initialState = {
           contractLoading : true,
         }
       case 'RECIEVE_CONTRACT_DATA' :
-        const currentContract = action.data[0];
+        const currentContract = action.data;
+        console.log(currentContract);
         return {
           ...state,
           contractLoading : false,

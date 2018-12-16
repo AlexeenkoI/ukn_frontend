@@ -25,10 +25,12 @@ export const getCustomersList = (uId, searchData = '') => {
       userId : uId,
       data : searchData
     }
-    fetch('/api/customers/getcustomers',{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/customers/getall',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'POST',
       body : JSON.stringify(reqBody)
@@ -78,13 +80,15 @@ export const getCurrentCustomer = (uId, customerId) => {
     const reqBody = {
       userId : uId,
     }
-    fetch('/api/customers/getcustomer/' + customerId,{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/customers/get/' + customerId,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
-      method:'POST',
-      body : JSON.stringify(reqBody)
+      method:'GET',
+      //body : JSON.stringify(reqBody)
     })
     .then(res => res.json())
     .then(json => {
@@ -112,10 +116,12 @@ export const updateCustomer = (uId, formData, str) => {
       userId : uId,
       data : formData
     }
-    fetch('/api/customers/updatecustomer/' + formData.id,{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/customers/update/' + formData.id,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)
@@ -149,10 +155,12 @@ export const deleteCustomer = (uId, deleteId, str) => {
       userId : uId,
       deleteId : deleteId
     }
-    fetch('/api/customers/deletecustomer/' + deleteId,{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/customers/delete/' + deleteId,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'DELETE',
       body : JSON.stringify(reqBody)
@@ -179,10 +187,12 @@ export const insertCustomer = (uId, formData) => {
       data : formData
     }
     console.log(reqBody);
-    fetch('/api/customers/createcustomer',{
+    const token = localStorage.getItem('app_token');
+    fetch('/api/customers/create',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)

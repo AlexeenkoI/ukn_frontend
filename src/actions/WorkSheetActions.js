@@ -1,4 +1,5 @@
 import { message, notification } from 'antd'
+import moment from 'moment'
 
 export const START_GET_CONTRACTS = 'START_GET_CONTRACTS';
 export const RECIEVE_CONTRACTS = 'RECIEVE_CONTRACTS';
@@ -20,10 +21,12 @@ export function getContracts(id,filterData){
       data : filterData
     }
     console.log('get contracts...');
+    const token = localStorage.getItem('app_token');
     fetch('/api/contracts/getall',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'POST',
       body : JSON.stringify(reqBody)
@@ -92,16 +95,19 @@ export function startFilterQuery(){
   }
 }
 
-export function applyFilters(id, filters){
+export function applyFilters(id, data, page, limit){
   const token = localStorage.getItem('app_token');
-  console.log(filters);
+  console.log(data);
   return function(dispatch){
     dispatch(startFilterQuery());
     const reqBody = {
       userId : id,
-      data : filters
+      page : page ? page : data.page,
+      limit: limit ? limit : data.limit,
+      data : data.filters
     }
     console.log('apply filters...');
+    console.log(reqBody);
     fetch('/api/contracts/getall',{
       headers: {
         'Accept': 'application/json',
@@ -116,7 +122,7 @@ export function applyFilters(id, filters){
       if(json.success === true){
         console.log('recieve filter contracts');
         console.log(json);
-        dispatch(recieveContracts(json, filters))
+        dispatch(recieveContracts(json, data))
       }
     })
     .catch(err => {
@@ -140,19 +146,21 @@ export function setLimit(limit){
   }
 }
 
-export function resetFilters(id,filters){
-  for(var key in filters){
+export function resetFilters(id,data){
+  const filters = data.filters
+  for(let key in filters){
     if(filters[key] !=='limit' && filters[key] !== 'offset'){
         filters[key] = '';
     }
   }
-  filters.contractor = id;
+  filters.contractor = [id];
   filters.status = 2;
   filters.date_started = '';
   filters.date_deadline= '';
-  filters.limit = 10;
-  filters.offset = 0;
-  return applyFilters(id,filters);
+  data.limit = 10;
+  //filters.limit = 10;
+  //filters.offset = 0;
+  return applyFilters(id,data);
 }
 
 export function getFilterData(id){
@@ -161,10 +169,12 @@ export function getFilterData(id){
       userId : id,
     }
     console.log('get filter data...');
+    const token = localStorage.getItem('app_token');
     fetch('/api/contracts/getfilters',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'POST',
       body : JSON.stringify(reqBody)
@@ -198,13 +208,15 @@ export function getContract(user, contractId){
         userId : user,
         contractId : contractId
       }
-      fetch('/api/contracts/getcontract/' + contractId , {
+      const token = localStorage.getItem('app_token');
+      fetch('/api/contracts/get/' + contractId , {
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${token}`
         },
-        method:'POST',
-        body : JSON.stringify(reqBody)
+        method:'GET',
+        //body : JSON.stringify(reqBody)
       })
       .then(res => res.json())
       .then(json => {
@@ -238,14 +250,18 @@ export function recieveContract(data){
 
 export function updateContract(id, formData, filterData){
   return function (dispatch){
+    //formData.date_deadline = moment(formData.date_deadline).format("X");
+    //console.log(formData);
     const reqBody = {
       userId : id,
       data : formData
     }
-    fetch('/api/contracts/updatecontract/' + formData.id , {
+    const token = localStorage.getItem('app_token');
+    fetch('/api/contracts/update/' + formData.id , {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)
@@ -253,14 +269,14 @@ export function updateContract(id, formData, filterData){
     .then( res => res.json())
     .then( json => {
       if(json.success === true){
-        message.success(json.msg);
+        message.success(json.message);
         //dispatch(getContracts(id, filterData))
       }else{
-        message.warning(json.msg);
+        message.warning(json.message);
       }
     })
     .catch( err => {
-      message.warning(err);
+      message.warning(err.message);
     })
   }
 }
@@ -283,10 +299,12 @@ export function createContract(uId,formData){
       userId : uId,
       data : formData
     }
-    fetch('/api/contracts/createcontract/', {
+    const token = localStorage.getItem('app_token');
+    fetch('/api/contracts/create', {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
       method:'PUT',
       body : JSON.stringify(reqBody)

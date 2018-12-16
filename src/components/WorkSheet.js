@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Preloader from './Preloader'
-import { Table, Button, Modal } from 'antd';
+import { Table, Button, Modal, Menu, Dropdown, Icon } from 'antd';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -41,12 +41,19 @@ class WorkSheet extends Component{
       
       
     }
-    this.props.applyFilters(this.props.user.id,this.props.contracts.filters);
+    this.props.applyFilters(this.props.user.id,this.props.contracts);
     //}
+  }
+  componentDidUpdate(prevProps){
+    //console.log('component updated');
+    //console.log('prev  props')
+    //console.log(prevProps.contracts);
+    //console.log('current props');
+    //console.log(this.props.contracts);
   }
 
   handleSearch = (type,selectedKeys) => () => {
-    this.props.applyFilter(this.props.user.id,this.props.contracts.filters, type, selectedKeys[0]);
+    this.props.applyFilter(this.props.user.id,this.props.contracts, type, selectedKeys[0]);
   }
   
   handleReset = clearFilters => () => {
@@ -58,10 +65,13 @@ class WorkSheet extends Component{
     const { contracts, setPage } = this.props;
     console.log('pagination listener, page:');
     console.log(page);
+    console.log(contracts);
     let offset =  page.current === 1 ? 0 : contracts.filters.limit * (page.current-1);
     setPage(page.current)
+    console.log('after set page')
+    console.log(contracts)
     //this.props.setFilters('offset', offset);
-    this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
+    this.props.applyFilters(this.props.user.id, this.props.contracts, page.current);
   }
   onPageSizeChange = (current, pageSize) => {
     const { setLimit } = this.props;
@@ -69,9 +79,10 @@ class WorkSheet extends Component{
     console.log(current);
     console.log(pageSize);
     setLimit(pageSize);
+    console.log(this.props.contracts);
     //this.props.setFilters('limit',pageSize);
 
-    this.props.applyFilters(this.props.user.id, this.props.contracts.filters);
+    this.props.applyFilters(this.props.user.id, this.props.contracts,current, pageSize);
   }
 
   onCalendarChange = (date, string)=>{
@@ -132,9 +143,36 @@ class WorkSheet extends Component{
           return type.work_type || "Не указано" ;
         }
       },{
-        title: 'Исполнитель',
+        title: 'Исполнители',
         dataIndex: 'name',
-        key: 'contractor'
+        key: 'contractor',
+        render : (_, record) => {
+          let res;
+          if(record.users.length > 1){
+            const menu = (
+              <Menu>
+              {record.users.map( user => <Menu.Item key={user.id}>{user.name}</Menu.Item>)}
+              </Menu>
+            )
+            //res = record.users.map( user => <div key={user.id}>{user.name}</div>)
+            //return (
+            //  <Dropdown overlay={menu}>
+            //  Исполнители <Icon type="down" />
+            //  </Dropdown>
+            //)
+            return (
+              <Dropdown overlay={menu}>
+              <a>
+               Исполнители<Icon type="down" />
+              </a>
+            </Dropdown>
+            )
+          }else {
+            res = record.users[0] ? record.users[0].name : "Не назначены";
+            return res;
+          }
+          
+        }
       },
       {
         title: 'Примечание',
@@ -161,6 +199,7 @@ class WorkSheet extends Component{
             user={this.props.user} 
             filterData={this.props.contracts.filterData}
             filters={this.props.contracts.filters}
+            applyData={this.props.contracts}
             loadingState={this.props.contracts.isFetching}
             isLoaded={this.props.contracts.isLoaded}
             settings={settings}
@@ -173,7 +212,7 @@ class WorkSheet extends Component{
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
-            pagination={{total:this.props.contracts.total, pageSize : this.props.contracts.filters.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
+            pagination={{total:this.props.contracts.total, pageSize : this.props.contracts.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
             locale={{ emptyText : "Заявок не найдено"}}
           />
           <Modal
@@ -203,7 +242,7 @@ class WorkSheet extends Component{
       setFilters : (name, filter) => dispatch(setFilters(name, filter)),
       getContract : (userId, id) => dispatch(getContract(userId,id)),
       updateContract : (userId, formData, filterData) => dispatch(updateContract(userId,formData,filterData)),
-      applyFilters : (id, filters) => dispatch(applyFilters(id, filters)),
+      applyFilters : (id, filters, page, limit) => dispatch(applyFilters(id, filters, page, limit)),
       getFilterData : (id) => dispatch(getFilterData(id)),
       getUsers : (id) => dispatch(getUserList(id)),
       getCustomers : (id) => dispatch(getCustomersList(id)),
