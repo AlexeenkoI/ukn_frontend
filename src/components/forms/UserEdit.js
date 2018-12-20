@@ -112,7 +112,7 @@ class UserEdit extends Component{
                   component={ASelect}  
                   name="role_id"
                 >
-                  {settings.roles.map(role =>
+                  {settings.user_roles.map(role =>
                       <Select.Option value={role.id} key={role.id}>
                           {role.role}
                       </Select.Option>

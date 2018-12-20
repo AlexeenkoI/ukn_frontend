@@ -14,7 +14,7 @@ const menuMap = {
     "/contracts/create" : "Создать заявку",
     "/settings" : "Настройки",
     "/settings/work_types" : "Виды работ",
-    "/settings/roles" : "Виды ролей",
+    "/settings/user_roles" : "Виды ролей",
     "/settings/status_types" : "Статусы заявлений",
 }
 

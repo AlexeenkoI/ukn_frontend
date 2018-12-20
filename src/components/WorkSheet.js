@@ -8,7 +8,9 @@ import { Link } from 'react-router-dom'
 import { getContracts , setFilters, getContract, updateContract, applyFilters, getFilterData, setPage, setLimit } from '../actions/WorkSheetActions'
 import { getUserList } from '../actions/UserListActions'
 import { getCustomersList } from '../actions/CustomersActions'
+import { getSettings } from '../actions/SettingsActions'
 import Filters from './Filters';
+import moment from 'moment';
 
 
 class WorkSheet extends Component{
@@ -23,13 +25,17 @@ class WorkSheet extends Component{
 
   componentWillMount(){
     //if(!this.props.contracts.isLoaded){
-    const { user, users, getUsers, customers, getCustomers } = this.props;
+    const { user, users, getUsers, customers, getCustomers,settings, loadSettings } = this.props;
     if(users.isLoading){
       getUsers(user.id);
     }
     if(!customers.loaded){
       getCustomers(user.id)
     }
+    if(!settings.settings_loaded){
+      loadSettings();
+    }
+
   
     if(!this.props.contracts.isLoaded){
         //Устанавливаем фильтр на текущего пользователя
@@ -137,10 +143,11 @@ class WorkSheet extends Component{
         dataIndex: 'type_of_work',
         key: 'type_of_work',
         render : (_, record) => {
-          const type = settings.work_types.find(item => {
+          if(!settings.settings_loaded) return 'Загружаю...';
+          const type = settings.data.work_types.find(item => {
             return item.id === record.type_of_work;
           });
-          return type.work_type || "Не указано" ;
+          return type ? type.work_type : "Не указано" ;
         }
       },{
         title: 'Исполнители',
@@ -185,6 +192,9 @@ class WorkSheet extends Component{
         title: 'Исполнить до',
         dataIndex: 'date_deadline',
         key: 'date_deadline',
+        render : (_, record) => {
+
+        }
       }];
       return !this.props.contracts.isLoaded ? 
         <Preloader/>
@@ -202,7 +212,7 @@ class WorkSheet extends Component{
             applyData={this.props.contracts}
             loadingState={this.props.contracts.isFetching}
             isLoaded={this.props.contracts.isLoaded}
-            settings={settings}
+            settings={settings.data}
             users={users.data}
             customers={customers.data}
             />
@@ -232,7 +242,7 @@ class WorkSheet extends Component{
         user : store.user,
         contracts : store.contracts,
         users : store.userList,
-        settings : store.settings.data,
+        settings : store.settings,
         customers : store.customersList
       }
     }
@@ -247,7 +257,8 @@ class WorkSheet extends Component{
       getUsers : (id) => dispatch(getUserList(id)),
       getCustomers : (id) => dispatch(getCustomersList(id)),
       setPage : (page) => dispatch(setPage(page)),
-      setLimit : (limit) => dispatch(setLimit(limit))
+      setLimit : (limit) => dispatch(setLimit(limit)),
+      loadSettings : () => dispatch(getSettings())
       //resetFilter : (id, filters) => dispatch(reserFlilters(id,filters))
     })
 

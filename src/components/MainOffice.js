@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react'
 import { Switch, Route, Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import openSocket from 'socket.io-client';
+//import {openSocket, io} from 'socket.io-client';
+import io from 'socket.io-client';
 
 import AuthWindow from './AuthWindow'
 import WorkSheet from './WorkSheet'
@@ -30,7 +31,10 @@ import { Layout, Icon, Row, Col } from 'antd'
 
 
 const { Header, Content } = Layout;
-//const socket = openSocket('http://localhost:3333');
+//const socket = openSocket('http://localhost:3333/');
+//const socket = io('http://localhost:3333', {
+//  path: '/test'
+//});
 
 
 /**

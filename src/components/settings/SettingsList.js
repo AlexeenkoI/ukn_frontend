@@ -10,6 +10,7 @@ export class SettingsList extends Component {
 
   componentWillMount(){
     const { loadSettings } = this.props;
+    loadSettings();
 
   }
 

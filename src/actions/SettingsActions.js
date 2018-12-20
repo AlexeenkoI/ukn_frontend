@@ -52,33 +52,36 @@ export const getSettings = (userId, condition = '') => {
   return (dispatch) => {
     dispatch(startLoading());
     //TO DO
-    const reqBody = {
-      userId : userId,
-    }
-    fetch('/api/settings/getsettings',{
+    //const reqBody = {
+    //  userId : userId,
+    //}
+    const token = localStorage.getItem('app_token');
+    fetch('/api/settings/getall',{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
-      method:'POST',
-      body : JSON.stringify(reqBody)
+      method:'GET',
+      //body : JSON.stringify(reqBody)
     })
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
         console.log('succsess answer');
         console.log(json);
-        message.success(json.msg)
+        message.success(json.message)
+        dispatch(finishLoading(json.data))
       }else{
         console.log('error anser');
         console.log(json);
-        message.warn(json);
+        message.warn(json.message);
       }
-      dispatch(finishLoading())
+      
     })
     .catch(err => {
       //console.log(err);
-      message.warn('Ошибка');
+      message.warn(`Ошибка ${err.message}`);
       dispatch(finishLoading())
     });
 
@@ -108,13 +111,14 @@ export const updateSetting = (userId, type, setting) => {
       userId : userId,
       data : setting
     }
-    
-    fetch(`/api/${type}/update${type}/${updId}`,{
+    const token = localStorage.getItem('app_token');
+    fetch(`/api/${type}/update/${updId}`,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
-      method:'POST',
+      method:'PUT',
       body : JSON.stringify(reqBody)
     })
     .then(res => res.json())
@@ -122,18 +126,18 @@ export const updateSetting = (userId, type, setting) => {
       if(json.success === true){
           console.log('succsess answer');
           console.log(json);
-          message.success(json.msg)
+          message.success(json.message)
           //dispatch(getSettings(userId))
       }else{
           console.log('error anser');
           console.log(json);
-          message.warn(json);
+          message.warn(json.message);
       }
       dispatch(finishUpdate())
     })
     .catch(err => {
       //console.log(err);
-      message.warn('Ошибка');
+      message.warn(`Ошибка ${err.message}`);
       dispatch(finishUpdate())
     });
   }
@@ -147,12 +151,15 @@ export const insertSetting = (userId, type, insertValues) => {
       userId : userId,
       data : insertValues
     }
-    fetch(`/api/${type}/create${type}`,{
+    console.log(reqBody)
+    const token = localStorage.getItem('app_token');
+    fetch(`/api/${type}/create`,{
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
       },
-      method:'POST',
+      method:'PUT',
       body : JSON.stringify(reqBody)
     })
     .then(res => res.json())
@@ -160,18 +167,20 @@ export const insertSetting = (userId, type, insertValues) => {
       if(json.success === true){
         console.log('succsess answer');
         console.log(json);
-        message.success(json.msg)
+        message.success(json.message)
         //dispatch(getSettings(userId))
+        dispatch(getSettings())
+        dispatch(clearRow())
       }else{
         console.log('error anser');
         console.log(json);
-        message.warn(json);
+        message.warn(json.message);
       }
       dispatch(finishUpdate())
     })
     .catch(err => {
       console.log('err');
-      message.warn('Ошибка');
+      message.warn(`Ошибка ${err.message}`);
       dispatch(finishUpdate())
     });
   }

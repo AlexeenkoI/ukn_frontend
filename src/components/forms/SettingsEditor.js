@@ -69,11 +69,11 @@ export class SettingsEditor extends Component {
           <FormItem {...formItemLayout}>
           { Object.keys(values[0]).map( (field, index) =>
             field !== 'id' &&
-            (<Input type="text" key={index} style={{width: "50%", marginRight : "10px"}} name={field} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
+            (<Input type="text" key={index} style={{width: "50%", marginRight : "10px"}} name={field} value={settings.newData[field]} onChange={(e) => createRow(match.params.type, field, e.target.value)} />)
           )}
               <Button 
                 type="primary" 
-                disabled={settings.newData.hasOwnProperty("table") ? false : true} 
+                disabled={Object.keys(settings.newData).length === 0 ? true : false} 
                 onClick={() => performInsert(user.id, match.params.type, settings.newData)}
                 loading={settings.settingsUpdating}
                 icon="check"

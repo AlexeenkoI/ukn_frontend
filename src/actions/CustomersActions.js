@@ -205,7 +205,7 @@ export const insertCustomer = (uId, formData) => {
       dispatch(getCustomersList(uId))
       dispatch({
         type:'FINISH_INSERTING',
-        data : json.data.insertId
+        data : json.insertId
       })
     })
     .catch( err => {
