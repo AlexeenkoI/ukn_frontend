@@ -98,6 +98,8 @@ export function startFilterQuery(){
 export function applyFilters(id, data, page, limit){
   const token = localStorage.getItem('app_token');
   console.log(data);
+  data.filters.date_started = data.filters.date_started && moment(data.filters.date_started).format("YYYY-MM-DD HH:mm:ss")
+  data.filters.date_deadline = data.filters.date_deadline && moment(data.filters.date_deadline).format("YYYY-MM-DD HH:mm:ss")
   return function(dispatch){
     dispatch(startFilterQuery());
     const reqBody = {

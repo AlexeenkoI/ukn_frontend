@@ -122,7 +122,8 @@ class ContractEdit extends Component {
   onSubmit = values => {
     const { user, insertOne } = this.props;
     delete values.date_started;
-    values.date_deadline = moment(values.date_deadline).format("X")
+    //values.date_deadline = moment(values.date_deadline).format("X")
+    values.date_deadline = moment(values.date_deadline).format("YYYY-MM-DD HH:mm:ss");
     console.log(values);
     delete values.name;
    

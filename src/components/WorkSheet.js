@@ -129,6 +129,9 @@ class WorkSheet extends Component{
         title: 'Дата заключения',
         dataIndex: 'date_started',
         key: 'date_started',
+        render : (_, record) => {
+          return moment(record.date_started).format('DD.MM.YYYY')
+        }
       }, {
         title: 'ФИО Заказчика',
         dataIndex: 'customer',
@@ -193,7 +196,9 @@ class WorkSheet extends Component{
         dataIndex: 'date_deadline',
         key: 'date_deadline',
         render : (_, record) => {
-
+          if(record.date_deadline)
+            return moment(record.date_deadline).format('DD.MM.YYYY');
+          return 'Не указана';
         }
       }];
       return !this.props.contracts.isLoaded ? 

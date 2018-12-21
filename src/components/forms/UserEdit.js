@@ -4,6 +4,7 @@ import { Field, reduxForm } from 'redux-form'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getUser, updatedUser, insertUser} from '../../actions/UserListActions'
+import { getSettings } from '../../actions/SettingsActions'
 import Preloader from '../Preloader'
 const FormItem = Form.Item;
 
@@ -65,9 +66,14 @@ class UserEdit extends Component{
     }
 
     componentWillMount(){
-      const { match, user, getOne } = this.props;
+      const { match, user, getOne, settings, loadSettings } = this.props;
+
       if(typeof match !== 'undefined'){
         getOne(user.id, match.params.id);
+      }
+
+      if(settings.settings_loaded){
+        loadSettings()
       }
     }
 
@@ -75,11 +81,13 @@ class UserEdit extends Component{
       const { user, updateOne, createOne } = this.props;
       delete values.re_password;
       delete values.status_text;
+      delete values.is_active;
+      delete values.role_data;
+
       if(values.is_active === true){
         values.is_active = 1;
-      }else{
-        values.is_active = 0;
       }
+      console.log(values);
       if(values.id > 0){
         updateOne(user.id, values);
       }else{
@@ -101,7 +109,7 @@ class UserEdit extends Component{
             <Form onSubmit={handleSubmit(this.handleSubmit)}>
               <Field type="hidden" component="input" name="id"/>
               {user.id !== initialValues.id &&
-                <Field label="Активнвость" name="is_active" component={ACheckbox}  type="checkbox" />
+                <Field label="Активнвость" name="is_active" component={ACheckbox} type="checkbox" />
               }
               <Field label="Имя" name="name" component={AInput} placeholder="Имя" hasFeedback />
               <Field label="Фамилия" name="surename" component={AInput} placeholder="Фамилия" />
@@ -112,9 +120,9 @@ class UserEdit extends Component{
                   component={ASelect}  
                   name="role_id"
                 >
-                  {settings.user_roles.map(role =>
+                  {settings.data.user_roles && settings.data.user_roles.map(role =>
                       <Select.Option value={role.id} key={role.id}>
-                          {role.role}
+                          {role.role_name}
                       </Select.Option>
                   )}
                 </Field>
@@ -169,7 +177,7 @@ function mapStateToProps(state, ownProps) {
     user : state.user,
     userStatus: state.user.role,
     role : ownProps.userRoles,
-    settings : state.settings.data,
+    settings : state.settings,
     userFetch : state.userList.userIsLoading,
     initialValues : state.userList.currentUserData,
     grid : ownProps.gridSettings  || defaultGrid
@@ -187,7 +195,8 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = dispatch =>({
   getOne : (uId, id) => dispatch(getUser(uId,id)),
   createOne : (uId, formData) => dispatch(insertUser(uId, formData)),
-  updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData))
+  updateOne : (uId, formData)=> dispatch(updatedUser(uId, formData)),
+  loadSettings : () => dispatch(getSettings())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

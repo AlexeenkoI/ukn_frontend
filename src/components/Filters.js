@@ -44,6 +44,7 @@ class Filters extends Component{
   }
 
   handleCustomerChange = value => {
+    value = value > 0 ? value : '';
     this.props.setFilters('customer_id',value);
   }
 
@@ -54,11 +55,13 @@ class Filters extends Component{
   handleDateFrom = (date, value) => {
     //console.log(date);
     //console.log(moment(date).format("X"));
-    this.props.setFilters('date_started',moment(date).format("X"));
+    const setDate  = date === null ? '' : date;
+    this.props.setFilters('date_started',setDate);
   }
 
   handleDateTo = (date, value) => {
-    this.props.setFilters('date_deadline',moment(date).format("X"));
+    const setDate  = date === null ? '' : date;
+    this.props.setFilters('date_deadline',setDate);
   }
 
   resetFilters = () => {
@@ -117,7 +120,7 @@ class Filters extends Component{
                   <DatePicker 
                     style={{width:'40%'}} 
                     placeholder="C" 
-                    value={this.props.filters.date_started === '' ? null : moment.unix(this.props.filters.date_started) } 
+                    value={this.props.filters.date_started === '' ? null : moment(this.props.filters.date_started, 'YYYY-MM-DD') } 
                     format="YYYY-MM-DD" 
                     onChange={this.handleDateFrom}
                   />
@@ -125,7 +128,7 @@ class Filters extends Component{
                   <DatePicker 
                     style={{width:'40%'}} 
                     placeholder="По" 
-                    value={this.props.filters.date_deadline === '' ? null : moment.unix(this.props.filters.date_deadline) } 
+                    value={this.props.filters.date_deadline === '' ? null :moment(this.props.filters.date_deadline, 'YYYY-MM-DD') } 
                     format="YYYY-MM-DD" 
                     onChange={this.handleDateTo}
                   />

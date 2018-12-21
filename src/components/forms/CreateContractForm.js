@@ -80,7 +80,8 @@ class CreateContractForm extends Component {
     onFormSubmit = (values) => {
       const { user, createOne } = this.props;
       //values.date_deadline = Date.parse(values.date_deadline);
-      values.date_deadline = moment(values.date_deadline).format("X");
+      //values.date_deadline = moment(values.date_deadline).format("X");
+      values.date_deadline = moment(values.date_deadline).format("YYYY-MM-DD HH:mm:ss");
       let sendValues = {...values};
       console.log(sendValues);
      // let modifiedContractors = sendValues.contractor.map(val => {
