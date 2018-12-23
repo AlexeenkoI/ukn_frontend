@@ -348,3 +348,12 @@ export function createContract(uId,formData){
     })
   }
 }
+
+export function fileUploaded(file){
+  console.log('file uploaded action');
+  console.log(file);
+  return {
+    type : 'FILE_UPLOADED',
+    file
+  }
+}

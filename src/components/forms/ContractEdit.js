@@ -4,7 +4,8 @@ import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
 import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker } from 'antd'
 import FieldWrapper from './FieldWrapper'
-import { getContract, updateContract, contractLeaving} from '../../actions/WorkSheetActions'
+import FileUploader from '../small/FileUploader'
+import { getContract, updateContract, contractLeaving, fileUploaded} from '../../actions/WorkSheetActions'
 import { getUserList } from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 import moment from 'moment'
@@ -114,6 +115,45 @@ class ContractEdit extends Component {
 
   }
 
+  handleUpload = (file) => {
+   // const status = file.file.status;
+   // console.log('handle upload');
+    console.log(file);
+    if(file.file.status === 'done'){
+      console.log('done');
+      
+      //file.file.url = `http://api/download/${file.file.name}`;
+      //console.log(file);
+      //this.props.fileUpload(file);
+      file.fileList = file.fileList.map((file) => {
+        if (file.response) {
+          // Component will show file.url as link
+          file.url =  `api/file_download/${file.response.fileName}`;
+        }
+        return file;
+      });
+      this.props.fileUpload(file.fileList);
+    }
+
+    //file.fileList = file.fileList.map((file) => {
+    //  if (file.response) {
+    //    // Component will show file.url as link
+    //    file.url =  `http://www.api/download/${file.response.fileName}`;
+    //  }
+    //  return file;
+    //});
+   // //return false;
+  }
+  handleRemove = (file) => {
+    console.log('removing file');
+    console.log(file);
+
+    //const index = state.fileList.indexOf(file);
+    //const newFileList = state.fileList.slice();
+    //newFileList.splice(index, 1);
+    //return false;
+  }
+
   removeFiles = (file) => {
     console.log('remove file');
     console.log(file);
@@ -145,7 +185,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, user, contractFetching, settings , grid, userList, needRedirect} = this.props;
+    const {handleSubmit, pristine,submitting, user, files, contractFetching, settings , grid, userList, needRedirect} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(needRedirect) return <Redirect to="/contracts"/>
 
@@ -202,6 +242,13 @@ class ContractEdit extends Component {
             <Row className="add-info-row">
               <Col span={12}>
                 <div>Файлы :</div>
+                <FileUploader
+                  actionUrl="/api/files/upload"
+                  callbackUploader={this.handleUpload}
+                  callbackRemover={this.handleRemove}
+                  files={files}
+                />
+                {/*
                 <Upload 
                   action={this.props.uploadAction} 
                   onChange={this.uploadFiles}  
@@ -213,6 +260,7 @@ class ContractEdit extends Component {
                     <Icon type="upload" /> Загрузить
                   </Button>
                 </Upload>
+                */}
               </Col>
               <Col span={12}>
                 Еще что-то
@@ -268,6 +316,7 @@ function mapStateToProps(state, ownProps) {
     settings : state.settings.data,
     grid : ownProps.gridSettings || defaultGrid,
     tv : state.contracts.currentContract,
+    files : state.contracts.currentContractFiles,
     initialValues: state.contracts.currentContract,
     needRedirect : state.contracts.contractIsUpdated
   }
@@ -277,7 +326,8 @@ const mapDispatchToProps = dispatch =>({
   getOne : (uId, contractId) => dispatch(getContract(uId, contractId)),
   insertOne : (uId, formData, filterData) => dispatch(updateContract(uId,formData,filterData)),
   getUsers : (uid) => dispatch(getUserList(uid)),
-  leaveContract : () => dispatch(contractLeaving())
+  leaveContract : () => dispatch(contractLeaving()),
+  fileUpload : (file) => dispatch(fileUploaded(file))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

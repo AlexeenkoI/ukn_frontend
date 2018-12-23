@@ -227,6 +227,10 @@ class WorkSheet extends Component{
             dataSource={this.props.contracts.data}
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
+            rowClassName={(record, index) => {
+              const deadLinePassed = moment(record.date_deadline).format('DD.MM.YYYY') > moment().format('DD.MM.YYYY') ? false : true;
+              return deadLinePassed ? 'row warn' : 'row normal';
+            }}
             pagination={{total:this.props.contracts.total, pageSize : this.props.contracts.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
             locale={{ emptyText : "Заявок не найдено"}}
           />
