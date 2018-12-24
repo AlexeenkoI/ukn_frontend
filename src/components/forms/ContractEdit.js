@@ -118,10 +118,8 @@ class ContractEdit extends Component {
   handleUpload = (file) => {
    // const status = file.file.status;
    // console.log('handle upload');
-    console.log(file);
     if(file.file.status === 'done'){
       console.log('done');
-      
       //file.file.url = `http://api/download/${file.file.name}`;
       //console.log(file);
       //this.props.fileUpload(file);
@@ -130,9 +128,13 @@ class ContractEdit extends Component {
           // Component will show file.url as link
           file.url =  `api/file_download/${file.response.fileName}`;
         }
+        if(file.hasOwnProperty('response') && file.response.status === 'error'){
+          file.status = "error";
+          file.response = file.response.error.message
+        }
         return file;
       });
-      this.props.fileUpload(file.fileList);
+      this.props.fileUpload(file.file);
     }
 
     //file.fileList = file.fileList.map((file) => {
@@ -145,9 +147,11 @@ class ContractEdit extends Component {
    // //return false;
   }
   handleRemove = (file) => {
+    const { files } = this.props
     console.log('removing file');
     console.log(file);
-
+    const fileIndex = files.indexOf(file);
+    console.log(fileIndex);
     //const index = state.fileList.indexOf(file);
     //const newFileList = state.fileList.slice();
     //newFileList.splice(index, 1);
@@ -185,7 +189,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, user, files, contractFetching, settings , grid, userList, needRedirect} = this.props;
+    const {handleSubmit, pristine,submitting, user, files, contractFetching, settings , grid, userList, needRedirect, contractId} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(needRedirect) return <Redirect to="/contracts"/>
 
@@ -242,12 +246,15 @@ class ContractEdit extends Component {
             <Row className="add-info-row">
               <Col span={12}>
                 <div>Файлы :</div>
+                
                 <FileUploader
                   actionUrl="/api/files/upload"
                   callbackUploader={this.handleUpload}
                   callbackRemover={this.handleRemove}
                   files={files}
+                  contractId={contractId}
                 />
+                
                 {/*
                 <Upload 
                   action={this.props.uploadAction} 
@@ -309,6 +316,7 @@ function mapStateToProps(state, ownProps) {
   return {
     user : state.user,
     userStatus : state.user,
+    contractId : state.contracts.currentContract.id,
     contractFetching : state.contracts.contractLoading,
     uploadAction : '/api/upload',
     userList : state.userList,

@@ -4,18 +4,6 @@ import { Upload, Button, Icon} from 'antd'
 
 class FileUploader extends Component {
 
-    ownRequest =(data) => {
-        console.log('own request');
-        console.log(data);
-        data.onProgress();
-    }
-
-    componentDidUpdate(prevProps, nextProps){
-        console.log('component updating');
-        console.log(prevProps);
-        console.log(nextProps);
-    }
-
     render() {
       const fl =  [{
         uid: '1',
@@ -35,19 +23,19 @@ class FileUploader extends Component {
         response: 'Server Error 500', // custom error message to show
         url: 'http://www.baidu.com/zzz.png',
       }]
-      const { actionUrl, callbackUploader,callbackRemover, files } = this.props;
+      const { actionUrl, callbackUploader,callbackRemover, files, contractId } = this.props;
         return (
             <div>
                 <Upload 
                   action={actionUrl}
                   multiple={true} 
-                  data={{id: 2}}
+                  data={{upload_contract: contractId}}
                   headers={{
                     Authorization : `Bearer ${localStorage.getItem('app_token')}`,
                   }}
                   defaultFileList={files}
                   onChange={callbackUploader}
-                  //onRemove={callbackRemover}
+                  onRemove={callbackRemover}
                   //customRequest={this.ownRequest}
                 >  
                     <Button>
