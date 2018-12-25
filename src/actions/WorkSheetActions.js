@@ -357,3 +357,34 @@ export function fileUploaded(file){
     file
   }
 }
+
+
+export function removeFile(contractId,filePath){
+  return dispatch => {
+    const reqBody = {
+      filePath : filePath
+    }
+    const token = localStorage.getItem('app_token');
+    fetch(`/api/files/remove/${contractId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
+      },
+      method:'POST',
+      body : JSON.stringify(reqBody)
+    })
+    .then( res => res.json())
+    .then( json => {
+      if(json.success === true){
+        message.success(json.message);
+      }else{
+        message.warning(json.message);
+      }
+    })
+    .catch( err => {
+      message.warning(err.message);
+    })
+
+  }
+}

@@ -5,7 +5,7 @@ import { Field, reduxForm } from 'redux-form'
 import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker } from 'antd'
 import FieldWrapper from './FieldWrapper'
 import FileUploader from '../small/FileUploader'
-import { getContract, updateContract, contractLeaving, fileUploaded} from '../../actions/WorkSheetActions'
+import { getContract, updateContract, contractLeaving, fileUploaded, removeFile} from '../../actions/WorkSheetActions'
 import { getUserList } from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 import moment from 'moment'
@@ -127,6 +127,7 @@ class ContractEdit extends Component {
         if (file.response) {
           // Component will show file.url as link
           file.url =  `api/file_download/${file.response.fileName}`;
+          file.storagePath = file.response.tmpPath;
         }
         if(file.hasOwnProperty('response') && file.response.status === 'error'){
           file.status = "error";
@@ -147,11 +148,12 @@ class ContractEdit extends Component {
    // //return false;
   }
   handleRemove = (file) => {
-    const { files } = this.props
+    const { files, removeFile, contractId } = this.props
     console.log('removing file');
     console.log(file);
     const fileIndex = files.indexOf(file);
     console.log(fileIndex);
+    removeFile(contractId,file.storagePath);
     //const index = state.fileList.indexOf(file);
     //const newFileList = state.fileList.slice();
     //newFileList.splice(index, 1);
@@ -335,7 +337,8 @@ const mapDispatchToProps = dispatch =>({
   insertOne : (uId, formData, filterData) => dispatch(updateContract(uId,formData,filterData)),
   getUsers : (uid) => dispatch(getUserList(uid)),
   leaveContract : () => dispatch(contractLeaving()),
-  fileUpload : (file) => dispatch(fileUploaded(file))
+  fileUpload : (file) => dispatch(fileUploaded(file)),
+  removeFile : (contractId, fileName) => dispatch(removeFile(contractId, fileName))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

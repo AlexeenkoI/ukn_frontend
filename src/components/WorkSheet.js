@@ -69,26 +69,17 @@ class WorkSheet extends Component{
   }
   onPaginationChange = (page) =>{
     const { contracts, setPage } = this.props;
-    console.log('pagination listener, page:');
-    console.log(page);
-    console.log(contracts);
     let offset =  page.current === 1 ? 0 : contracts.filters.limit * (page.current-1);
     setPage(page.current)
-    console.log('after set page')
-    console.log(contracts)
-    //this.props.setFilters('offset', offset);
-    this.props.applyFilters(this.props.user.id, this.props.contracts, page.current);
+    this.props.applyFilters(this.props.user.id, this.props.contracts, page.current, page.pageSize);
   }
   onPageSizeChange = (current, pageSize) => {
     const { setLimit } = this.props;
-    console.log('page size changed');
-    console.log(current);
-    console.log(pageSize);
     setLimit(pageSize);
-    console.log(this.props.contracts);
     //this.props.setFilters('limit',pageSize);
 
-    this.props.applyFilters(this.props.user.id, this.props.contracts,current, pageSize);
+   // this.props.applyFilters(this.props.user.id, this.props.contracts, current.current, pageSize);
+    
   }
 
   onCalendarChange = (date, string)=>{

@@ -30,17 +30,20 @@ const initialState = {
       status: 'done',
       response: 'Server Error 500', // custom error message to show
       url: 'http://www.baidu.com/xxx.png',
+      storagePath : '//str.path'
     }, {
       uid: '2',
       name: 'yyy.png',
       status: 'done',
       url: 'http://www.baidu.com/yyy.png',
+      storagePath : '//str.path',
     }, {
       uid: '3',
       name: 'zzz.png',
       status: 'error',
       response: 'Server Error 500', // custom error message to show
       url: 'http://www.baidu.com/zzz.png',
+      storagePath : '//str.path'
     }]
   }
   
