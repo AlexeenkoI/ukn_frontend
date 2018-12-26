@@ -226,6 +226,7 @@ export function getContract(user, contractId){
         console.log(json);
         if(json.success === true){
           dispatch(recieveContract(json.data));
+          dispatch(loadFileList(json.data.id))
         }else{
           message.warning(json.msg);
         }
@@ -350,8 +351,6 @@ export function createContract(uId,formData){
 }
 
 export function fileUploaded(file){
-  console.log('file uploaded action');
-  console.log(file);
   return {
     type : 'FILE_UPLOADED',
     file
@@ -386,5 +385,48 @@ export function removeFile(contractId,filePath){
       message.warning(err.message);
     })
 
+  }
+}
+
+export function loadFileList(contractId){
+  return dispatch => {
+    dispatch({
+      type : "START_FILES_LOADING"
+    })
+    const token = localStorage.getItem('app_token');
+    fetch(`/api/files/getfiles/${contractId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${token}`
+      },
+      method:'GET',
+    })
+    .then( res => res.json())
+    .then( json => {
+      if(json.success === true){
+        message.success(json.message);
+        const data = json.data;
+        dispatch(fileListLoaded(data))
+      }else{
+        message.warning(json.message);
+      }
+    })
+    .catch( err => {
+      message.warning(err.message);
+    })
+  }
+}
+
+export function clearFileList(){
+  return {
+    type : "CLEAR_FILE_LIST"
+  }
+}
+
+export function fileListLoaded(data){
+  return {
+    type : "FILE_LIST_LOADED",
+    data
   }
 }

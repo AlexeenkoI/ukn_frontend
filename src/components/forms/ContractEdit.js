@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { Field, reduxForm } from 'redux-form'
-import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker } from 'antd'
+import { Form, Icon, Input, Button, Select, Row, Col, Upload, DatePicker, message } from 'antd'
 import FieldWrapper from './FieldWrapper'
 import FileUploader from '../small/FileUploader'
-import { getContract, updateContract, contractLeaving, fileUploaded, removeFile} from '../../actions/WorkSheetActions'
+import { getContract, updateContract, contractLeaving, fileUploaded, removeFile, clearFileList, fileListLoaded} from '../../actions/WorkSheetActions'
 import { getUserList } from '../../actions/UserListActions'
 import Preloader from '../Preloader'
 import moment from 'moment'
@@ -78,7 +78,7 @@ class ContractEdit extends Component {
   }
 
   componentWillMount = () =>{
-    const { match, user, getOne, userList, getUsers } = this.props;
+    const { match, user, getOne, userList, getUsers, loadFileList, contractId } = this.props;
     console.log(this.props);
     if(typeof match !== 'undefined'){
       getOne(user.id, match.params.id);
@@ -87,11 +87,13 @@ class ContractEdit extends Component {
     if(!userList.isLoading){
       getUsers(user.id);
     }
+    
   }
 
   componentWillUnmount(){
-    const { leaveContract } = this.props;
+    const { leaveContract, clearFileList } = this.props;
     leaveContract();
+    clearFileList();
   }
 
   uploadFiles = (files) => {
@@ -116,17 +118,17 @@ class ContractEdit extends Component {
   }
 
   handleUpload = (file) => {
+    const { contractId } = this.props;
    // const status = file.file.status;
    // console.log('handle upload');
     if(file.file.status === 'done'){
-      console.log('done');
       //file.file.url = `http://api/download/${file.file.name}`;
-      //console.log(file);
+      console.log(file);
       //this.props.fileUpload(file);
       file.fileList = file.fileList.map((file) => {
         if (file.response) {
           // Component will show file.url as link
-          file.url =  `api/file_download/${file.response.fileName}`;
+          file.url =  `/api/files/download/${contractId}/${file.response.fileName}`;
           file.storagePath = file.response.tmpPath;
         }
         if(file.hasOwnProperty('response') && file.response.status === 'error'){
@@ -136,6 +138,7 @@ class ContractEdit extends Component {
         return file;
       });
       this.props.fileUpload(file.file);
+      message.success("Успешно загружено")
     }
 
     //file.fileList = file.fileList.map((file) => {
@@ -148,16 +151,18 @@ class ContractEdit extends Component {
    // //return false;
   }
   handleRemove = (file) => {
-    const { files, removeFile, contractId } = this.props
-    console.log('removing file');
-    console.log(file);
-    const fileIndex = files.indexOf(file);
-    console.log(fileIndex);
+    const { files, removeFile, contractId, updateFileList } = this.props
+    //console.log('removing file');
+   // console.log(file);
+    //const fileIndex = files.indexOf(file);
+    //console.log(fileIndex);
     removeFile(contractId,file.storagePath);
-    //const index = state.fileList.indexOf(file);
-    //const newFileList = state.fileList.slice();
+    //const index = files.indexOf(file);
+    //const newFileList = files.slice();
     //newFileList.splice(index, 1);
-    //return false;
+    //console.log(newFileList);
+    ////return false;
+    //updateFileList(newFileList);
   }
 
   removeFiles = (file) => {
@@ -170,7 +175,6 @@ class ContractEdit extends Component {
     delete values.date_started;
     //values.date_deadline = moment(values.date_deadline).format("X")
     values.date_deadline = moment(values.date_deadline).format("YYYY-MM-DD HH:mm:ss");
-    console.log(values);
     delete values.name;
    
     insertOne(user.id, values);
@@ -191,7 +195,7 @@ class ContractEdit extends Component {
   }
 
   render() {
-    const {handleSubmit, pristine,submitting, user, files, contractFetching, settings , grid, userList, needRedirect, contractId} = this.props;
+    const {handleSubmit, pristine,submitting, user, files, contractFetching, settings , grid, userList, needRedirect, contractId, filesLoading} = this.props;
     const disabler = user.role > 1 ? true : false;
     if(needRedirect) return <Redirect to="/contracts"/>
 
@@ -255,6 +259,7 @@ class ContractEdit extends Component {
                   callbackRemover={this.handleRemove}
                   files={files}
                   contractId={contractId}
+                  loading={filesLoading}
                 />
                 
                 {/*
@@ -328,7 +333,8 @@ function mapStateToProps(state, ownProps) {
     tv : state.contracts.currentContract,
     files : state.contracts.currentContractFiles,
     initialValues: state.contracts.currentContract,
-    needRedirect : state.contracts.contractIsUpdated
+    needRedirect : state.contracts.contractIsUpdated,
+    filesLoading : state.contracts.filesIsLoading
   }
 }
 
@@ -338,7 +344,9 @@ const mapDispatchToProps = dispatch =>({
   getUsers : (uid) => dispatch(getUserList(uid)),
   leaveContract : () => dispatch(contractLeaving()),
   fileUpload : (file) => dispatch(fileUploaded(file)),
-  removeFile : (contractId, fileName) => dispatch(removeFile(contractId, fileName))
+  removeFile : (contractId, fileName) => dispatch(removeFile(contractId, fileName)),
+  clearFileList : () => dispatch(clearFileList()),
+  updateFileList : (data) => dispatch(fileListLoaded(data)) 
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({

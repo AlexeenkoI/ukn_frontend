@@ -24,27 +24,8 @@ const initialState = {
     contractLoading: false,
     contractIsUpdated : false,
     currentContract : {},
-    currentContractFiles : [{
-      uid: '1',
-      name: 'xxx.png',
-      status: 'done',
-      response: 'Server Error 500', // custom error message to show
-      url: 'http://www.baidu.com/xxx.png',
-      storagePath : '//str.path'
-    }, {
-      uid: '2',
-      name: 'yyy.png',
-      status: 'done',
-      url: 'http://www.baidu.com/yyy.png',
-      storagePath : '//str.path',
-    }, {
-      uid: '3',
-      name: 'zzz.png',
-      status: 'error',
-      response: 'Server Error 500', // custom error message to show
-      url: 'http://www.baidu.com/zzz.png',
-      storagePath : '//str.path'
-    }]
+    currentContractFiles : [],
+    filesIsLoading : false
   }
   
   export function contractsReducer(state = initialState, action) {
@@ -125,14 +106,28 @@ const initialState = {
           contractIsUpdated : false
         }
       case 'FILE_UPLOADED' : 
-        console.log('file uploaded');
-        console.log(action);
         return {
           ...state,
           currentContractFiles : [
             ...state,
             action.file
           ]
+        }
+      case 'START_FILES_LOADING' : 
+        return {
+          ...state,
+          filesIsLoading : true
+        }
+      case 'FILE_LIST_LOADED' : 
+        return {
+          ...state,
+          filesIsLoading : false,
+          currentContractFiles : action.data
+        }
+      case 'CLEAR_FILE_LIST' : 
+        return {
+          ...state,
+          currentContractFiles : []
         }
       default:
         return state;
