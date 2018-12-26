@@ -31,11 +31,10 @@ import { Layout, Icon, Row, Col } from 'antd'
 
 
 const { Header, Content } = Layout;
-//const socket = openSocket('http://localhost:3333/');
+const socket = io('http://localhost:3333/');
 //const socket = io('http://localhost:3333', {
 //  path: '/test'
 //});
-
 
 /**
  * Точка входа и роутинга в основные компоненты
@@ -65,6 +64,9 @@ class MainOffice extends Component{
     }
   componentWillMount(){
 
+    socket.emit('ContractPush', this.props.currentUser.id)
+    console.log("contract push " + this.props.currentUser.id )
+
       //socket.on('updateContracts',(res)=>{
       //  console.log('hey hey im socket event');
       //  console.log(res);
@@ -74,7 +76,9 @@ class MainOffice extends Component{
   }
 
   componentWillUnmount() {
-    //socket.disconnect();
+      socket.emit('ContractDisconnect', this.props.currentUser.id)
+
+    
     //console.log("Disconnecting Socket as component will unmount");
   }
 
