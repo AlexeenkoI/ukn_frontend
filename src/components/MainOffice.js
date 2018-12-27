@@ -31,7 +31,7 @@ import { Layout, Icon, Row, Col } from 'antd'
 
 
 const { Header, Content } = Layout;
-const socket = io('http://localhost:3333/');
+const socket = io('http://127.0.0.1:3333/');
 //const socket = io('http://localhost:3333', {
 //  path: '/test'
 //});
@@ -63,9 +63,11 @@ class MainOffice extends Component{
       });
     }
   componentWillMount(){
-
-    socket.emit('ContractPush', this.props.currentUser.id)
-    console.log("contract push " + this.props.currentUser.id )
+    socket.on('connect', () => {
+      socket.emit('ContractPush', this.props.currentUser.id)
+    console.log("contract push " + this.props.currentUser.id )  
+    })
+    
 
       //socket.on('updateContracts',(res)=>{
       //  console.log('hey hey im socket event');
