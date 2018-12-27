@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 //import {openSocket, io} from 'socket.io-client';
 import io from 'socket.io-client';
+import Ws from '@adonisjs/websocket-client'
 
 import AuthWindow from './AuthWindow'
 import WorkSheet from './WorkSheet'
@@ -31,10 +32,14 @@ import { Layout, Icon, Row, Col } from 'antd'
 
 
 const { Header, Content } = Layout;
-const socket = io('http://localhost:3333/');
+//const socket = io('http://127.0.0.1:3333', {
+//  transports: ['polling','websocket']
+//});
 //const socket = io('http://localhost:3333', {
 //  path: '/test'
 //});
+
+const ws = Ws('ws://127.0.0.1:3333')
 
 /**
  * Точка входа и роутинга в основные компоненты
@@ -63,9 +68,18 @@ class MainOffice extends Component{
       });
     }
   componentWillMount(){
-
-    socket.emit('ContractPush', this.props.currentUser.id)
-    console.log("contract push " + this.props.currentUser.id )
+    ws.connect();
+    const contractsNotificator = ws.subscribe('contractsRoom')
+    contractsNotificator.on('contractRecieved', (data) => {
+      console.log('recieve contract notification');
+      console.log(data);
+    })
+    //socket.emit('ContractPush', this.props.currentUser.id)
+    //console.log("contract push " + this.props.currentUser.id )
+    //socket.on('testEmit', (data) => {
+    //  console.log(`test emit, data : `);
+    //  console.log(data);
+    //})
 
       //socket.on('updateContracts',(res)=>{
       //  console.log('hey hey im socket event');
@@ -76,7 +90,7 @@ class MainOffice extends Component{
   }
 
   componentWillUnmount() {
-      socket.emit('ContractDisconnect', this.props.currentUser.id)
+      //socket.emit('ContractDisconnect', this.props.currentUser.id)
 
     
     //console.log("Disconnecting Socket as component will unmount");

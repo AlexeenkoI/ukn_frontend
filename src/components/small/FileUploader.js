@@ -6,14 +6,27 @@ import { Link } from 'react-router-dom'
 
 class FileUploader extends Component {
 
-    download(link){
+    download = (link) =>{
       fetch(link, {method : "GET"})
       .then(response => response.blob())
       .then(blob => URL.createObjectURL(blob))
       .then(url => {
-        window.open(link, '_blank');
+        window.open(url, '_blank');
+        //setTimeout(function(){
+        //  // For Firefox it is necessary to delay revoking the ObjectURL
+        //  window.URL.revokeObjectURL(url);
+        //}, 100)
         URL.revokeObjectURL(url);
+        //return false;
     });
+    //return false
+    }
+
+    preview = (file) =>{
+      console.log('link clicked');
+      console.log(file);
+      this.download(file.url)
+      //return false;
     }
 
     render() {
@@ -46,20 +59,21 @@ class FileUploader extends Component {
               headers={{
                 Authorization : `Bearer ${localStorage.getItem('app_token')}`,
               }}
-              loading={loading}
               defaultFileList={files}
               onChange={callbackUploader}
               onRemove={callbackRemover}
-              openFileDialogOnClick={true}
+
+              openFileDialogOnClick={false}
+              //onPreview={this.preview}
               //customRequest={this.ownRequest}
             >  
                 <Button>
                     <Icon type="upload" /> Загрузить
                 </Button>
             </Upload>
-            {files.map( file => 
+            { /*files.map( file => 
               <a href={file.url} onClick={() => this.download(file.url)} download>{file.name}</a>
-            )}
+            ) */}
           </div>
         );
     }
