@@ -60,8 +60,6 @@ export function settingsReducer(state = initialState, action) {
         loading : true
       }
     case "SETTINGS_LOADED" : 
-      console.log('settings loaded!');
-      console.log(action);
       const data = action.data;
       return {
         ...state,

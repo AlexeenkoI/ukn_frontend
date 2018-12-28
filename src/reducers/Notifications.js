@@ -8,8 +8,6 @@ const initialState = {
 export function notificationsReducer(state=initialState,action){
   switch(action.type){
     case 'GET_CONTRACT_NOTIFICATION':
-      console.log('contracts get')
-      console.log(action);
       return {
         ...state,
         contractsNotifications:{

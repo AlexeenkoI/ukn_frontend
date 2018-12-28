@@ -27,7 +27,6 @@ export function tryToLogin(auth,pass,isRemember){
     .then(response => response.json())
     .then(json => {
       if(json.success === true){
-        console.log(json);
         localStorage.setItem('app_token',json.auth_token);
         message.success(json.message, 1.5);
         dispatch(successLogin(json))
@@ -102,10 +101,6 @@ export function logout(){
           type : LOGOUT
         })
       }
-
-      //return {
-      //  type : LOGOUT
-      //}
     })
     .catch(err => {
       message.error(err.message, 2);

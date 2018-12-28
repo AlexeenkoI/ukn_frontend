@@ -102,11 +102,11 @@ export class CustomersList extends Component {
         const menu = (
           <Menu>
             <Menu.Item key="0"><Link to={"/customers/edit/"+ record.id }>{ /*<a onClick={()=>this.openDetail(record.id)}>Подробнее</a> */}Подробнее</Link></Menu.Item>
-            <Menu.Item key="1">
+            {/*<Menu.Item key="1">
               <Popconfirm onConfirm={() => this.deleteAction(record.id)} title={titleString}>
                 <a className="action-title">Удалить</a>
               </Popconfirm>
-            </Menu.Item>
+            </Menu.Item>*/}
           </Menu>
         )
         return (
@@ -118,7 +118,7 @@ export class CustomersList extends Component {
     }]
     return (
       <Fragment>
-        <Link to="/customers/createcustomer">Создать клиента</Link>
+        {/*<Link to="/customers/createcustomer">Создать клиента</Link>*/}
         <Search
           placeholder="Поиск..."
           value={customers.searchData.whereString}

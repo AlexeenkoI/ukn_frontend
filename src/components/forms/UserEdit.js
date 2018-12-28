@@ -68,7 +68,7 @@ class UserEdit extends Component{
     componentWillMount(){
       const { match, user, getOne, settings, loadSettings } = this.props;
 
-      if(typeof match !== 'undefined'){
+      if(match && typeof match.params.id !== 'undefined'){
         getOne(user.id, match.params.id);
       }
 

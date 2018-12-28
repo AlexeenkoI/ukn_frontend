@@ -37,8 +37,6 @@ export const getCustomersList = (uId, searchData = '') => {
     })
     .then(res => res.json())
     .then(json => {
-      console.log('resieve customers');
-      console.log(json);
       if(json.success === true){
         dispatch(recieveCustomersList(json))
       }else{
@@ -97,7 +95,7 @@ export const getCurrentCustomer = (uId, customerId) => {
       }
     })
     .catch(err => {
-      message.warning(err);
+      message.warning(err.message);
     });
   }
 }
@@ -131,19 +129,17 @@ export const updateCustomer = (uId, formData, str) => {
       if(json.success === true){
         //console.log('customer recieved');
         dispatch(getCustomersList(uId, str));
-        message.success(json.msg);
+        message.success(json.message);
         dispatch({
           type:'FINISH_INSERTING',
           data : json.data.insertId
         })
       }else{
-        console.log('err');
-        console.log(json);
-        //message.warning(json.msg);
+        message.warning(json.message);
       }
     })
     .catch(err => {
-      message.warning(err);
+      message.warning(err.message);
     });
   }
 }
@@ -167,11 +163,11 @@ export const deleteCustomer = (uId, deleteId, str) => {
     })
     .then( res => res.json())
     .then( json => {
-      message.success(json.msg)
+      message.success(json.message)
       dispatch(getCustomersList(uId, str))
     })
     .catch( err => {
-      message.error(err);
+      message.error(err.message);
     })
   }
 }
@@ -199,9 +195,7 @@ export const insertCustomer = (uId, formData) => {
     })
     .then( res => res.json())
     .then( json => {
-      message.success(json.msg)
-      console.log('customer created');
-      console.log(json);
+      message.success(json.message)
       dispatch(getCustomersList(uId))
       dispatch({
         type:'FINISH_INSERTING',
@@ -209,8 +203,7 @@ export const insertCustomer = (uId, formData) => {
       })
     })
     .catch( err => {
-      message.error(err);
-      console.log(err);
+      message.error(err.message);
     })
   }
 }
