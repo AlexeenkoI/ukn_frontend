@@ -38,8 +38,8 @@ export function getContracts(id,filterData){
       }
     })
     .catch(err => {
-      console.log(err);
       dispatch(errorGettingContracts(err))
+      message.error(err.message);
     });
   }
 }
@@ -75,7 +75,7 @@ export function recieveFilteredContracts(incFilters,res){
 export function errorGettingContracts(err){
   return {
     type : ERROR_RECIEVE_CONTRACTS,
-    msg : err
+    msg : err.message
   }
 }
 export function setFilters(name, filter){
@@ -108,8 +108,6 @@ export function applyFilters(id, data, page, limit){
       limit: limit ? limit : data.limit,
       data : data.filters
     }
-    console.log('apply filters...');
-    console.log(reqBody);
     fetch('/api/contracts/getall',{
       headers: {
         'Accept': 'application/json',
@@ -122,14 +120,12 @@ export function applyFilters(id, data, page, limit){
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
-        console.log('recieve filter contracts');
-        console.log(json);
         dispatch(recieveContracts(json, data))
       }
     })
     .catch(err => {
-      console.log(err);
       dispatch(errorGettingContracts(err))
+      message.error(err.message)
     });
   }
 }
@@ -170,7 +166,6 @@ export function getFilterData(id){
     const reqBody = {
       userId : id,
     }
-    console.log('get filter data...');
     const token = localStorage.getItem('app_token');
     fetch('/api/contracts/getfilters',{
       headers: {
@@ -183,15 +178,13 @@ export function getFilterData(id){
     })
     .then(res => res.json())
     .then(json => {
-      console.log(json);
       if(json.success === true){
         dispatch(recieveFilters(json))
       }
     })
     .catch(err => {
-      console.log('err');
-      console.log(err);
       dispatch(errorGettingContracts(err))
+      message.error(err.message)
     });
   }
 }
@@ -206,6 +199,7 @@ export function recieveFilters(data){
 
 export function getContract(user, contractId){
   return function(dispatch){
+      dispatch(startGettingContract())
       const reqBody = {
         userId : user,
         contractId : contractId
@@ -222,17 +216,15 @@ export function getContract(user, contractId){
       })
       .then(res => res.json())
       .then(json => {
-        console.log('contract recieved');
-        console.log(json);
         if(json.success === true){
           dispatch(recieveContract(json.data));
           dispatch(loadFileList(json.data.id))
         }else{
-          message.warning(json.msg);
+          message.warning(json.message);
         }
       })
       .catch(err => {
-        console.log(err);
+        message.error(err.message);
       })
 
   }
@@ -345,7 +337,7 @@ export function createContract(uId,formData){
       }
     })
     .catch( err => {
-      message.warning(err);
+      message.warning(err.message);
     })
   }
 }

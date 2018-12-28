@@ -33,13 +33,11 @@ export function getUserList(id , condition){
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
-        console.log('user list recieved');
-        console.log(json);
         dispatch(recieveUserList(json))
       }
     })
     .catch(err => {
-      console.log(err);
+      message.error(err.message);
     });
   }
 }
@@ -68,6 +66,9 @@ export function getUser(currUserId, incUserId){
         dispatch(recieveUser(json))
       }
     })
+    .catch(err => {
+      message.error(err.message);
+    });
   }
 }
 
@@ -130,7 +131,7 @@ export function updatedUser(incId,formData){
     .then( res => res.json())
     .then( json => {
       if(json.success === true){
-        message.success(json.msg);
+        message.success(json.messasge);
         if(incId === formData.id){
           dispatch(rerenderUser(formData));
           dispatch(getUserList(id));
@@ -140,7 +141,7 @@ export function updatedUser(incId,formData){
       }
     })
     .catch( err => {
-      console.log(err);
+      message.error(err.message)
     })
   }
 }
@@ -181,7 +182,7 @@ export function insertUser(incId, formData){
       }
     })
     .catch( err => {
-      console.log(err);
+      message.error(err.message)
     })
   }
 }
@@ -208,12 +209,11 @@ export function deleteUser(id,deleteUserId){
     })
     .then( res => res.json())
     .then( json => {
-      message.success(json.msg)
+      message.success(json.message)
       dispatch(getUserList(id))
     })
     .catch( err => {
-      message.error(err);
-      console.log(err);
+      message.error(err.message);
     })
   }
 }

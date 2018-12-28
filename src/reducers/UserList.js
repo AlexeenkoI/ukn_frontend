@@ -23,8 +23,6 @@ export function userListReducer(state = initialState, action){
         isLoading : true
       }
     case 'RECIEVE_USERS_LIST':
-      console.log('user list');
-      console.log(action);
       return {
         ...state,
         isLoading : false,

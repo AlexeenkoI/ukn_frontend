@@ -122,10 +122,9 @@ class UsersList extends Component{
     }]
     return(
       <div>
-        <Row>
-          {/*<Button onClick={this.createAction}>Добавить Пользователя</Button> */}
+        {/*<Row>
           <Link to="/users/create"> <Button>Добавить пользователя</Button></Link>
-        </Row>
+        </Row>*/}
         <Row>
           <Search
             placeholder="Поиск..."

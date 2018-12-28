@@ -104,6 +104,19 @@ body {
 .add-info-row{
   padding: 10px 0px 15px 0px;
 }
+.row.normal{
+}
+.row.normal td{
+}
+.row.warn{
+  background-color: #f5222d;
+}
+.row.warn td{
+  color:#fff;
+}
+.row.warnd:hover td{
+  color : rgba(0, 0, 0, 0.65);
+}
 
 /* Настройки */
 

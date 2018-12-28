@@ -54,8 +54,6 @@ class MainOffice extends Component{
   }
 
   tryToLogin = (data) => {
-    console.log("recieving in mainOffice ");
-    console.log(data);
     this.setState({
         isLogged:true
     }
@@ -119,12 +117,14 @@ class MainOffice extends Component{
     if(currentUser.loggedIn === false){
         return (
             <Fragment>
-                { this.props.location.pathname !=="/login" && <Redirect to="/login"/>}
+                { this.props.location.pathname !=="/login" && <Redirect to={{
+                  pathname: "/login",
+                  state: { from: this.props.location }
+                }}/>}
                 <Route path="/login" component={AuthWindow}/>
             </Fragment>
         )
     }
-    
     return(
       <Layout className="mainContainer">
         <LeftMenu collapsed={this.state.collapsed}/>

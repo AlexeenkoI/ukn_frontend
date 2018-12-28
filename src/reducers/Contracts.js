@@ -89,7 +89,6 @@ const initialState = {
         }
       case 'RECIEVE_CONTRACT_DATA' :
         const currentContract = action.data;
-        console.log(currentContract);
         return {
           ...state,
           contractLoading : false,

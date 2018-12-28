@@ -40,33 +40,50 @@ class LeftMenu extends Component{
               </NavLink>
             </Menu.Item>
           </SubMenu>
-          <Menu.Item key="/users">
-            <NavLink exact={true} to="/users" activeClassName="active">
-              <Icon type="team" />
-              <span>Сотрудники</span>
-            </NavLink>
-          </Menu.Item>
-          <Menu.Item key="/customers">
-            <NavLink to="/customers"  activeClassName="active">
-              <Icon type="solution" theme="outlined" />
-              <span>Клиенты</span>
-            </NavLink>
-          </Menu.Item>
+          <SubMenu key="/users" title={<span><Icon type="team"/><span>Сотрудники</span></span>}>
+            <Menu.Item key="/users/create">
+              <NavLink exact={true} to="/users/create" activeClassName="active">
+                <Icon type="user-add" />
+                <span>Добавить</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/users">
+              <NavLink exact={true} to="/users" activeClassName="active">
+                <Icon type="team" />
+                <span>Все Сотрудники</span>
+              </NavLink>
+            </Menu.Item>
+          </SubMenu>
+          <SubMenu key="/customers" title={<span><Icon type="solution"/><span>Клиенты</span></span>}>
+            <Menu.Item key="/customers/createcustomer">
+              <NavLink to="/customers/createcustomer"  activeClassName="active">
+                <Icon type="usergroup-add" />
+                <span>Добавить</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="/customers">
+              <NavLink to="/customers"  activeClassName="active">
+                <Icon type="solution" theme="outlined" />
+                <span>Все клиенты</span>
+              </NavLink>
+            </Menu.Item>
+          </SubMenu>
+
           <SubMenu key="sub1" title={<span><Icon type="setting"/><span>Настройки</span></span>}>
             <Menu.Item>
               <NavLink to="/settings"  activeClassName="active">
                 <Icon type="setting" theme="outlined" />
-              <span>Все</span>
+                <span>Все</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="sub1_2">
+            {/*<Menu.Item key="sub1_2">
               <Icon type="exception"/>
               Статусы
             </Menu.Item>
             <Menu.Item key="sub1_3">
               <Icon type="file-unknown"/>
               Виды заявлений
-            </Menu.Item>
+            </Menu.Item>*/}
           </SubMenu>
         </Menu>
       </Sider>

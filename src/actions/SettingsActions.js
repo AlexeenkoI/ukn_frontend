@@ -68,13 +68,9 @@ export const getSettings = (userId, condition = '') => {
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
-        console.log('succsess answer');
-        console.log(json);
-        message.success(json.message)
+        //message.success(json.message)
         dispatch(finishLoading(json.data))
       }else{
-        console.log('error anser');
-        console.log(json);
         message.warn(json.message);
       }
       
@@ -124,13 +120,9 @@ export const updateSetting = (userId, type, setting) => {
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
-          console.log('succsess answer');
-          console.log(json);
           message.success(json.message)
           //dispatch(getSettings(userId))
       }else{
-          console.log('error anser');
-          console.log(json);
           message.warn(json.message);
       }
       dispatch(finishUpdate())
@@ -165,21 +157,16 @@ export const insertSetting = (userId, type, insertValues) => {
     .then(res => res.json())
     .then(json => {
       if(json.success === true){
-        console.log('succsess answer');
-        console.log(json);
         message.success(json.message)
         //dispatch(getSettings(userId))
         dispatch(getSettings())
         dispatch(clearRow())
       }else{
-        console.log('error anser');
-        console.log(json);
         message.warn(json.message);
       }
       dispatch(finishUpdate())
     })
     .catch(err => {
-      console.log('err');
       message.warn(`Ошибка ${err.message}`);
       dispatch(finishUpdate())
     });

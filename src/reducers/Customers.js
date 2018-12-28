@@ -30,8 +30,6 @@ export function customersReducer(state = initialState, action){
         loading : true
       };
     case 'RECIEVE_CUSTOMERS_LIST' :
-    console.log('RECIEVE_CUSTOMERS_LIST');
-    console.log(action);
       return {
         ...state,
         loading : false,

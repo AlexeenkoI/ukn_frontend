@@ -127,7 +127,18 @@ class WorkSheet extends Component{
         title: 'ФИО Заказчика',
         dataIndex: 'customer',
         key: 'customer',
+        render : (_, record) => {
+          if(!customers.loaded){ 
+            return <div><Icon type="loading" /> Загружаю... </div>
+          }else{
+            const customerData = customers.data.filter( customer => {
+              return customer.id === record.customer_id
+            })
 
+            return `${customerData[0].firstname} ${customerData[0].name} ${customerData[0].secondname}`
+
+          }
+        }
       },{
         title: 'Адрес объекта',
         dataIndex: 'address',
@@ -189,18 +200,13 @@ class WorkSheet extends Component{
         render : (_, record) => {
           if(record.date_deadline)
             return moment(record.date_deadline).format('DD.MM.YYYY');
-          return 'Не указана';
+          return 'Не указано';
         }
       }];
       return !this.props.contracts.isLoaded ? 
         <Preloader/>
          :
         (<div>
-          {user.id <= 2 &&
-            <div>
-              <Link to="/contracts/create"><Button>Создать заявление</Button></Link>
-            </div>
-          }
           <Filters
             user={this.props.user} 
             filterData={this.props.contracts.filterData}
