@@ -69,11 +69,23 @@ class MainOffice extends Component{
     }
   componentWillMount(){
     ws.connect();
-    const contractsNotificator = ws.subscribe('contractsRoom')
+    //const contractsNotificator = ws.subscribe('contractsRoom:' + this.props.currentUser.id)
+    const contractsNotificator = ws.subscribe('contractsRoom:' + 1)
+    console.log("Component mount");
+
+    contractsNotificator.emit('contractCreate', {      
+      userId : [1,2]
+    })
+
+    contractsNotificator.on('contractRecieved', (data) => {
+      console.log(data)
+    })
+    /*
     contractsNotificator.on('contractRecieved', (data) => {
       console.log('recieve contract notification');
       console.log(data);
     })
+    */
     //socket.emit('ContractPush', this.props.currentUser.id)
     //console.log("contract push " + this.props.currentUser.id )
     //socket.on('testEmit', (data) => {
