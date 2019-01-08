@@ -66,6 +66,7 @@ class MainOffice extends Component{
       });
     }
   componentWillMount(){
+<<<<<<< HEAD
     const { currentUser } = this.props;
     if(currentUser){
       const token = localStorage.getItem('app_token');
@@ -88,6 +89,26 @@ class MainOffice extends Component{
       })
     }
 
+=======
+    ws.connect();
+    //const contractsNotificator = ws.subscribe('contractsRoom:' + this.props.currentUser.id)
+    const contractsNotificator = ws.subscribe('contractsRoom:' + 1)
+    console.log("Component mount");
+
+    contractsNotificator.emit('contractCreate', {      
+      userId : [1,2]
+    })
+
+    contractsNotificator.on('contractRecieved', (data) => {
+      console.log(data)
+    })
+    /*
+    contractsNotificator.on('contractRecieved', (data) => {
+      console.log('recieve contract notification');
+      console.log(data);
+    })
+    */
+>>>>>>> 98f783ba93b83990ac855679f18e042c91ecbfd2
     //socket.emit('ContractPush', this.props.currentUser.id)
     //console.log("contract push " + this.props.currentUser.id )
     //socket.on('testEmit', (data) => {
