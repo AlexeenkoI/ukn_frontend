@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Form, Icon, Input, Button, Checkbox } from 'antd'
 import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router'
+import { withRouter } from 'react-router'
 
 import {tryToLogin, successLogin} from '../actions/LoginActions';
 
@@ -22,14 +22,11 @@ class AuthWindow extends Component{
     componentWillMount(){
       const {autoLogIn} = this.props;
       document.body.style.backgroundColor = "#E0F2F1";
-      console.log('authorize');
-      console.log(this.props);
       //Автологин из локального хранилища
       if(localStorage.getItem('is_remember')){
         let data = {}; 
         data.data = JSON.parse(localStorage.getItem('currentUser'));
         autoLogIn(data);
-
       }
     }
      getCookie(name) {
@@ -53,7 +50,6 @@ class AuthWindow extends Component{
 
     render(){
       const { getFieldDecorator } = this.props.form;
-      if(this.props.location.state.from) return <Redirect to={this.props.location.state.from}/> 
       return(
       <div className="auth_block">
         <div className="app_logo fadeInDown animated"></div>

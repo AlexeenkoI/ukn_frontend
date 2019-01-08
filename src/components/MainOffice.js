@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Switch, Route, Redirect} from 'react-router-dom'
+import { Switch, Route, Redirect, Link} from 'react-router-dom'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
 //import {openSocket, io} from 'socket.io-client';
@@ -24,11 +24,11 @@ import TopCrumbs from './TopCrumbs';
 import SettingsList from './settings/SettingsList'
 
 import { logout } from '../actions/LoginActions'
-import { recieveContractNotification } from '../actions/NotificationsActions'
+import { recieveContractNotification, notificatorViewed } from '../actions/NotificationsActions'
 import { getUser, updatedUser } from '../actions/UserListActions'
 
 import 'antd/dist/antd.css';
-import { Layout, Icon, Row, Col } from 'antd'
+import { Layout, Icon, Row, Col, notification } from 'antd'
 
 
 const { Header, Content } = Layout;
@@ -66,12 +66,28 @@ class MainOffice extends Component{
       });
     }
   componentWillMount(){
-    ws.connect();
-    const contractsNotificator = ws.subscribe('contractsRoom')
-    contractsNotificator.on('contractRecieved', (data) => {
-      console.log('recieve contract notification');
-      console.log(data);
-    })
+    const { currentUser } = this.props;
+    if(currentUser){
+      const token = localStorage.getItem('app_token');
+      ws.withJwtToken(token).connect();
+      //ws.connect();
+      const contractsNotificator = ws.subscribe('contractsRoom')
+      //contractsNotificator.on('contractRecieved', (data) => {
+      //  console.log('recieve contract notification');
+      //  console.log(data);
+      //})
+      contractsNotificator.on('newContractData',(data) => {
+
+        console.log(data);
+        this.props.recieveContractNotification(data);
+        notification.open({
+          message : 'Новое уведомление',
+          description : data[0].message,
+          duration : 3
+        })
+      })
+    }
+
     //socket.emit('ContractPush', this.props.currentUser.id)
     //console.log("contract push " + this.props.currentUser.id )
     //socket.on('testEmit', (data) => {
@@ -89,7 +105,7 @@ class MainOffice extends Component{
 
   componentWillUnmount() {
       //socket.emit('ContractDisconnect', this.props.currentUser.id)
-
+      ws.emit('close');
     
     //console.log("Disconnecting Socket as component will unmount");
   }
@@ -129,7 +145,10 @@ class MainOffice extends Component{
                       style={{ fontSize: 22, marginLeft:15,cursor:"pointer"}}
                     />
                   </span>
-                  <Notificator notifications={this.props.notifications.contractsNotifications}/>
+                  <Notificator 
+                  notifications={this.props.notifications.contractsNotifications}
+                  viewHandler={this.props.viewHandler}
+                  />
                 </div>
               </Col>
               <Col style={{marginRight:'15px'}}>
@@ -188,7 +207,8 @@ const mapDispatchToProps = dispatch => ({
   logout : () => dispatch(logout()),
   recieveContractNotification : (data) => dispatch(recieveContractNotification(data)),
   getProfileData : (userId, profileId) => dispatch(getUser(userId, profileId)),
-  changeProfileData : (userId, formData) => dispatch(updatedUser(userId, formData))
+  changeProfileData : (userId, formData) => dispatch(updatedUser(userId, formData)),
+  viewHandler : () => dispatch(notificatorViewed())
 })
 
 export default withRouter(connect(mapStateToProps,mapDispatchToProps)(MainOffice));

@@ -1,28 +1,26 @@
 
 import React, { Component } from 'react'
 import { Icon, Popover, Badge } from 'antd'
+import { Link} from 'react-router-dom'
 
 
 
 class Notificator extends Component{
   constructor(props){
     super(props);
+    console.log('nofigicator');
+    console.log(this.props.notifications);
     this.state = {
         visible: false,
-        count : this.props.notifications.data.length
     }
     this.handleVisibleChange = this.handleVisibleChange.bind(this);
-  }
-
-  componentWillMount(){
-      
   }
 
   handleVisibleChange = () => {
       this.setState({
           visible : !this.state.visible,
-          count : 0
       })
+      this.props.viewHandler();
   }
 
   render(){
@@ -30,7 +28,7 @@ class Notificator extends Component{
       const content = (
         <div>
         {notifications.data.length > 0 ? 
-          notifications.data.map(item =><div key={item.id}>{item.msg}</div>) 
+          notifications.data.map(item =><Link to={`/contracts/edit/${item.id}`} key={item.id}><div >{item.message}</div></Link>) 
           : <div>Уведомлений нет</div>}
         </div>
       );
@@ -42,7 +40,7 @@ class Notificator extends Component{
           onVisibleChange={this.handleVisibleChange}
           title={notifications.data.length > 0 ? 'Новые уведомления' : 'Новых уведомлений нет'}
         >
-          <Badge count={this.state.count} className="badge-info">
+          <Badge count={this.props.notifications.count} className="badge-info">
             <Icon type="message" theme="outlined" style={{ fontSize: 22, cursor :'pointer', marginLeft:15 }} />
           </Badge>
         </Popover>
