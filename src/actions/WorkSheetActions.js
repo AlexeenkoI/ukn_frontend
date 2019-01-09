@@ -397,7 +397,7 @@ export function loadFileList(contractId){
     .then( res => res.json())
     .then( json => {
       if(json.success === true){
-        message.success(json.message);
+        //message.success(json.message);
         const data = json.data;
         dispatch(fileListLoaded(data))
       }else{

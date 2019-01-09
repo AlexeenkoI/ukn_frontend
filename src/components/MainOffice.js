@@ -67,6 +67,7 @@ class MainOffice extends Component{
     }
   componentWillMount(){
     const { currentUser } = this.props;
+
     if(currentUser){
       const token = localStorage.getItem('app_token');
       ws.withJwtToken(token).connect();
@@ -105,6 +106,7 @@ class MainOffice extends Component{
 
   componentWillUnmount() {
       //socket.emit('ContractDisconnect', this.props.currentUser.id)
+      console.log('component unmounted');
       ws.emit('close');
     
     //console.log("Disconnecting Socket as component will unmount");
@@ -117,14 +119,15 @@ class MainOffice extends Component{
 
   render(){
     const { currentUser } = this.props;
-
+    //const st = this.props.location.state.from ? this.props.location.state.from : '/';
     if(currentUser.loggedIn === false){
         return (
             <Fragment>
                 { this.props.location.pathname !=="/login" && <Redirect to={{
-                  pathname: "/login",
-                  state: { from: this.props.location }
-                }}/>}
+                    pathname: "/login",
+                    state: { from: this.props.location }
+                  }}/>
+                }
                 <Route path="/login" component={AuthWindow}/>
             </Fragment>
         )
@@ -169,9 +172,10 @@ class MainOffice extends Component{
             </div>
             <Switch>
               {/* Пока главной страницы нет, редиректим с главной на /contracts а с /login на главную */}
-              <Redirect from ="/login" to="/"/>
+              <Redirect from ="/login" to={this.props.currentUser.referer}/>
               <Redirect exact from="/" to="/contracts" />
               <Route exact path="/" component={HomePage}/>
+              
               <Route exact path="/contracts" component={WorkSheet} />
               <Route path="/contracts/create" component={CreateContractForm} />
               <Route exact path="/contracts/edit/:id" component={ContractEdit} />

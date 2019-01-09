@@ -114,8 +114,8 @@ class WorkSheet extends Component{
     const { user, users, customers, settings } = this.props;
       const columns = [{
         title: '№ Договора',
-        dataIndex: 'contract_number',
-        key: 'contract_number',
+        dataIndex: 'id',
+        key: 'id',
       }, {
         title: 'Дата заключения',
         dataIndex: 'date_started',
@@ -225,8 +225,15 @@ class WorkSheet extends Component{
             loading={this.props.contracts.isFetching}
             onChange={this.onPaginationChange}
             rowClassName={(record, index) => {
-              const deadLinePassed = moment(record.date_deadline).format('DD.MM.YYYY') > moment().format('DD.MM.YYYY') ? false : true;
-              return deadLinePassed ? 'row warn' : 'row normal';
+              if(record.date_deadline){
+                const deadLinePassed = moment(record.date_deadline).format('DD.MM.YYYY') > moment().format('DD.MM.YYYY') ? false : true;
+                if(record.status < 3){
+                  return moment().isBefore(record.date_deadline ,moment()) ? 'row normal' : 'row warn';
+                }
+                if(record.status > 2){
+                  return 'row finished';
+                }
+              }
             }}
             pagination={{total:this.props.contracts.total, pageSize : this.props.contracts.limit, showSizeChanger : true, onShowSizeChange : this.onPageSizeChange, current : this.props.contracts.page }}
             locale={{ emptyText : "Заявок не найдено"}}

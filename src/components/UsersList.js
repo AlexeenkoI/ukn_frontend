@@ -75,14 +75,14 @@ class UsersList extends Component{
   render(){
     const { userList, addCond } = this.props;
     const columns = [
-    {
-      title : 'Активность',
-      dataIndex : 'is_active',
-      key : 'is_active',
-      render : (text,record) => (
-        <Checkbox checked={record.is_active} />
-      )
-    },
+    //{
+    //  title : 'Активность',
+    //  dataIndex : 'is_active',
+    //  key : 'is_active',
+    //  render : (text,record) => (
+    //    <Checkbox checked={record.is_active} />
+    //  )
+    //},
     {
       title : 'Имя',
       key : 'name',
@@ -96,7 +96,10 @@ class UsersList extends Component{
     {
       title : 'Должность',
       dataIndex : 'position',
-      key : 'position'
+      key : 'position',
+      render : (_, record) => {
+        return 'В разработке'
+      }
     },
     {
       title : 'Действия',

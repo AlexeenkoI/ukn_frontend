@@ -7,7 +7,7 @@ export const LOGOUT = 'LOGOUT';
 export const REINIT_USER = 'REINIT_USER';
 
 
-export function tryToLogin(auth,pass,isRemember){
+export function tryToLogin(auth,pass,isRemember, referer="/"){
   return function(dispatch){
     dispatch(startLogin());
     const reqBody = {
@@ -29,7 +29,7 @@ export function tryToLogin(auth,pass,isRemember){
       if(json.success === true){
         localStorage.setItem('app_token',json.auth_token);
         message.success(json.message, 1.5);
-        dispatch(successLogin(json))
+        dispatch(successLogin(json, referer))
         if(isRemember){
           // document.cookie = "autoLogin=true";
           //Запоминаем конкретного пользака без его пароля, он нам не нужен
@@ -53,12 +53,13 @@ export function startLogin(){
   }
 }
 
-export function successLogin(incData){
+export function successLogin(incData, referer){
   return{
     type : LOGIN_SUCCESS,
     data : incData.data,
     userRoles : incData.userRoles,
-    isFetching : false
+    isFetching : false,
+    referer
   }
 }
 

@@ -111,10 +111,22 @@ body {
 .row.warn{
   background-color: #f5222d;
 }
+.row.finished{
+  background-color: cadetblue;
+}
+.row.finished td {
+  color:#fff;
+}
+.row.row.finished td a {
+  color : #fff;
+}
 .row.warn td{
   color:#fff;
 }
-.row.warnd:hover td{
+.row.warn td a {
+  color : white;
+}
+.row.warn:hover td{
   color : rgba(0, 0, 0, 0.65);
 }
 

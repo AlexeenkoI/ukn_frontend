@@ -4,7 +4,8 @@ const initialState = {
     status : '',
     loggedIn : false,
     isFetching : false,
-    errMsg:''
+    errMsg:'',
+    referer : '/'
   }
   
   export function userReducer(state = initialState, action) {
@@ -15,6 +16,8 @@ const initialState = {
           isFetching : true
         }
       case 'LOGIN_SUCCESS':
+      console.log('login success');
+      console.log(action);
         return{
           ...state,
           loggedIn : true,
@@ -24,7 +27,8 @@ const initialState = {
           surename : action.data.surename,
           status : action.data.status,
           role : action.data.role_id,
-          userRoles : action.userRoles
+          userRoles : action.userRoles,
+          referer : action.referer
         }
       case 'LOGIN_FAIL':
         return {
