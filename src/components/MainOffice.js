@@ -39,7 +39,8 @@ const { Header, Content } = Layout;
 //  path: '/test'
 //});
 
-const ws = Ws('ws://127.0.0.1:3333')
+//const ws = Ws('ws://127.0.0.1:3333')
+const ws = Ws('ws://213.183.51.110:3333')
 
 /**
  * Точка входа и роутинга в основные компоненты
