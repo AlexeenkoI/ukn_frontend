@@ -132,7 +132,7 @@ export const updateCustomer = (uId, formData, str) => {
         message.success(json.message);
         dispatch({
           type:'FINISH_INSERTING',
-          data : json.data.insertId
+          data : json.insertId
         })
       }else{
         message.warning(json.message);
