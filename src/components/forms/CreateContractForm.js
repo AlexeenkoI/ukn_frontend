@@ -183,7 +183,11 @@ class CreateContractForm extends Component {
                     name="customer_id" 
                     component={ASelect}
                     showSearch
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                    filterOption={(input, option) => 
+                      option.props.children.toString().toLowerCase().indexOf(input.toString().toLowerCase()) >= 0                       
+                    
+                    }
+                    
                     defaultActiveFirstOption={true}
                     defaultValue={0}
                   >
@@ -192,8 +196,9 @@ class CreateContractForm extends Component {
                   </Select.Option>
                   {customers.map(customer => 
                     <Select.Option key={customer.id} value={customer.id}>
-                      {customer.name}
-                    </Select.Option>
+                      {customer.secondname} {customer.name} {customer.firstname}
+                    </Select.Option>                  
+                    
                   )}
                   </Field>
                   <Button type="primary" onClick={this.openForm}><Icon type="user-add" theme="outlined" />Добавить заявителя</Button>
