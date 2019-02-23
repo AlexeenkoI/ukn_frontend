@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Field, reduxForm } from 'redux-form'
+import { Field, reduxForm, change } from 'redux-form'
 import { Redirect } from 'react-router-dom'
 import { Form, Icon, Input, Button, Modal, Select, Row, Col, Steps, DatePicker } from 'antd';
 import FieldWrapper from './FieldWrapper'
@@ -76,19 +76,20 @@ class CreateContractForm extends Component {
           showCustomersForm : false
       })
     }
+    componentWillReceiveProps(nextProps, nextContext) {
 
-    onFormSubmit = (values) => {
+      if(nextProps.customers.length > this.props.customers.length){
+        //console.log('in recieve props');
+        //change('customer_id', nextProps.customers[nextProps.customers.length - 1])
+        //this.props.change('customer_id',1);
+        //this.props.dispatch(change('customer_id', nextProps.customers[nextProps.customers.length - 1]))
+      }
+    }
+
+  onFormSubmit = (values) => {
       const { user, createOne } = this.props;
-      //values.date_deadline = Date.parse(values.date_deadline);
-      //values.date_deadline = moment(values.date_deadline).format("X");
       values.date_deadline = moment(values.date_deadline).format("YYYY-MM-DD HH:mm:ss");
       let sendValues = {...values};
-      console.log(sendValues);
-     // let modifiedContractors = sendValues.contractor.map(val => {
-     //   let obj = {id : val}
-     //   return obj;
-     // })
-     // sendValues.contractor = modifiedContractors;
       createOne(user.id, sendValues);
       this.setState({
         needToRedirect:true
@@ -100,6 +101,7 @@ class CreateContractForm extends Component {
           showCustomersForm : true
         })
     }
+
     render() {
       const { handleSubmit, pristine,submitting, workTypes, customers, contractors, statuses } = this.props;
       if(this.state.needToRedirect) return <Redirect to="/contracts"/>
@@ -295,9 +297,6 @@ const validate = values => {
     form:'CreateContractForm',
     validate,
     enableReinitialize : true,
+    keepDirtyOnReinitialize : true,
     destroyOnUnmount: true
   })(CreateContractForm))
-
-//export default connect(
-//    mapStateToProps,
-//)(CreateCustomerForm);
