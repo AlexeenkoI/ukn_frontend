@@ -50,8 +50,11 @@ class CreateContractForm extends Component {
       this.state = {
         step : 0,
         showCustomersForm : false,
+        showEditCustomers : false,
+        editCustomerId : null,
         needToRedirect : false
       }
+      this.onEditIconClick = this.onEditIconClick.bind(this);
     }
 
     componentWillMount = () =>{
@@ -76,14 +79,11 @@ class CreateContractForm extends Component {
           showCustomersForm : false
       })
     }
-    componentWillReceiveProps(nextProps, nextContext) {
 
-      if(nextProps.customers.length > this.props.customers.length){
-        //console.log('in recieve props');
-        //change('customer_id', nextProps.customers[nextProps.customers.length - 1])
-        //this.props.change('customer_id',1);
-        //this.props.dispatch(change('customer_id', nextProps.customers[nextProps.customers.length - 1]))
-      }
+    toggleCustomersEditForm = () => {
+      this.setState({
+        showEditCustomers : false,
+      })
     }
 
   onFormSubmit = (values) => {
@@ -100,6 +100,20 @@ class CreateContractForm extends Component {
         this.setState({
           showCustomersForm : true
         })
+    }
+
+    openEditForm = () => {
+      this.setState({
+        showEditCustomers  : true
+      })
+    }
+
+    onEditIconClick = (id) => (e) => {
+      e.stopPropagation()
+      this.setState({
+        editCustomerId : id
+      })
+      this.openEditForm()
     }
 
     render() {
@@ -198,7 +212,10 @@ class CreateContractForm extends Component {
                   </Select.Option>
                   {customers.map(customer => 
                     <Select.Option key={customer.id} value={customer.id}>
-                      {customer.secondname} {customer.name} {customer.firstname}
+                      <Row className="customer-option" type="flex" justify="space-between">
+                        <div>{customer.secondname} {customer.name} {customer.firstname}</div>
+                      <Icon className="customer-option__icon" type="edit" onClick={this.onEditIconClick(customer.id)} />
+                      </Row>
                     </Select.Option>                  
                     
                   )}
@@ -220,6 +237,7 @@ class CreateContractForm extends Component {
             </Col> 
           </Row>
           </Form>
+          {/* Модальное окно создания клиента*/}
           <Modal
             footer={false}
             visible={this.state.showCustomersForm}
@@ -233,6 +251,23 @@ class CreateContractForm extends Component {
               onAdd={this.toggleCreateCustomersForm}
             />
           </Modal>
+          {/*****/}
+          {/* Модальное окно редактирования */}
+          <Modal
+            footer={false}
+            visible={this.state.showEditCustomers}
+            onCancel={this.toggleCustomersEditForm}
+            title="Редактировать клиента"
+            destroyOnClose={true}
+          >
+            <CustomerEdit
+              noRedirect={true}
+              gridSettings = {{ xs : 24, sm : 24, md : 24,lg : 24,  xl : 24}}
+              onAdd={this.toggleCustomersEditForm}
+              loadCustomerId={this.state.editCustomerId}
+            />
+          </Modal>
+          {/******/}
         </Fragment>
       );
     }

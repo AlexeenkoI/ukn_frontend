@@ -24,10 +24,13 @@ class CustomerEdit extends Component {
       }
     }
     componentWillMount(){
-      const { match, user, getOne } = this.props;
+      const { match, user, getOne, loadCustomerId } = this.props;
       //console.log(Object.keys(match.params).length);
       if(typeof match !== 'undefined' && Object.keys(match.params).length !== 0){
           getOne(user.id, match.params.id);
+      }
+      if(typeof loadCustomerId !=='undefined'){
+        getOne(user.id, loadCustomerId)
       }
     }
 
@@ -52,7 +55,7 @@ class CustomerEdit extends Component {
     }
 
     render() {
-      const { handleSubmit, pristine,submitting, fetching, match, noRedirect, grid } = this.props;
+      const { handleSubmit, pristine,submitting, fetching, match, noRedirect, grid, loadCustomerId } = this.props;
       if(this.state.needRedirect &&(!noRedirect)) return <Redirect to="/customers"/>
       return (
         <Row>
@@ -64,7 +67,7 @@ class CustomerEdit extends Component {
               <Field label="Отчество" name="secondname" component={AInput} placeholder="Отчество" />
               <Field label="Почта" type="email" name="email" component={AInput} placeholder="Почта" />
               <Field addonBefore="+7" label="Телефон" name="phone" component={AInput} placeholder="Теелфон" />
-              <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{(typeof match !== 'undefined' && Object.keys(match.params).length !== 0) ? "Изменить" : "Создать"}</Button>
+              <Button loading={fetching} htmlType="submit" type="primary" disabled={pristine || submitting }>{(typeof match !== 'undefined' && Object.keys(match.params).length !== 0 || loadCustomerId ) ? "Изменить" : "Создать"}</Button>
             </Form>
           </Col>
         </Row>

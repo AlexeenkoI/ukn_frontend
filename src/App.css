@@ -130,6 +130,18 @@ body {
   color : rgba(0, 0, 0, 0.65);
 }
 
+/* Создание заявок */
+.customer-option__icon {
+  display:none;
+  transition: all 0.3s;
+  transform: scale(0);
+}
+.customer-option:hover .customer-option__icon {
+  display:block;
+  transform: scale(1.1);
+}
+
+
 /* Настройки */
 
 
