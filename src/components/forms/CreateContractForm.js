@@ -134,6 +134,7 @@ class CreateContractForm extends Component {
           <Form onSubmit={handleSubmit(this.onFormSubmit)}>
           <Row type="flex" justify="center" gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
             <Col xs={12} sm={24} md={20} lg={12} xl={6} >
+                <Field label="Номер договора" name="contract_number" component={ATextArea} placeholder="Номер договора" />
               <Field label="Адрес" name="address" component={ATextArea} placeholder="Адрес" />
               <Field 
                 label="Вид работ" 

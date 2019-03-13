@@ -113,9 +113,14 @@ class WorkSheet extends Component{
   render(){
     const { user, users, customers, settings } = this.props;
       const columns = [{
+        /*
         title: '№ Договора',
         dataIndex: 'id',
         key: 'id',
+        */
+        title: 'Номер контракта',
+        dataIndex: 'contract_number',
+        key: 'contract_number',
       }, {
         title: 'Дата заключения',
         dataIndex: 'date_started',

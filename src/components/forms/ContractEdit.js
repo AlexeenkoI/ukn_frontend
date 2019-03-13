@@ -208,13 +208,7 @@ class ContractEdit extends Component {
             <Field type="hidden" component="input" name="id"/>
             <Field label="Номер договора" name="contract_number" component={AInput} disabled={disabler} placeholder="Фамилия" />
             <Field label="Адрес" name="address" component={ATextArea} placeholder="" disabled={disabler} />
-            <Field label="Статус" component={ASelect} name="status">
-              {settings.status_types.map( status => 
-                <Select.Option value={status.id} key={status.id}>
-                {status.type}
-              </Select.Option>
-              )}
-            </Field>
+
             <Field 
               label="Исполнитель" 
               name="contractor" 
@@ -249,6 +243,13 @@ class ContractEdit extends Component {
               placeholder="Полная стоимость" 
               addonAfter="руб" />
              <Field label="Оплачено/Внесено" name="paid" component={AInput} placeholder="Оплачено" addonAfter="руб" />
+            <Field label="Статус" component={ASelect} name="status">
+              {settings.status_types.map( status =>
+                  <Select.Option value={status.id} key={status.id}>
+                    {status.type}
+                  </Select.Option>
+              )}
+            </Field>
             <Row className="add-info-row">
               <Col span={12}>
                 <div>Файлы :</div>
